@@ -1,4 +1,5 @@
 import 'package:duel_matching/screens/login.dart';
+import 'package:duel_matching/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,15 +35,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
         title: 'DuelMatching',
         routeInformationParser: _router.routeInformationParser,
-        routerDelegate: _router.routerDelegate);
+        routerDelegate: _router.routerDelegate,
+        theme: appTheme());
   }
 
   final _router = GoRouter(
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) => LoginScreen(),
       ),
     ],
+    initialLocation: '/',
   );
 }

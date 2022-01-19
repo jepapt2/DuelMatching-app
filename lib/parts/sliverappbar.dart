@@ -16,6 +16,7 @@ class Page2 extends StatelessWidget {
             [
               Column(
                 children: [
+                  Text('ああああa'),
                   Text('あああああ'),
                   Text('あああああ'),
                   Text('あああああ'),
@@ -24,10 +25,7 @@ class Page2 extends StatelessWidget {
                   Text('あああああ'),
                   Text('あああああ'),
                   Text('あああああ'),
-                  Text('あああああ'),
-                  Text('あああああ'),
-                  Text('あああああ'),
-                  Text('あああああ'),
+                  Text('ああああa'),
                   Text('あああああ'),
                   Text('あああああ'),
                   Text('あああああ'),

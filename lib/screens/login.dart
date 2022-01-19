@@ -5,8 +5,17 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('ログインページ'),
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.secondary,
+      body: SafeArea(
+        child: Center(
+          child: Row(
+            children: <Widget>[
+              Expanded(child: Image.asset('assets/images/logo.png'))
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
