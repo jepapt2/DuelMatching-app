@@ -379,7 +379,7 @@ packages:
     source: hosted
     version: "3.0.1+1"
   sign_in_with_apple:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: sign_in_with_apple
       url: "https://pub.dartlang.org"
@@ -447,7 +447,7 @@ packages:
     source: hosted
     version: "0.4.3"
   twitter_login:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: twitter_login
       url: "https://pub.dartlang.org"
