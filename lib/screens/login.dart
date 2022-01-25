@@ -32,16 +32,25 @@ class LoginScreen extends StatelessWidget {
               Visibility(
                 visible: Platform.isAndroid,
                 child: Padding(
-                  padding: EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: GoogleSignInButton(clientId: getclientId()),
                 ),
               ),
               Visibility(
                 visible: Platform.isIOS,
-                child: Padding(
+                child: const Padding(
                   padding: EdgeInsets.all(10.0),
-                  child: AppleSignInButton(),
+                  child: AppleSignInButton(
+                    action: AuthAction.signIn,
+                  ),
                 ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(10.0),
+                child: TwitterSignInButton(
+                    apiKey: 'apiKey',
+                    apiSecretKey: 'apiSecretKey',
+                    redirectUri: 'redirectUri'),
               ),
               TextButton(
                   onPressed: () => print(FirebaseAuth.instance.currentUser),
