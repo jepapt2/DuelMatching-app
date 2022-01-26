@@ -1,20 +1,32 @@
 import 'dart:io';
 
 import 'package:duel_matching/gen/google_options.dart';
+import 'package:duel_matching/gen/twitter_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
+import 'package:twitter_login/twitter_login.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
-  String getclientId() {
+  Map<String, String> getOption() {
     const flavor = String.fromEnvironment('FLAVOR');
     switch (flavor) {
       case 'development':
-        return googleClientIdDevelopment;
+        return {
+          'GoogleClient': googleClientIdDevelopment,
+          'twitterApiKey': twitterApiKeyDevelopment,
+          'twitterApiSecret': twitterApiSecretDevelopment,
+          'twitterCallBack': twitterCallBackDevelopment
+        };
       case 'production':
-        return googleClientIdProduction;
+        return {
+          'GoogleClient': googleClientIdProduction,
+          'twitterApiKey': twitterApiKeyProduction,
+          'twitterApiSecret': twitterApiSecretProduction,
+          'twitterCallBack': twitterCallBackProduction
+        };
       default:
         throw ArgumentError('Not available flavor');
     }
@@ -33,7 +45,8 @@ class LoginScreen extends StatelessWidget {
                 visible: Platform.isAndroid,
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: GoogleSignInButton(clientId: getclientId()),
+                  child: GoogleSignInButton(
+                      clientId: getOption()['GoogleClient']!),
                 ),
               ),
               Visibility(
@@ -45,12 +58,15 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(10.0),
                 child: TwitterSignInButton(
-                    apiKey: 'apiKey',
-                    apiSecretKey: 'apiSecretKey',
-                    redirectUri: 'redirectUri'),
+                  apiKey: getOption()['twitterApiKey']!,
+                  apiSecretKey: getOption()['twitterApiSecret']!,
+                  redirectUri: getOption()['twitterCallBack']!,
+                  // action: AuthAction.signIn,
+                  // onTap: () => signInWithTwitter(),
+                ),
               ),
               TextButton(
                   onPressed: () => print(FirebaseAuth.instance.currentUser),
