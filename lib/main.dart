@@ -1,20 +1,23 @@
-import 'package:duel_matching/screens/login.dart';
+import 'package:duel_matching/router.dart';
 import 'package:duel_matching/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/i10n.dart';
-import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:duel_matching/gen/firebase_options_development.dart'
     as development;
 import 'package:duel_matching/gen/firebase_options_production.dart'
     as production;
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'local/fluttefire.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: getFirebaseOptions());
-  runApp(MyApp());
+  runApp(ProviderScope(
+    child: MyApp(),
+  ));
 }
 
 FirebaseOptions getFirebaseOptions() {
@@ -29,6 +32,12 @@ FirebaseOptions getFirebaseOptions() {
   }
 }
 
+final loginProvider = ChangeNotifierProvider((ref) => LoginNotifier());
+
+class LoginNotifier extends ChangeNotifier {
+  User? user = FirebaseAuth.instance.currentUser;
+}
+
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
@@ -36,30 +45,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-        localizationsDelegates: [
-          FlutterFireUILocalizations.withDefaultOverrides(
-              const LabelOverrides()),
-
-          // Delegates below take care of built-in flutter widgets
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-
-          // This delegate is required to provide the labels that are not overriden by LabelOverrides
-          FlutterFireUILocalizations.delegate,
-        ],
-        title: 'DuelMatching',
-        routeInformationParser: _router.routeInformationParser,
-        routerDelegate: _router.routerDelegate,
-        theme: appTheme());
+      localizationsDelegates: [
+        FlutterFireUILocalizations.withDefaultOverrides(const LabelOverrides()),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        FlutterFireUILocalizations.delegate,
+      ],
+      title: 'DuelMatching',
+      routeInformationParser: router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
+      theme: appTheme(),
+    );
   }
-
-  final _router = GoRouter(
-    routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => LoginScreen(),
-      ),
-    ],
-    initialLocation: '/',
-  );
 }

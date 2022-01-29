@@ -5,7 +5,7 @@ import 'package:duel_matching/gen/twitter_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
-import 'package:twitter_login/twitter_login.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -59,7 +59,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10.0),
                 child: TwitterSignInButton(
                   apiKey: getOption()['twitterApiKey']!,
                   apiSecretKey: getOption()['twitterApiSecret']!,
@@ -72,7 +72,14 @@ class LoginScreen extends StatelessWidget {
                   onPressed: () => print(FirebaseAuth.instance.currentUser),
                   child: Text('ユーザー')),
               TextButton(
-                  onPressed: () => FirebaseAuth.instance.signOut(),
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginScreen()),
+                        (_) => false);
+                  },
                   child: Text('ユーザー')),
             ],
           ),
