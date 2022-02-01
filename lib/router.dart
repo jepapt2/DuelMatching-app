@@ -1,4 +1,6 @@
 import 'package:duel_matching/screens/login.dart';
+import 'package:duel_matching/screens/notice.dart';
+import 'package:duel_matching/screens/recruits.dart';
 import 'package:duel_matching/screens/users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
@@ -11,8 +13,25 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/users',
-      builder: (context, state) => UsersScreen(),
-    )
+      pageBuilder: (context, state) => NoTransitionPage<void>(
+        key: state.pageKey,
+        child: const UsersScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/recruits',
+      pageBuilder: (context, state) => NoTransitionPage<void>(
+        key: state.pageKey,
+        child: const RecruitsScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/notice',
+      pageBuilder: (context, state) => NoTransitionPage<void>(
+        key: state.pageKey,
+        child: const NoticeScreen(),
+      ),
+    ),
   ],
   redirect: (state) {
     final bool loggedIn = FirebaseAuth.instance.currentUser != null;
