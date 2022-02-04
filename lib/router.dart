@@ -1,5 +1,6 @@
 import 'package:duel_matching/screens/login.dart';
 import 'package:duel_matching/screens/notice.dart';
+import 'package:duel_matching/screens/profile_edit.dart';
 import 'package:duel_matching/screens/recruits.dart';
 import 'package:duel_matching/screens/users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,6 +33,10 @@ final router = GoRouter(
         child: const NoticeScreen(),
       ),
     ),
+    GoRoute(
+      path: '/profile_edit',
+      builder: (context, state) => ProfileEditScreen(),
+    )
   ],
   redirect: (state) {
     final bool loggedIn = FirebaseAuth.instance.currentUser != null;

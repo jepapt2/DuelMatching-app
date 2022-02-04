@@ -51,6 +51,9 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         FlutterFireUILocalizations.delegate,
       ],
+      // supportedLocales: const [
+      //   Locale("ja", "JP"),
+      // ],
       title: 'DuelMatching',
       routeInformationParser: router.routeInformationParser,
       routerDelegate: router.routerDelegate,
