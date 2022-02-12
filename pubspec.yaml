@@ -49,6 +49,8 @@ dependencies:
   flutter_form_builder: ^7.1.0
   json_serializable: ^6.1.4
   json_annotation: ^4.4.0
+  form_builder_validators: ^7.4.0
+  image_picker: ^0.8.4+6
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +78,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/logo.png
+    - assets/images/initial_avatar.png
   fonts:
     - family: Noto Sans JP
       fonts:

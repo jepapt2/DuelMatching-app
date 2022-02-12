@@ -17,6 +17,8 @@ class UserProfile with _$UserProfile {
 class Profile with _$Profile {
   factory Profile({
     required final String name,
+    String? avatar,
+    String? header,
   }) = _Profile;
 
   const Profile._();

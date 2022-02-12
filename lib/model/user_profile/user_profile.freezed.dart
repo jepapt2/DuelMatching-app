@@ -172,9 +172,11 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) {
 class _$ProfileTearOff {
   const _$ProfileTearOff();
 
-  _Profile call({required String name}) {
+  _Profile call({required String name, String? avatar, String? header}) {
     return _Profile(
       name: name,
+      avatar: avatar,
+      header: header,
     );
   }
 
@@ -189,6 +191,8 @@ const $Profile = _$ProfileTearOff();
 /// @nodoc
 mixin _$Profile {
   String get name => throw _privateConstructorUsedError;
+  String? get avatar => throw _privateConstructorUsedError;
+  String? get header => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -199,7 +203,7 @@ mixin _$Profile {
 abstract class $ProfileCopyWith<$Res> {
   factory $ProfileCopyWith(Profile value, $Res Function(Profile) then) =
       _$ProfileCopyWithImpl<$Res>;
-  $Res call({String name});
+  $Res call({String name, String? avatar, String? header});
 }
 
 /// @nodoc
@@ -213,12 +217,22 @@ class _$ProfileCopyWithImpl<$Res> implements $ProfileCopyWith<$Res> {
   @override
   $Res call({
     Object? name = freezed,
+    Object? avatar = freezed,
+    Object? header = freezed,
   }) {
     return _then(_value.copyWith(
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      avatar: avatar == freezed
+          ? _value.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
+              as String?,
+      header: header == freezed
+          ? _value.header
+          : header // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -228,7 +242,7 @@ abstract class _$ProfileCopyWith<$Res> implements $ProfileCopyWith<$Res> {
   factory _$ProfileCopyWith(_Profile value, $Res Function(_Profile) then) =
       __$ProfileCopyWithImpl<$Res>;
   @override
-  $Res call({String name});
+  $Res call({String name, String? avatar, String? header});
 }
 
 /// @nodoc
@@ -243,12 +257,22 @@ class __$ProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
   @override
   $Res call({
     Object? name = freezed,
+    Object? avatar = freezed,
+    Object? header = freezed,
   }) {
     return _then(_Profile(
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      avatar: avatar == freezed
+          ? _value.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
+              as String?,
+      header: header == freezed
+          ? _value.header
+          : header // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -256,17 +280,21 @@ class __$ProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Profile extends _Profile {
-  _$_Profile({required this.name}) : super._();
+  _$_Profile({required this.name, this.avatar, this.header}) : super._();
 
   factory _$_Profile.fromJson(Map<String, dynamic> json) =>
       _$$_ProfileFromJson(json);
 
   @override
   final String name;
+  @override
+  final String? avatar;
+  @override
+  final String? header;
 
   @override
   String toString() {
-    return 'Profile(name: $name)';
+    return 'Profile(name: $name, avatar: $avatar, header: $header)';
   }
 
   @override
@@ -274,12 +302,17 @@ class _$_Profile extends _Profile {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Profile &&
-            const DeepCollectionEquality().equals(other.name, name));
+            const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality().equals(other.avatar, avatar) &&
+            const DeepCollectionEquality().equals(other.header, header));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(name));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(avatar),
+      const DeepCollectionEquality().hash(header));
 
   @JsonKey(ignore: true)
   @override
@@ -293,13 +326,18 @@ class _$_Profile extends _Profile {
 }
 
 abstract class _Profile extends Profile {
-  factory _Profile({required String name}) = _$_Profile;
+  factory _Profile({required String name, String? avatar, String? header}) =
+      _$_Profile;
   _Profile._() : super._();
 
   factory _Profile.fromJson(Map<String, dynamic> json) = _$_Profile.fromJson;
 
   @override
   String get name;
+  @override
+  String? get avatar;
+  @override
+  String? get header;
   @override
   @JsonKey(ignore: true)
   _$ProfileCopyWith<_Profile> get copyWith =>
