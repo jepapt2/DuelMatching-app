@@ -3,9 +3,20 @@ import 'package:flutter/material.dart';
 ThemeData appTheme() {
   return ThemeData(
     fontFamily: "Noto Sans JP",
-    scaffoldBackgroundColor: Color(0xfffffffe),
+    scaffoldBackgroundColor: const Color(0xfffffffe),
     colorScheme: ColorScheme.fromSwatch(
-      accentColor: Color(0xffff8e3c),
+      accentColor: const Color(0xffff8e3c),
+    ),
+    chipTheme: const ChipThemeData(
+      backgroundColor: Color(0xffff8e3c),
+      disabledColor: Color(0xffeff0f3),
+      selectedColor: Color(0xfffffffe),
+      secondarySelectedColor: Color(0xffff8e3c),
+      padding: EdgeInsets.all(3.0),
+      labelStyle: TextStyle(),
+      secondaryLabelStyle: TextStyle(),
+      brightness: Brightness.light,
+      deleteIconColor: Color(0xfffffffe),
     ),
     appBarTheme: const AppBarTheme(
         backgroundColor: Colors.white,
@@ -15,11 +26,16 @@ ThemeData appTheme() {
         shape: Border(bottom: BorderSide(color: Colors.black38)),
         centerTitle: true,
         elevation: 10.0),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Color(0xffeff0f3),
         unselectedItemColor: Color(0xff2a2a2a),
         selectedItemColor: Color(0xffff8e3c),
         elevation: 10.0),
     brightness: Brightness.light,
+    inputDecorationTheme: const InputDecorationTheme(
+        labelStyle: TextStyle(color: Color(0xff2a2a2a), fontSize: 15.0),
+        floatingLabelStyle: TextStyle(color: Color(0xff2a2a2a), fontSize: 15.0),
+        border: UnderlineInputBorder(
+            borderSide: BorderSide(color: Color(0xff2a2a2a)))),
   );
 }

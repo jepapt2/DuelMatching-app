@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^1.11.0
   firebase_auth: ^3.3.5
+  firebase_storage: ^8.0.5
   flutterfire_ui: ^0.3.1
   sign_in_with_apple: ^3.3.0
   twitter_login: ^4.0.1
@@ -51,6 +52,8 @@ dependencies:
   json_annotation: ^4.4.0
   form_builder_validators: ^7.4.0
   image_picker: ^0.8.4+6
+  firestore_ref: ^0.13.2
+  fluttertoast: ^8.0.8
 
 dev_dependencies:
   flutter_test:

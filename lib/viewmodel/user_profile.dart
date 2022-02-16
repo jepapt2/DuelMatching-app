@@ -2,7 +2,7 @@ import 'package:duel_matching/model/user_profile/user_profile.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final profileProvider = StreamProvider.family<Profile, String>((ref, id) {
-  final document = getUserDocument(id);
+  final document = userDocument(id);
   final snapshot = document.snapshots();
   final doc = snapshot.map((event) => event.data()!);
   return doc;

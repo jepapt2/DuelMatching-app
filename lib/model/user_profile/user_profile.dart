@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:firestore_ref/firestore_ref.dart';
 part 'user_profile.freezed.dart';
 part 'user_profile.g.dart';
 
@@ -19,6 +20,18 @@ class Profile with _$Profile {
     required final String name,
     String? avatar,
     String? header,
+    String? comment,
+    String? introduction,
+    String? favorite,
+    List<String>? playTitle,
+    String? adress,
+    String? activityDay,
+    String? activityTime,
+    String? age,
+    String? sex,
+    bool? remoteDuel,
+    @TimestampConverter() DateTime? createdAt,
+    required final int order,
   }) = _Profile;
 
   const Profile._();
@@ -27,7 +40,7 @@ class Profile with _$Profile {
       _$ProfileFromJson(json);
 }
 
-DocumentReference<Profile> getUserDocument(String id) {
+DocumentReference<Profile> userDocument(String id) {
   return FirebaseFirestore.instance
       .collection('users')
       .doc(id)

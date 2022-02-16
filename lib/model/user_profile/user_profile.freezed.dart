@@ -172,11 +172,38 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) {
 class _$ProfileTearOff {
   const _$ProfileTearOff();
 
-  _Profile call({required String name, String? avatar, String? header}) {
+  _Profile call(
+      {required String name,
+      String? avatar,
+      String? header,
+      String? comment,
+      String? introduction,
+      String? favorite,
+      List<String>? playTitle,
+      String? adress,
+      String? activityDay,
+      String? activityTime,
+      String? age,
+      String? sex,
+      bool? remoteDuel,
+      @TimestampConverter() DateTime? createdAt,
+      required int order}) {
     return _Profile(
       name: name,
       avatar: avatar,
       header: header,
+      comment: comment,
+      introduction: introduction,
+      favorite: favorite,
+      playTitle: playTitle,
+      adress: adress,
+      activityDay: activityDay,
+      activityTime: activityTime,
+      age: age,
+      sex: sex,
+      remoteDuel: remoteDuel,
+      createdAt: createdAt,
+      order: order,
     );
   }
 
@@ -193,6 +220,19 @@ mixin _$Profile {
   String get name => throw _privateConstructorUsedError;
   String? get avatar => throw _privateConstructorUsedError;
   String? get header => throw _privateConstructorUsedError;
+  String? get comment => throw _privateConstructorUsedError;
+  String? get introduction => throw _privateConstructorUsedError;
+  String? get favorite => throw _privateConstructorUsedError;
+  List<String>? get playTitle => throw _privateConstructorUsedError;
+  String? get adress => throw _privateConstructorUsedError;
+  String? get activityDay => throw _privateConstructorUsedError;
+  String? get activityTime => throw _privateConstructorUsedError;
+  String? get age => throw _privateConstructorUsedError;
+  String? get sex => throw _privateConstructorUsedError;
+  bool? get remoteDuel => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  int get order => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -203,7 +243,22 @@ mixin _$Profile {
 abstract class $ProfileCopyWith<$Res> {
   factory $ProfileCopyWith(Profile value, $Res Function(Profile) then) =
       _$ProfileCopyWithImpl<$Res>;
-  $Res call({String name, String? avatar, String? header});
+  $Res call(
+      {String name,
+      String? avatar,
+      String? header,
+      String? comment,
+      String? introduction,
+      String? favorite,
+      List<String>? playTitle,
+      String? adress,
+      String? activityDay,
+      String? activityTime,
+      String? age,
+      String? sex,
+      bool? remoteDuel,
+      @TimestampConverter() DateTime? createdAt,
+      int order});
 }
 
 /// @nodoc
@@ -219,6 +274,18 @@ class _$ProfileCopyWithImpl<$Res> implements $ProfileCopyWith<$Res> {
     Object? name = freezed,
     Object? avatar = freezed,
     Object? header = freezed,
+    Object? comment = freezed,
+    Object? introduction = freezed,
+    Object? favorite = freezed,
+    Object? playTitle = freezed,
+    Object? adress = freezed,
+    Object? activityDay = freezed,
+    Object? activityTime = freezed,
+    Object? age = freezed,
+    Object? sex = freezed,
+    Object? remoteDuel = freezed,
+    Object? createdAt = freezed,
+    Object? order = freezed,
   }) {
     return _then(_value.copyWith(
       name: name == freezed
@@ -233,6 +300,54 @@ class _$ProfileCopyWithImpl<$Res> implements $ProfileCopyWith<$Res> {
           ? _value.header
           : header // ignore: cast_nullable_to_non_nullable
               as String?,
+      comment: comment == freezed
+          ? _value.comment
+          : comment // ignore: cast_nullable_to_non_nullable
+              as String?,
+      introduction: introduction == freezed
+          ? _value.introduction
+          : introduction // ignore: cast_nullable_to_non_nullable
+              as String?,
+      favorite: favorite == freezed
+          ? _value.favorite
+          : favorite // ignore: cast_nullable_to_non_nullable
+              as String?,
+      playTitle: playTitle == freezed
+          ? _value.playTitle
+          : playTitle // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      adress: adress == freezed
+          ? _value.adress
+          : adress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      activityDay: activityDay == freezed
+          ? _value.activityDay
+          : activityDay // ignore: cast_nullable_to_non_nullable
+              as String?,
+      activityTime: activityTime == freezed
+          ? _value.activityTime
+          : activityTime // ignore: cast_nullable_to_non_nullable
+              as String?,
+      age: age == freezed
+          ? _value.age
+          : age // ignore: cast_nullable_to_non_nullable
+              as String?,
+      sex: sex == freezed
+          ? _value.sex
+          : sex // ignore: cast_nullable_to_non_nullable
+              as String?,
+      remoteDuel: remoteDuel == freezed
+          ? _value.remoteDuel
+          : remoteDuel // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      createdAt: createdAt == freezed
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      order: order == freezed
+          ? _value.order
+          : order // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -242,7 +357,22 @@ abstract class _$ProfileCopyWith<$Res> implements $ProfileCopyWith<$Res> {
   factory _$ProfileCopyWith(_Profile value, $Res Function(_Profile) then) =
       __$ProfileCopyWithImpl<$Res>;
   @override
-  $Res call({String name, String? avatar, String? header});
+  $Res call(
+      {String name,
+      String? avatar,
+      String? header,
+      String? comment,
+      String? introduction,
+      String? favorite,
+      List<String>? playTitle,
+      String? adress,
+      String? activityDay,
+      String? activityTime,
+      String? age,
+      String? sex,
+      bool? remoteDuel,
+      @TimestampConverter() DateTime? createdAt,
+      int order});
 }
 
 /// @nodoc
@@ -259,6 +389,18 @@ class __$ProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
     Object? name = freezed,
     Object? avatar = freezed,
     Object? header = freezed,
+    Object? comment = freezed,
+    Object? introduction = freezed,
+    Object? favorite = freezed,
+    Object? playTitle = freezed,
+    Object? adress = freezed,
+    Object? activityDay = freezed,
+    Object? activityTime = freezed,
+    Object? age = freezed,
+    Object? sex = freezed,
+    Object? remoteDuel = freezed,
+    Object? createdAt = freezed,
+    Object? order = freezed,
   }) {
     return _then(_Profile(
       name: name == freezed
@@ -273,6 +415,54 @@ class __$ProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
           ? _value.header
           : header // ignore: cast_nullable_to_non_nullable
               as String?,
+      comment: comment == freezed
+          ? _value.comment
+          : comment // ignore: cast_nullable_to_non_nullable
+              as String?,
+      introduction: introduction == freezed
+          ? _value.introduction
+          : introduction // ignore: cast_nullable_to_non_nullable
+              as String?,
+      favorite: favorite == freezed
+          ? _value.favorite
+          : favorite // ignore: cast_nullable_to_non_nullable
+              as String?,
+      playTitle: playTitle == freezed
+          ? _value.playTitle
+          : playTitle // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      adress: adress == freezed
+          ? _value.adress
+          : adress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      activityDay: activityDay == freezed
+          ? _value.activityDay
+          : activityDay // ignore: cast_nullable_to_non_nullable
+              as String?,
+      activityTime: activityTime == freezed
+          ? _value.activityTime
+          : activityTime // ignore: cast_nullable_to_non_nullable
+              as String?,
+      age: age == freezed
+          ? _value.age
+          : age // ignore: cast_nullable_to_non_nullable
+              as String?,
+      sex: sex == freezed
+          ? _value.sex
+          : sex // ignore: cast_nullable_to_non_nullable
+              as String?,
+      remoteDuel: remoteDuel == freezed
+          ? _value.remoteDuel
+          : remoteDuel // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      createdAt: createdAt == freezed
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      order: order == freezed
+          ? _value.order
+          : order // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -280,7 +470,23 @@ class __$ProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Profile extends _Profile {
-  _$_Profile({required this.name, this.avatar, this.header}) : super._();
+  _$_Profile(
+      {required this.name,
+      this.avatar,
+      this.header,
+      this.comment,
+      this.introduction,
+      this.favorite,
+      this.playTitle,
+      this.adress,
+      this.activityDay,
+      this.activityTime,
+      this.age,
+      this.sex,
+      this.remoteDuel,
+      @TimestampConverter() this.createdAt,
+      required this.order})
+      : super._();
 
   factory _$_Profile.fromJson(Map<String, dynamic> json) =>
       _$$_ProfileFromJson(json);
@@ -291,10 +497,35 @@ class _$_Profile extends _Profile {
   final String? avatar;
   @override
   final String? header;
+  @override
+  final String? comment;
+  @override
+  final String? introduction;
+  @override
+  final String? favorite;
+  @override
+  final List<String>? playTitle;
+  @override
+  final String? adress;
+  @override
+  final String? activityDay;
+  @override
+  final String? activityTime;
+  @override
+  final String? age;
+  @override
+  final String? sex;
+  @override
+  final bool? remoteDuel;
+  @override
+  @TimestampConverter()
+  final DateTime? createdAt;
+  @override
+  final int order;
 
   @override
   String toString() {
-    return 'Profile(name: $name, avatar: $avatar, header: $header)';
+    return 'Profile(name: $name, avatar: $avatar, header: $header, comment: $comment, introduction: $introduction, favorite: $favorite, playTitle: $playTitle, adress: $adress, activityDay: $activityDay, activityTime: $activityTime, age: $age, sex: $sex, remoteDuel: $remoteDuel, createdAt: $createdAt, order: $order)';
   }
 
   @override
@@ -304,7 +535,23 @@ class _$_Profile extends _Profile {
             other is _Profile &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.avatar, avatar) &&
-            const DeepCollectionEquality().equals(other.header, header));
+            const DeepCollectionEquality().equals(other.header, header) &&
+            const DeepCollectionEquality().equals(other.comment, comment) &&
+            const DeepCollectionEquality()
+                .equals(other.introduction, introduction) &&
+            const DeepCollectionEquality().equals(other.favorite, favorite) &&
+            const DeepCollectionEquality().equals(other.playTitle, playTitle) &&
+            const DeepCollectionEquality().equals(other.adress, adress) &&
+            const DeepCollectionEquality()
+                .equals(other.activityDay, activityDay) &&
+            const DeepCollectionEquality()
+                .equals(other.activityTime, activityTime) &&
+            const DeepCollectionEquality().equals(other.age, age) &&
+            const DeepCollectionEquality().equals(other.sex, sex) &&
+            const DeepCollectionEquality()
+                .equals(other.remoteDuel, remoteDuel) &&
+            const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
+            const DeepCollectionEquality().equals(other.order, order));
   }
 
   @override
@@ -312,7 +559,19 @@ class _$_Profile extends _Profile {
       runtimeType,
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(avatar),
-      const DeepCollectionEquality().hash(header));
+      const DeepCollectionEquality().hash(header),
+      const DeepCollectionEquality().hash(comment),
+      const DeepCollectionEquality().hash(introduction),
+      const DeepCollectionEquality().hash(favorite),
+      const DeepCollectionEquality().hash(playTitle),
+      const DeepCollectionEquality().hash(adress),
+      const DeepCollectionEquality().hash(activityDay),
+      const DeepCollectionEquality().hash(activityTime),
+      const DeepCollectionEquality().hash(age),
+      const DeepCollectionEquality().hash(sex),
+      const DeepCollectionEquality().hash(remoteDuel),
+      const DeepCollectionEquality().hash(createdAt),
+      const DeepCollectionEquality().hash(order));
 
   @JsonKey(ignore: true)
   @override
@@ -326,8 +585,22 @@ class _$_Profile extends _Profile {
 }
 
 abstract class _Profile extends Profile {
-  factory _Profile({required String name, String? avatar, String? header}) =
-      _$_Profile;
+  factory _Profile(
+      {required String name,
+      String? avatar,
+      String? header,
+      String? comment,
+      String? introduction,
+      String? favorite,
+      List<String>? playTitle,
+      String? adress,
+      String? activityDay,
+      String? activityTime,
+      String? age,
+      String? sex,
+      bool? remoteDuel,
+      @TimestampConverter() DateTime? createdAt,
+      required int order}) = _$_Profile;
   _Profile._() : super._();
 
   factory _Profile.fromJson(Map<String, dynamic> json) = _$_Profile.fromJson;
@@ -338,6 +611,31 @@ abstract class _Profile extends Profile {
   String? get avatar;
   @override
   String? get header;
+  @override
+  String? get comment;
+  @override
+  String? get introduction;
+  @override
+  String? get favorite;
+  @override
+  List<String>? get playTitle;
+  @override
+  String? get adress;
+  @override
+  String? get activityDay;
+  @override
+  String? get activityTime;
+  @override
+  String? get age;
+  @override
+  String? get sex;
+  @override
+  bool? get remoteDuel;
+  @override
+  @TimestampConverter()
+  DateTime? get createdAt;
+  @override
+  int get order;
   @override
   @JsonKey(ignore: true)
   _$ProfileCopyWith<_Profile> get copyWith =>
