@@ -9,7 +9,8 @@ part 'user_profile.g.dart';
 class UserProfile with _$UserProfile {
   factory UserProfile(
       {required final String uid,
-      @Default(null) AsyncValue<Profile>? profile}) = _UserProfile;
+      @Default(null) AsyncValue<Profile>? profile,
+      @Default(null) AsyncValue<List<FriendWithId>>? friends}) = _UserProfile;
 
   const UserProfile._();
 }
@@ -30,7 +31,9 @@ class Profile with _$Profile {
     String? age,
     String? sex,
     bool? remoteDuel,
+    List<String>? blockList,
     @TimestampConverter() DateTime? createdAt,
+    @TimestampConverter() DateTime? activeAt,
     required final int order,
   }) = _Profile;
 
@@ -40,12 +43,65 @@ class Profile with _$Profile {
       _$ProfileFromJson(json);
 }
 
+@freezed
+class FriendWithId with _$FriendWithId {
+  factory FriendWithId({
+    required final String uid,
+    required final Friend friend,
+  }) = _FriendWithId;
+
+  const FriendWithId._();
+}
+
+@freezed
+class Friend with _$Friend {
+  factory Friend({
+    required final String name,
+    String? avatar,
+    @TimestampConverter() DateTime? createdAt,
+  }) = _Friend;
+
+  const Friend._();
+
+  factory Friend.fromJson(Map<String, dynamic> json) => _$FriendFromJson(json);
+}
+
 DocumentReference<Profile> userDocument(String id) {
   return FirebaseFirestore.instance
       .collection('users')
       .doc(id)
       .withConverter<Profile>(
         fromFirestore: (snapshot, _) => Profile.fromJson(snapshot.data()!),
+        toFirestore: (model, _) => model.toJson(),
+      );
+}
+
+CollectionReference<Profile> userCollection() {
+  return FirebaseFirestore.instance.collection('users').withConverter<Profile>(
+        fromFirestore: (snapshot, _) => Profile.fromJson(snapshot.data()!),
+        toFirestore: (model, _) => model.toJson(),
+      );
+}
+
+Query<Profile> userCollectionQuery() {
+  return FirebaseFirestore.instance
+      .collection('users')
+      .withConverter<Profile>(
+        fromFirestore: (snapshot, _) => Profile.fromJson(snapshot.data()!),
+        toFirestore: (model, _) => model.toJson(),
+      )
+      .orderBy('activeAt');
+  // .where(FieldPath.documentId,
+  //     whereNotIn: ['5XfmclOlLxhs27P86bu6et98DQ03']);
+}
+
+CollectionReference<Friend> friendCollection(String id) {
+  return FirebaseFirestore.instance
+      .collection('users')
+      .doc(id)
+      .collection('friends')
+      .withConverter<Friend>(
+        fromFirestore: (snapshot, _) => Friend.fromJson(snapshot.data()!),
         toFirestore: (model, _) => model.toJson(),
       );
 }

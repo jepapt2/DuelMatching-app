@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,7 +20,7 @@ class PrimaryDrawer extends StatelessWidget {
                 EdgeInsets.only(left: 5.0, right: 0.0, top: 0.0, bottom: 0.0),
             leading: Icon(Icons.account_circle_rounded),
             title: const Text('プロフィール確認'),
-            onTap: () => GoRouter.of(context).push('/users'),
+            onTap: () => GoRouter.of(context).push('/profile'),
           ),
           ListTile(
             minLeadingWidth: 0.0,
@@ -27,6 +28,13 @@ class PrimaryDrawer extends StatelessWidget {
             leading: Icon(Icons.manage_accounts_rounded),
             title: Text('プロフィール編集'),
             onTap: () => GoRouter.of(context).push('/profile_edit'),
+          ),
+          ListTile(
+            minLeadingWidth: 0.0,
+            contentPadding: EdgeInsets.only(left: 5.0, right: 0.0),
+            leading: Icon(Icons.manage_accounts_rounded),
+            title: Text('ログアウト'),
+            onTap: () => FirebaseAuth.instance.signOut(),
           )
         ],
       ),

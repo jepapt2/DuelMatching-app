@@ -22,8 +22,13 @@ _$_Profile _$$_ProfileFromJson(Map<String, dynamic> json) => _$_Profile(
       age: json['age'] as String?,
       sex: json['sex'] as String?,
       remoteDuel: json['remoteDuel'] as bool?,
+      blockList: (json['blockList'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       createdAt:
           const TimestampConverter().fromJson(json['createdAt'] as Timestamp?),
+      activeAt:
+          const TimestampConverter().fromJson(json['activeAt'] as Timestamp?),
       order: json['order'] as int,
     );
 
@@ -42,6 +47,21 @@ Map<String, dynamic> _$$_ProfileToJson(_$_Profile instance) =>
       'age': instance.age,
       'sex': instance.sex,
       'remoteDuel': instance.remoteDuel,
+      'blockList': instance.blockList,
       'createdAt': const TimestampConverter().toJson(instance.createdAt),
+      'activeAt': const TimestampConverter().toJson(instance.activeAt),
       'order': instance.order,
+    };
+
+_$_Friend _$$_FriendFromJson(Map<String, dynamic> json) => _$_Friend(
+      name: json['name'] as String,
+      avatar: json['avatar'] as String?,
+      createdAt:
+          const TimestampConverter().fromJson(json['createdAt'] as Timestamp?),
+    );
+
+Map<String, dynamic> _$$_FriendToJson(_$_Friend instance) => <String, dynamic>{
+      'name': instance.name,
+      'avatar': instance.avatar,
+      'createdAt': const TimestampConverter().toJson(instance.createdAt),
     };

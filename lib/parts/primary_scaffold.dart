@@ -10,17 +10,22 @@ class PrimaryScaffold extends StatelessWidget {
     Key? key,
     required this.sliverChild,
     this.appBarText,
+    this.appBarAction,
   }) : super(key: key);
 
   final Widget sliverChild;
   final String? appBarText;
+  final List<Widget>? appBarAction;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          PrimarySliverAppBar(appBarText: appBarText),
+          PrimarySliverAppBar(
+            appBarText: appBarText,
+            appBarAction: appBarAction,
+          ),
           sliverChild,
         ],
       ),

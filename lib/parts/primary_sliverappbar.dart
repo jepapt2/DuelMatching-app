@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 
 class PrimarySliverAppBar extends StatelessWidget {
-  PrimarySliverAppBar({Key? key, this.appBarText}) : super(key: key);
+  PrimarySliverAppBar({Key? key, this.appBarText, this.appBarAction})
+      : super(key: key);
 
   final String? appBarText;
+  final List<Widget>? appBarAction;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,7 @@ class PrimarySliverAppBar extends StatelessWidget {
           icon: UserAvatar(
             auth: FirebaseAuth.instance,
           )),
+      actions: appBarAction,
       expandedHeight: 10,
     );
   }

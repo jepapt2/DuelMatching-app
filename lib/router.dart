@@ -1,5 +1,7 @@
+import 'package:duel_matching/model/user_profile/user_profile.dart';
 import 'package:duel_matching/screens/login.dart';
 import 'package:duel_matching/screens/notice.dart';
+import 'package:duel_matching/screens/my_profile.dart';
 import 'package:duel_matching/screens/profile_edit.dart';
 import 'package:duel_matching/screens/recruits.dart';
 import 'package:duel_matching/screens/users.dart';
@@ -16,7 +18,7 @@ final router = GoRouter(
       path: '/users',
       pageBuilder: (context, state) => NoTransitionPage<void>(
         key: state.pageKey,
-        child: const UsersScreen(),
+        child: UsersScreen(),
       ),
     ),
     GoRoute(
@@ -36,6 +38,11 @@ final router = GoRouter(
     GoRoute(
       path: '/profile_edit',
       builder: (context, state) => ProfileEditScreen(),
+    ),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => MyProfileScreen(
+          myProfile: true, id: FirebaseAuth.instance.currentUser!.uid),
     )
   ],
   redirect: (state) {

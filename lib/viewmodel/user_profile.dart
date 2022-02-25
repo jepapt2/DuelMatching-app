@@ -8,8 +8,18 @@ final profileProvider = StreamProvider.family<Profile, String>((ref, id) {
   return doc;
 });
 
+final friendsProvider =
+    StreamProvider.family<List<FriendWithId>, String>((ref, id) {
+  final document = friendCollection(id);
+  final snapshot = document.snapshots().map((event) => event.docs
+      .map((e) => FriendWithId(uid: e.id, friend: e.data()))
+      .toList());
+  return snapshot;
+});
+
 final userProfileProvider =
     StateProvider.family<UserProfile, String>((ref, String id) {
-  final a = ref.watch(profileProvider(id));
-  return UserProfile(uid: id, profile: a);
+  final profile = ref.watch(profileProvider(id));
+  final friends = ref.watch(friendsProvider(id));
+  return UserProfile(uid: id, profile: profile, friends: friends);
 });
