@@ -5,11 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:duel_matching/extension/string.dart';
 
-class MyProfileScreen extends HookConsumerWidget {
-  const MyProfileScreen({Key? key, required this.myProfile, required this.id})
-      : super(key: key);
+class UserProfileScreen extends HookConsumerWidget {
+  const UserProfileScreen({Key? key, required this.id}) : super(key: key);
 
-  final bool myProfile;
   final String id;
 
   @override
@@ -238,7 +236,7 @@ class MyProfileScreen extends HookConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text('自己紹介'),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20.0,
                                   ),
                                   Text(user.introduction!)

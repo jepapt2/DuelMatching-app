@@ -23,7 +23,7 @@ class FriendsWhenConsumer extends HookConsumerWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text('ユーザの取得に失敗しました'),
+                    const Text('アカウント情報の取得に失敗しました'),
                     ElevatedButton(
                       style: ButtonStyle(
                           textStyle: MaterialStateProperty.all(

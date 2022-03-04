@@ -4,6 +4,7 @@ import 'package:duel_matching/screens/notice.dart';
 import 'package:duel_matching/screens/my_profile.dart';
 import 'package:duel_matching/screens/profile_edit.dart';
 import 'package:duel_matching/screens/recruits.dart';
+import 'package:duel_matching/screens/user_profile.dart';
 import 'package:duel_matching/screens/users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
@@ -36,6 +37,13 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
+      path: '/user/:id',
+      builder: (context, state) {
+        final userId = state.params['id']!;
+        return UserProfileScreen(id: userId);
+      },
+    ),
+    GoRoute(
       path: '/profile_edit',
       builder: (context, state) => ProfileEditScreen(),
     ),
@@ -43,7 +51,7 @@ final router = GoRouter(
       path: '/profile',
       builder: (context, state) => MyProfileScreen(
           myProfile: true, id: FirebaseAuth.instance.currentUser!.uid),
-    )
+    ),
   ],
   redirect: (state) {
     final bool loggedIn = FirebaseAuth.instance.currentUser != null;

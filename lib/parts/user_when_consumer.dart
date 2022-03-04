@@ -23,14 +23,14 @@ class UserWhenConsumer extends HookConsumerWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('ユーザの取得に失敗しました'),
+                    const Text('アカウント情報の取得に失敗しました'),
                     ElevatedButton(
                       style: ButtonStyle(
                           textStyle: MaterialStateProperty.all(
                               const TextStyle(fontWeight: FontWeight.bold)),
                           backgroundColor:
                               MaterialStateProperty.all(Colors.redAccent)),
-                      child: Text('更新する'),
+                      child: const Text('更新する'),
                       onPressed: () {
                         ref.refresh(userProfileProvider(
                             FirebaseAuth.instance.currentUser!.uid));

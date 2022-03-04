@@ -9,6 +9,7 @@ import 'package:duel_matching/parts/primary_drawer.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/parts/primary_sliverappbar.dart';
 import 'package:duel_matching/parts/search_button.dart';
+import 'package:duel_matching/parts/user_card.dart';
 import 'package:duel_matching/parts/user_when_consumer.dart';
 import 'package:duel_matching/viewmodel/users_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,7 +39,7 @@ class UsersScreen extends HookConsumerWidget {
     return UserWhenConsumer(
       child: (user) => FriendsWhenConsumer(child: (friends) {
         final blockIds = useState<List<String>>([
-          FirebaseAuth.instance.currentUser!.uid,
+          // FirebaseAuth.instance.currentUser!.uid,
           ...friends.map((f) => f.uid).toList(),
           ...?user.blockList
         ]);
@@ -62,44 +63,107 @@ class UsersScreen extends HookConsumerWidget {
                               (element) => !blockIds.value.contains(element.id))
                           .toList();
                       if (snapshot.isFetching) {
-                        return const CircularProgressIndicator();
+                        return Center(
+                            child: Column(
+                          children: const [
+                            SizedBox(
+                              height: 100.0,
+                            ),
+                            CircularProgressIndicator(),
+                          ],
+                        ));
                       }
 
                       if (snapshot.hasError) {
-                        return Text('Something went wrong! ${snapshot.error}');
+                        return Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(
+                                height: 100.0,
+                              ),
+                              const Text('ユーザの取得に失敗しました'),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                    textStyle: MaterialStateProperty.all(
+                                        const TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.redAccent)),
+                                child: const Text('更新する'),
+                                onPressed: () {
+                                  usersQueryProvider.update(
+                                      (state) => getUsersQuery(searchQuery));
+                                },
+                              ),
+                            ],
+                          ),
+                        );
                       }
-                      return GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 5,
-                          crossAxisSpacing: 5,
-                          childAspectRatio: 0.3,
+                      if (docs.isEmpty) {
+                        return Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(
+                                height: 100.0,
+                              ),
+                              const Text('ユーザが見つかりませんでした'),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                    textStyle: MaterialStateProperty.all(
+                                        const TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.redAccent)),
+                                child: const Text('再検索する'),
+                                onPressed: () {
+                                  searchDialog(context, ref, searchQuery,
+                                      usersQueryProvider);
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 5,
+                            crossAxisSpacing: 5,
+                            childAspectRatio: 1,
+                          ),
+                          itemCount: docs.length,
+                          itemBuilder: (context, index) {
+                            // if we reached the end of the currently obtained items, we try to
+                            // obtain more items
+                            if (snapshot.hasMore && index + 1 == docs.length) {
+                              // Tell FirestoreQueryBuilder to try to obtain more items.
+                              // It is safe to call this function from within the build method.
+                              snapshot.fetchMore();
+                            }
+
+                            final user = docs[index].data();
+                            final id = docs[index].id;
+
+                            return GestureDetector(
+                              onTap: () =>
+                                  GoRouter.of(context).push('/user/$id'),
+                              child: UserCard(
+                                avatar: user.avatar,
+                                adress: user.adress,
+                                favorite: user.favorite,
+                                comment: user.comment,
+                                name: user.name,
+                              ),
+                            );
+                          },
                         ),
-                        itemCount: docs.length,
-                        itemBuilder: (context, index) {
-                          // if we reached the end of the currently obtained items, we try to
-                          // obtain more items
-                          if (snapshot.hasMore && index + 1 == docs.length) {
-                            // Tell FirestoreQueryBuilder to try to obtain more items.
-                            // It is safe to call this function from within the build method.
-                            snapshot.fetchMore();
-                          }
-
-                          final user = docs[index].data();
-                          final id = docs[index].id;
-
-                          return GestureDetector(
-                            onTap: () => print(id),
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              color: Colors.teal[100],
-                              child: Text("User name is ${user.name},${id}"),
-                            ),
-                          );
-                        },
                       );
                     }),
               ],
