@@ -141,18 +141,20 @@ class ProfileEditScreen extends HookConsumerWidget {
                                   .labelStyle,
                             ),
                             Text(
-                              '(プレイする頻度から入力してください)',
+                              '(プレイする頻度が高い順で入力してください)',
                               style: Theme.of(context)
                                   .inputDecorationTheme
                                   .labelStyle
                                   ?.copyWith(fontSize: 12.0),
                             ),
                             SizedBox(
-                              height: 70.0,
+                              height: 100.0,
                               child: Scrollbar(
                                 controller: _playTitleController,
                                 isAlwaysShown: true,
                                 child: ListView(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 30.0),
                                     controller: _playTitleController,
                                     scrollDirection: Axis.horizontal,
                                     children: playTitleOption
@@ -482,7 +484,7 @@ class ProfileEditScreen extends HookConsumerWidget {
         await FirebaseStorage.instance
             .ref("avatars/$uid.png")
             .putFile(File(avatarImage.path));
-        headerUrl = await FirebaseStorage.instance
+        avatarUrl = await FirebaseStorage.instance
             .ref("avatars/$uid.png")
             .getDownloadURL();
       } catch (e) {
@@ -497,33 +499,35 @@ class ProfileEditScreen extends HookConsumerWidget {
       }
     }
 
-    try {
-      await userDocument(uid).update({
-        'header': headerUrl ?? user.header,
-        'avatar': avatarUrl ?? user.avatar,
-        'name': _formKey.currentState!.value['name'],
-        'comment': _formKey.currentState!.value['comment'],
-        'introduction': _formKey.currentState!.value['introduction'],
-        'favorite': _formKey.currentState!.value['favorite'],
-        'playTitle': playTitle,
-        'remoteDuel': _formKey.currentState!.value['remoteDuel'],
-        'adress': _formKey.currentState!.value['adress'],
-        'activityDay': _formKey.currentState!.value['activityDay'],
-        'activityTime': _formKey.currentState!.value['activityTime'],
-        'age': _formKey.currentState!.value['age'],
-        'sex': _formKey.currentState!.value['sex']
-      });
-      GoRouter.of(context).pop();
-      GoRouter.of(context).push('/profile');
-    } catch (e) {
-      Fluttertoast.showToast(
-          msg: 'プロフィールの更新に失敗しました',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 13.0);
+    if (_formKey.currentState!.validate()) {
+      try {
+        await userDocument(uid).update({
+          'header': headerUrl ?? user.header,
+          'avatar': avatarUrl ?? user.avatar,
+          'name': _formKey.currentState!.value['name'],
+          'comment': _formKey.currentState!.value['comment'],
+          'introduction': _formKey.currentState!.value['introduction'],
+          'favorite': _formKey.currentState!.value['favorite'],
+          'playTitle': playTitle,
+          'remoteDuel': _formKey.currentState!.value['remoteDuel'],
+          'adress': _formKey.currentState!.value['adress'],
+          'activityDay': _formKey.currentState!.value['activityDay'],
+          'activityTime': _formKey.currentState!.value['activityTime'],
+          'age': _formKey.currentState!.value['age'],
+          'sex': _formKey.currentState!.value['sex']
+        });
+        GoRouter.of(context).pop();
+        GoRouter.of(context).push('/profile');
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: 'プロフィールの更新に失敗しました',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 13.0);
+      }
     }
   }
 }

@@ -8,6 +8,14 @@ final profileProvider = StreamProvider.family<Profile, String>((ref, id) {
   return doc;
 });
 
+final disposeProfileProvider =
+    StreamProvider.family.autoDispose<Profile, String>((ref, id) {
+  final document = userDocument(id);
+  final snapshot = document.snapshots();
+  final doc = snapshot.map((event) => event.data()!);
+  return doc;
+});
+
 final friendsProvider =
     StreamProvider.family<List<FriendWithId>, String>((ref, id) {
   final document = friendCollection(id);

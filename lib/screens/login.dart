@@ -68,19 +68,9 @@ class LoginScreen extends StatelessWidget {
                   // onTap: () => signInWithTwitter(),
                 ),
               ),
-              TextButton(
-                  onPressed: () => print(FirebaseAuth.instance.currentUser),
-                  child: Text('ユーザー')),
-              TextButton(
-                  onPressed: () async {
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginScreen()),
-                        (_) => false);
-                  },
-                  child: Text('ユーザー')),
+              const SizedBox(
+                height: 50.0,
+              )
             ],
           ),
         ),

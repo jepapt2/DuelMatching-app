@@ -19,8 +19,6 @@ class MyProfileScreen extends HookConsumerWidget {
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
-              stretchTriggerOffset: 50.0,
-              onStretchTrigger: () => stertchTrigger(),
               automaticallyImplyLeading: false,
               shape: Border.all(width: 0, style: BorderStyle.none),
               centerTitle: true,
@@ -133,96 +131,107 @@ class MyProfileScreen extends HookConsumerWidget {
                           padding: const EdgeInsets.only(bottom: 12.0),
                           child: Text(user.comment!),
                         ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                          elevation: 10.0,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Table(
-                              columnWidths: const <int, TableColumnWidth>{
-                                0: IntrinsicColumnWidth(),
-                                1: FlexColumnWidth(10.0),
-                              },
-                              defaultVerticalAlignment:
-                                  TableCellVerticalAlignment.middle,
-                              children: [
-                                if (user.playTitle != null &&
-                                    user.playTitle!.isNotEmpty)
-                                  TableRow(children: [
-                                    const Text('プレイタイトル'),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Wrap(
-                                          spacing: 2.0,
-                                          runSpacing: 5.0,
-                                          children: user.playTitle!
-                                              .map((t) => Chip(
-                                                  materialTapTargetSize:
-                                                      MaterialTapTargetSize
-                                                          .shrinkWrap,
-                                                  label: Text(t)))
-                                              .toList()),
-                                    )
-                                  ]),
-                                if (user.favorite.isNotNullAndNotEmpty)
-                                  TableRow(children: [
-                                    const Text('好きなカード'),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(user.favorite!),
-                                    )
-                                  ]),
-                                if (user.adress.isNotNullAndNotEmpty)
-                                  TableRow(children: [
-                                    const Text('居住地'),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(user.adress!),
-                                    )
-                                  ]),
-                                if (user.remoteDuel != null)
-                                  TableRow(children: [
-                                    const Text('リモート対戦環境'),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child:
-                                          Text(user.remoteDuel! ? 'あり' : 'なし'),
-                                    )
-                                  ]),
-                                if (user.activityDay.isNotNullAndNotEmpty)
-                                  TableRow(children: [
-                                    Text('活動日'),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(user.activityDay!),
-                                    )
-                                  ]),
-                                if (user.activityTime.isNotNullAndNotEmpty)
-                                  TableRow(children: [
-                                    const Text('活動時間'),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(user.activityTime!),
-                                    )
-                                  ]),
-                                if (user.age.isNotNullAndNotEmpty)
-                                  TableRow(children: [
-                                    const Text('年齢'),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(user.age!),
-                                    )
-                                  ]),
-                                if (user.sex.isNotNullAndNotEmpty)
-                                  TableRow(children: [
-                                    const Text('性別'),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(user.sex!),
-                                    )
-                                  ]),
-                              ],
+                      Visibility(
+                        visible: user.activityDay.isNotNullAndNotEmpty ||
+                            user.activityTime.isNotNullAndNotEmpty ||
+                            user.adress.isNotNullAndNotEmpty ||
+                            user.age.isNotNullAndNotEmpty ||
+                            user.favorite.isNotNullAndNotEmpty ||
+                            user.playTitle != null &&
+                                user.playTitle!.isNotEmpty ||
+                            user.remoteDuel != null ||
+                            user.sex.isNotNullAndNotEmpty,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Card(
+                            elevation: 10.0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Table(
+                                columnWidths: const <int, TableColumnWidth>{
+                                  0: IntrinsicColumnWidth(),
+                                  1: FlexColumnWidth(10.0),
+                                },
+                                defaultVerticalAlignment:
+                                    TableCellVerticalAlignment.middle,
+                                children: [
+                                  if (user.playTitle != null &&
+                                      user.playTitle!.isNotEmpty)
+                                    TableRow(children: [
+                                      const Text('プレイタイトル'),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Wrap(
+                                            spacing: 2.0,
+                                            runSpacing: 5.0,
+                                            children: user.playTitle!
+                                                .map((t) => Chip(
+                                                    materialTapTargetSize:
+                                                        MaterialTapTargetSize
+                                                            .shrinkWrap,
+                                                    label: Text(t)))
+                                                .toList()),
+                                      )
+                                    ]),
+                                  if (user.favorite.isNotNullAndNotEmpty)
+                                    TableRow(children: [
+                                      const Text('好きなカード'),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(user.favorite!),
+                                      )
+                                    ]),
+                                  if (user.adress.isNotNullAndNotEmpty)
+                                    TableRow(children: [
+                                      const Text('居住地'),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(user.adress!),
+                                      )
+                                    ]),
+                                  if (user.remoteDuel != null)
+                                    TableRow(children: [
+                                      const Text('リモート対戦環境'),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                            user.remoteDuel! ? 'あり' : 'なし'),
+                                      )
+                                    ]),
+                                  if (user.activityDay.isNotNullAndNotEmpty)
+                                    TableRow(children: [
+                                      Text('活動日'),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(user.activityDay!),
+                                      )
+                                    ]),
+                                  if (user.activityTime.isNotNullAndNotEmpty)
+                                    TableRow(children: [
+                                      const Text('活動時間'),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(user.activityTime!),
+                                      )
+                                    ]),
+                                  if (user.age.isNotNullAndNotEmpty)
+                                    TableRow(children: [
+                                      const Text('年齢'),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(user.age!),
+                                      )
+                                    ]),
+                                  if (user.sex.isNotNullAndNotEmpty)
+                                    TableRow(children: [
+                                      const Text('性別'),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(user.sex!),
+                                      )
+                                    ]),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -266,9 +275,5 @@ class MyProfileScreen extends HookConsumerWidget {
     } else {
       return const AssetImage('assets/images/initial_avatar.png');
     }
-  }
-
-  Future<void> stertchTrigger() async {
-    print('a');
   }
 }

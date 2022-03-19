@@ -5,9 +5,7 @@ import 'package:duel_matching/input_options/play_title.dart';
 import 'package:duel_matching/model/user_profile/user_profile.dart';
 import 'package:duel_matching/model/users_search/users_search.dart';
 import 'package:duel_matching/parts/friends_when_consumer.dart';
-import 'package:duel_matching/parts/primary_drawer.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
-import 'package:duel_matching/parts/primary_sliverappbar.dart';
 import 'package:duel_matching/parts/search_button.dart';
 import 'package:duel_matching/parts/user_card.dart';
 import 'package:duel_matching/parts/user_when_consumer.dart';
@@ -16,13 +14,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutterfire_ui/auth.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'login.dart';
 
 class UsersScreen extends HookConsumerWidget {
   UsersScreen({Key? key}) : super(key: key);
@@ -31,7 +25,8 @@ class UsersScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final usersQueryProvider = ref.watch(usersProvider.notifier);
+    final timeNow = useMemoized(DateTime.now);
+    final usersQueryProvider = ref.watch(usersProvider(timeNow).notifier);
     final searchQuery = useState<UsersSearch>(UsersSearch(
       sort: 'activeAt',
     ));
@@ -39,16 +34,17 @@ class UsersScreen extends HookConsumerWidget {
     return UserWhenConsumer(
       child: (user) => FriendsWhenConsumer(child: (friends) {
         final blockIds = useState<List<String>>([
-          // FirebaseAuth.instance.currentUser!.uid,
+          FirebaseAuth.instance.currentUser!.uid,
           ...friends.map((f) => f.uid).toList(),
           ...?user.blockList
         ]);
+
         return PrimaryScaffold(
           appBarAction: [
             IconButton(
                 iconSize: 33,
-                onPressed: () =>
-                    searchDialog(context, ref, searchQuery, usersQueryProvider),
+                onPressed: () => searchDialog(
+                    context, ref, searchQuery, usersQueryProvider, timeNow),
                 icon: const Icon(Icons.manage_search_outlined))
           ],
           sliverChild: SliverList(
@@ -92,8 +88,8 @@ class UsersScreen extends HookConsumerWidget {
                                         Colors.redAccent)),
                                 child: const Text('更新する'),
                                 onPressed: () {
-                                  usersQueryProvider.update(
-                                      (state) => getUsersQuery(searchQuery));
+                                  usersQueryProvider.update((state) =>
+                                      getUsersQuery(searchQuery, timeNow));
                                 },
                               ),
                             ],
@@ -119,7 +115,7 @@ class UsersScreen extends HookConsumerWidget {
                                 child: const Text('再検索する'),
                                 onPressed: () {
                                   searchDialog(context, ref, searchQuery,
-                                      usersQueryProvider);
+                                      usersQueryProvider, timeNow);
                                 },
                               ),
                             ],
@@ -175,7 +171,7 @@ class UsersScreen extends HookConsumerWidget {
   }
 
   searchDialog(context, WidgetRef ref, ValueNotifier<UsersSearch> searchQuery,
-      StateController<Query<Profile>> usersQueryProvider) {
+      StateController<Query<Profile>> usersQueryProvider, DateTime time) {
     BuildContext innerContext;
     showDialog(
       context: context,
@@ -268,9 +264,8 @@ class UsersScreen extends HookConsumerWidget {
                               _formKey.currentState?.value['remoteDuel'],
                           sort: _formKey.currentState?.value['sort'],
                         );
-                        print(searchQuery.value);
-                        usersQueryProvider
-                            .update((state) => getUsersQuery(searchQuery));
+                        usersQueryProvider.update(
+                            (state) => getUsersQuery(searchQuery, time));
                       }),
                     ],
                   ),
@@ -281,14 +276,17 @@ class UsersScreen extends HookConsumerWidget {
     );
   }
 
-  Query<Profile> getUsersQuery(ValueNotifier<UsersSearch> search) {
+  Query<Profile> getUsersQuery(
+      ValueNotifier<UsersSearch> search, DateTime time) {
     Query<Profile> searchUser;
     if (search.value.sort == 'activeAt') {
-      searchUser = userCollection().orderBy('activeAt');
+      searchUser = userCollection().orderBy('activeAt', descending: true);
     } else if (search.value.sort == 'createdAtDesc') {
       searchUser = userCollection().orderBy('createdAt', descending: true);
-    } else {
+    } else if (search.value.sort == 'createdAtAsc') {
       searchUser = userCollection().orderBy('createdAt');
+    } else {
+      searchUser = userCollection().orderBy('activeAt', descending: true);
     }
 
     if (search.value.playTitle.isNotNullAndNotEmpty) {
@@ -302,6 +300,12 @@ class UsersScreen extends HookConsumerWidget {
 
     if (search.value.remoteDuel != null && search.value.remoteDuel!) {
       searchUser = searchUser.where('remoteDuel', isEqualTo: true);
+    }
+
+    if (search.value.sort == 'createdAtAsc') {
+      searchUser = searchUser.endBefore([time]);
+    } else {
+      searchUser = searchUser.startAfter([time]);
     }
 
     return searchUser;
