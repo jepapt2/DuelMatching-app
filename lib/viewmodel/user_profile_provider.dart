@@ -35,14 +35,19 @@ final userProfileProvider =
 });
 
 class UserWhenConsumer extends HookConsumerWidget {
-  const UserWhenConsumer({Key? key, required this.child}) : super(key: key);
+  const UserWhenConsumer({
+    Key? key,
+    this.id,
+    required this.child,
+  }) : super(key: key);
 
+  final String? id;
   final Widget Function(Profile) child;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userProfile =
-        ref.watch(userProfileProvider(FirebaseAuth.instance.currentUser!.uid));
+    final userProfile = ref.watch(
+        userProfileProvider(id ?? FirebaseAuth.instance.currentUser!.uid));
     final profile = userProfile.profile;
 
     return profile!.when(
@@ -78,14 +83,16 @@ class UserWhenConsumer extends HookConsumerWidget {
 }
 
 class FriendsWhenConsumer extends HookConsumerWidget {
-  const FriendsWhenConsumer({Key? key, required this.child}) : super(key: key);
+  const FriendsWhenConsumer({Key? key, this.id, required this.child})
+      : super(key: key);
 
+  final String? id;
   final Widget Function(List<FriendWithId>) child;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userProfile =
-        ref.watch(userProfileProvider(FirebaseAuth.instance.currentUser!.uid));
+    final userProfile = ref.watch(
+        userProfileProvider(id ?? FirebaseAuth.instance.currentUser!.uid));
     final friends = userProfile.friends;
 
     return friends!.when(

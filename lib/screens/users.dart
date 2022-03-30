@@ -7,7 +7,7 @@ import 'package:duel_matching/model/users_search/users_search.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/parts/search_button.dart';
 import 'package:duel_matching/parts/user_card.dart';
-import 'package:duel_matching/viewmodel/user_profile.dart';
+import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:duel_matching/viewmodel/users_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
