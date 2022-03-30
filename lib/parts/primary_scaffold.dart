@@ -1,4 +1,4 @@
-import 'package:duel_matching/parts/primary_buttonnavigattionbar.dart';
+import 'package:duel_matching/parts/primary_buttomnavigattionbar.dart';
 import 'package:duel_matching/parts/primary_drawer.dart';
 import 'package:duel_matching/parts/primary_sliverappbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,16 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class PrimaryScaffold extends StatelessWidget {
-  const PrimaryScaffold({
-    Key? key,
-    required this.sliverChild,
-    this.appBarText,
-    this.appBarAction,
-  }) : super(key: key);
+  const PrimaryScaffold(
+      {Key? key,
+      required this.sliverChild,
+      this.appBarText,
+      this.appBarAction,
+      this.floatingActionButton})
+      : super(key: key);
 
   final Widget sliverChild;
   final String? appBarText;
   final List<Widget>? appBarAction;
+  final Widget? floatingActionButton;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class PrimaryScaffold extends StatelessWidget {
       ),
       drawer: PrimaryDrawer(),
       bottomNavigationBar: const PrimaryButtomNavigationBar(),
+      floatingActionButton: floatingActionButton,
     );
   }
 }

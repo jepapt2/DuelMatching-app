@@ -225,7 +225,7 @@ class UsersScreen extends HookConsumerWidget {
                                 .toList()
                           ]),
                       FormBuilderSwitch(
-                        title: Text('リモートデュエル環境'),
+                        title: const Text('リモートデュエル環境'),
                         name: 'remoteDuel',
                         initialValue: searchQuery.value.remoteDuel,
                       ),

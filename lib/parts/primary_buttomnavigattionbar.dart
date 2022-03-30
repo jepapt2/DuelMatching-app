@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -25,11 +26,11 @@ class PrimaryButtomNavigationBar extends StatelessWidget {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.people_alt_sharp),
+            icon: FaIcon(FontAwesomeIcons.userAlt),
             label: '探す',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.people_alt_sharp),
+            icon: FaIcon(FontAwesomeIcons.solidFileAlt),
             label: '募集',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.notifications), label: '通知'),
