@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duel_matching/extension/string.dart';
 import 'package:duel_matching/input_options/adress.dart';
 import 'package:duel_matching/input_options/play_title.dart';
+import 'package:duel_matching/model/recruit/recruit.dart';
 import 'package:duel_matching/model/user_profile/user_profile.dart';
 import 'package:duel_matching/model/users_search/users_search.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/parts/search_button.dart';
 import 'package:duel_matching/parts/user_card.dart';
+import 'package:duel_matching/viewmodel/recruit_provider.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:duel_matching/viewmodel/users_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,35 +28,31 @@ class RecruitsScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final timeNow = useMemoized(DateTime.now);
-    final usersQueryProvider = ref.watch(usersProvider(timeNow).notifier);
+    final recruitsQuery = ref.watch(recruitsQueryProvider(timeNow).notifier);
     final searchQuery = useState<UsersSearch>(UsersSearch(
       sort: 'activeAt',
     ));
 
     return UserWhenConsumer(
-      child: (user) => FriendsWhenConsumer(child: (friends) {
-        final blockIds = useState<List<String>>([
-          FirebaseAuth.instance.currentUser!.uid,
-          ...friends.map((f) => f.uid).toList(),
-          ...?user.blockList
-        ]);
+      child: (myProfile) => FriendsWhenConsumer(child: (friends) {
+        final blockIds = useState<List<String>>([...?myProfile.blockList]);
 
         return PrimaryScaffold(
           appBarAction: [
             IconButton(
                 iconSize: 33,
                 onPressed: () => searchDialog(
-                    context, ref, searchQuery, usersQueryProvider, timeNow),
+                    context, ref, searchQuery, recruitsQuery, timeNow),
                 icon: const Icon(Icons.manage_search_outlined))
           ],
           sliverChild: SliverList(
             delegate: SliverChildListDelegate(
               [
                 FirestoreQueryBuilder(
-                    query: usersQueryProvider.state,
+                    query: recruitsQuery.state,
                     builder: (context,
-                        FirestoreQueryBuilderSnapshot<Profile> snapshot, _) {
-                      List<QueryDocumentSnapshot<Profile>> docs = snapshot.docs
+                        FirestoreQueryBuilderSnapshot<Recruit> snapshot, _) {
+                      List<QueryDocumentSnapshot<Recruit>> docs = snapshot.docs
                           .where(
                               (element) => !blockIds.value.contains(element.id))
                           .toList();
@@ -88,7 +86,7 @@ class RecruitsScreen extends HookConsumerWidget {
                                         Colors.redAccent)),
                                 child: const Text('更新する'),
                                 onPressed: () {
-                                  usersQueryProvider.update((state) =>
+                                  recruitsQuery.update((state) =>
                                       getUsersQuery(searchQuery, timeNow));
                                 },
                               ),
@@ -115,7 +113,7 @@ class RecruitsScreen extends HookConsumerWidget {
                                 child: const Text('再検索する'),
                                 onPressed: () {
                                   searchDialog(context, ref, searchQuery,
-                                      usersQueryProvider, timeNow);
+                                      recruitsQuery, timeNow);
                                 },
                               ),
                             ],
@@ -151,11 +149,10 @@ class RecruitsScreen extends HookConsumerWidget {
                               onTap: () =>
                                   GoRouter.of(context).push('/user/$id'),
                               child: UserCard(
-                                avatar: user.avatar,
-                                adress: user.adress,
-                                favorite: user.favorite,
-                                comment: user.comment,
-                                name: user.name,
+                                adress: user.title,
+                                favorite: user.memberCount.toString(),
+                                comment: user.start.toString(),
+                                name: user.organizerId,
                               ),
                             );
                           },
@@ -178,7 +175,7 @@ class RecruitsScreen extends HookConsumerWidget {
   }
 
   searchDialog(context, WidgetRef ref, ValueNotifier<UsersSearch> searchQuery,
-      StateController<Query<Profile>> usersQueryProvider, DateTime time) {
+      StateController<Query<Recruit>> recruitsQuery, DateTime time) {
     BuildContext innerContext;
     showDialog(
       context: context,
@@ -270,7 +267,7 @@ class RecruitsScreen extends HookConsumerWidget {
                         remoteDuel: _formKey.currentState?.value['remoteDuel'],
                         sort: _formKey.currentState?.value['sort'],
                       );
-                      usersQueryProvider
+                      recruitsQuery
                           .update((state) => getUsersQuery(searchQuery, time));
                     }),
                   ],
@@ -283,38 +280,41 @@ class RecruitsScreen extends HookConsumerWidget {
     );
   }
 
-  Query<Profile> getUsersQuery(
+  Query<Recruit> getUsersQuery(
       ValueNotifier<UsersSearch> search, DateTime time) {
-    Query<Profile> searchUser;
-    if (search.value.sort == 'activeAt') {
-      searchUser = userCollection().orderBy('activeAt', descending: true);
-    } else if (search.value.sort == 'createdAtDesc') {
-      searchUser = userCollection().orderBy('createdAt', descending: true);
-    } else if (search.value.sort == 'createdAtAsc') {
-      searchUser = userCollection().orderBy('createdAt');
-    } else {
-      searchUser = userCollection().orderBy('activeAt', descending: true);
-    }
+    // if (search.value.sort == 'activeAt') {
+    //   searchUser = userCollection().orderBy('activeAt', descending: true);
+    // } else if (search.value.sort == 'createdAtDesc') {
+    //   searchUser = userCollection().orderBy('createdAt', descending: true);
+    // } else if (search.value.sort == 'createdAtAsc') {
+    //   searchUser = userCollection().orderBy('createdAt');
+    // } else {
+    //   searchUser = userCollection().orderBy('activeAt', descending: true);
+    // }
 
-    if (search.value.playTitle.isNotNullAndNotEmpty) {
-      searchUser =
-          searchUser.where('playTitle', arrayContains: search.value.playTitle);
-    }
+    // if (search.value.playTitle.isNotNullAndNotEmpty) {
+    //   searchUser =
+    //       searchUser.where('playTitle', arrayContains: search.value.playTitle);
+    // }
 
-    if (search.value.adress.isNotNullAndNotEmpty) {
-      searchUser = searchUser.where('adress', isEqualTo: search.value.adress);
-    }
+    // if (search.value.adress.isNotNullAndNotEmpty) {
+    //   searchUser = searchUser.where('adress', isEqualTo: search.value.adress);
+    // }
 
-    if (search.value.remoteDuel != null && search.value.remoteDuel!) {
-      searchUser = searchUser.where('remoteDuel', isEqualTo: true);
-    }
+    // if (search.value.remoteDuel != null && search.value.remoteDuel!) {
+    //   searchUser = searchUser.where('remoteDuel', isEqualTo: true);
+    // }
 
-    if (search.value.sort == 'createdAtAsc') {
-      searchUser = searchUser.endBefore([time]);
-    } else {
-      searchUser = searchUser.startAfter([time]);
-    }
+    // if (search.value.sort == 'createdAtAsc') {
+    //   searchUser = searchUser.endBefore([time]);
+    // } else {
+    //   searchUser = searchUser.startAfter([time]);
+    // }
+    Query<Recruit> searchRecruit = recruitsCollection()
+        .where('full', isEqualTo: false)
+        .where('cancel', isEqualTo: false)
+        .where('limit', isLessThan: time);
 
-    return searchUser;
+    return searchRecruit;
   }
 }

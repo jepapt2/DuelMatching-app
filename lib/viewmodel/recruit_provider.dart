@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duel_matching/model/member/member.dart';
 import 'package:duel_matching/model/recruit/recruit.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,16 @@ final membersProvider =
   final snapshot = document.snapshots();
   final collection = snapshot.map((e) => e.docs.map((e) => e.data()).toList());
   return collection;
+});
+
+final recruitsQueryProvider =
+    StateProvider.family.autoDispose<Query<Recruit>, DateTime>((ref, time) {
+  Query<Recruit> searchRecruit = recruitsCollection()
+      .where('full', isEqualTo: false)
+      .where('cancel', isEqualTo: false)
+      .where('limit', isLessThan: time);
+
+  return searchRecruit;
 });
 
 class RecruitWhenConsumer extends HookConsumerWidget {

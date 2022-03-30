@@ -31,7 +31,7 @@ class Recruit with _$Recruit {
       _$RecruitFromJson(json);
 }
 
-CollectionReference<Recruit> recruitCollection() {
+CollectionReference<Recruit> recruitsCollection() {
   return FirebaseFirestore.instance.collection('groups').withConverter<Recruit>(
         fromFirestore: (snapshot, _) => Recruit.fromJson(snapshot.data()!),
         toFirestore: (model, _) => model.toJson(),

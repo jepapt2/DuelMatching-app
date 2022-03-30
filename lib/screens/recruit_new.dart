@@ -233,7 +233,7 @@ class RecruitNewScreen extends HookConsumerWidget {
 
     if (_formKey.currentState!.validate()) {
       try {
-        recruitCollection()
+        recruitsCollection()
             .add(Recruit(
                 title: _formKey.currentState!.value['title'],
                 playTitle: _formKey.currentState!.value['playTitle'],
