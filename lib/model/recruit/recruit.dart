@@ -1,11 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:firestore_ref/firestore_ref.dart';
-part 'recruits.freezed.dart';
-part 'recruits.g.dart';
+part 'recruit.freezed.dart';
+part 'recruit.g.dart';
 
 @freezed
-class Recruits with _$Recruits {
-  factory Recruits({
+class Recruit with _$Recruit {
+  factory Recruit({
     required final String title,
     required final String playTitle,
     String? format,
@@ -23,19 +23,27 @@ class Recruits with _$Recruits {
     int? order,
     required final String organizerId,
     @TimestampConverter() DateTime? createdAt,
-  }) = _Recruits;
+  }) = _Recruit;
 
-  const Recruits._();
+  const Recruit._();
 
-  factory Recruits.fromJson(Map<String, dynamic> json) =>
-      _$RecruitsFromJson(json);
+  factory Recruit.fromJson(Map<String, dynamic> json) =>
+      _$RecruitFromJson(json);
 }
 
-CollectionReference<Recruits> recruitsCollection() {
+CollectionReference<Recruit> recruitCollection() {
+  return FirebaseFirestore.instance.collection('groups').withConverter<Recruit>(
+        fromFirestore: (snapshot, _) => Recruit.fromJson(snapshot.data()!),
+        toFirestore: (model, _) => model.toJson(),
+      );
+}
+
+DocumentReference<Recruit> recruitDocument(String id) {
   return FirebaseFirestore.instance
       .collection('groups')
-      .withConverter<Recruits>(
-        fromFirestore: (snapshot, _) => Recruits.fromJson(snapshot.data()!),
+      .doc(id)
+      .withConverter<Recruit>(
+        fromFirestore: (snapshot, _) => Recruit.fromJson(snapshot.data()!),
         toFirestore: (model, _) => model.toJson(),
       );
 }

@@ -1,4 +1,4 @@
-import 'package:duel_matching/parts/user_when_consumer.dart';
+import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';

@@ -3,6 +3,7 @@ import 'package:duel_matching/screens/login.dart';
 import 'package:duel_matching/screens/notice.dart';
 import 'package:duel_matching/screens/my_profile.dart';
 import 'package:duel_matching/screens/profile_edit.dart';
+import 'package:duel_matching/screens/recruit.dart';
 import 'package:duel_matching/screens/recruit_new.dart';
 import 'package:duel_matching/screens/recruits.dart';
 import 'package:duel_matching/screens/user_profile.dart';
@@ -61,7 +62,7 @@ final router = GoRouter(
       path: '/recruit/:id',
       builder: (context, state) {
         final recruitId = state.params['id']!;
-        return UserProfileScreen(id: recruitId);
+        return RecruitScreen(id: recruitId);
       },
     ),
   ],

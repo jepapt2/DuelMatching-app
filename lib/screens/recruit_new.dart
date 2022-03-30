@@ -1,10 +1,10 @@
-import 'package:duel_matching/model/members/members.dart';
-import 'package:duel_matching/model/recruits/recruits.dart';
+import 'package:duel_matching/model/member/member.dart';
+import 'package:duel_matching/model/recruit/recruit.dart';
 import 'package:duel_matching/parts/text.dart';
 import 'package:duel_matching/input_options/adress.dart';
 import 'package:duel_matching/input_options/play_title.dart';
 import 'package:duel_matching/model/user_profile/user_profile.dart';
-import 'package:duel_matching/parts/user_when_consumer.dart';
+import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -233,8 +233,8 @@ class RecruitNewScreen extends HookConsumerWidget {
 
     if (_formKey.currentState!.validate()) {
       try {
-        recruitsCollection()
-            .add(Recruits(
+        recruitCollection()
+            .add(Recruit(
                 title: _formKey.currentState!.value['title'],
                 playTitle: _formKey.currentState!.value['playTitle'],
                 format: _formKey.currentState?.value['format'] ?? '',
@@ -259,7 +259,7 @@ class RecruitNewScreen extends HookConsumerWidget {
           }
           return await membersCollection(docRef.id)
               .doc(FirebaseAuth.instance.currentUser!.uid)
-              .set(Members(
+              .set(Member(
                   uid: FirebaseAuth.instance.currentUser!.uid,
                   name: user.name,
                   avatar: user.avatar,

@@ -1,29 +1,35 @@
-import 'package:duel_matching/model/user_profile/user_profile.dart';
-import 'package:duel_matching/viewmodel/user_profile.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:duel_matching/model/recruit/recruit.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class UserWhenConsumer extends HookConsumerWidget {
-  const UserWhenConsumer({Key? key, required this.child}) : super(key: key);
+final recruitProvider =
+    StreamProvider.family.autoDispose<Recruit, String>((ref, id) {
+  final document = recruitDocument(id);
+  final snapshot = document.snapshots();
+  final doc = snapshot.map((event) => event.data()!);
+  return doc;
+});
 
-  final Widget Function(Profile) child;
+class UserWhenConsumer extends HookConsumerWidget {
+  const UserWhenConsumer({Key? key, required this.id, required this.child})
+      : super(key: key);
+
+  final String id;
+  final Widget Function(Recruit) child;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userProfile =
-        ref.watch(userProfileProvider(FirebaseAuth.instance.currentUser!.uid));
-    final profile = userProfile.profile;
+    final recruit = ref.watch(recruitProvider(id));
 
-    return profile!.when(
-        data: (user) => child(user),
+    return recruit.when(
+        data: (recruit) => child(recruit),
         error: (error, stack) => Scaffold(
               appBar: AppBar(),
               body: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text('アカウント情報の取得に失敗しました'),
+                    const Text('データの取得に失敗しました'),
                     ElevatedButton(
                       style: ButtonStyle(
                           textStyle: MaterialStateProperty.all(
@@ -32,8 +38,7 @@ class UserWhenConsumer extends HookConsumerWidget {
                               MaterialStateProperty.all(Colors.redAccent)),
                       child: const Text('更新する'),
                       onPressed: () {
-                        ref.refresh(userProfileProvider(
-                            FirebaseAuth.instance.currentUser!.uid));
+                        ref.refresh(recruitProvider(id));
                       },
                     ),
                   ],

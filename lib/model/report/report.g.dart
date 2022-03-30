@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'reports.dart';
+part of 'report.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Reports _$$_ReportsFromJson(Map<String, dynamic> json) => _$_Reports(
+_$_Report _$$_ReportFromJson(Map<String, dynamic> json) => _$_Report(
       sendId: json['sendId'] as String,
       sendName: json['sendName'] as String,
       reportId: json['reportId'] as String,
@@ -17,8 +17,7 @@ _$_Reports _$$_ReportsFromJson(Map<String, dynamic> json) => _$_Reports(
           const TimestampConverter().fromJson(json['createdAt'] as Timestamp?),
     );
 
-Map<String, dynamic> _$$_ReportsToJson(_$_Reports instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$$_ReportToJson(_$_Report instance) => <String, dynamic>{
       'sendId': instance.sendId,
       'sendName': instance.sendName,
       'reportId': instance.reportId,

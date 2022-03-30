@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'members.dart';
+part of 'member.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,21 +14,21 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-Members _$MembersFromJson(Map<String, dynamic> json) {
-  return _Members.fromJson(json);
+Member _$MemberFromJson(Map<String, dynamic> json) {
+  return _Member.fromJson(json);
 }
 
 /// @nodoc
-class _$MembersTearOff {
-  const _$MembersTearOff();
+class _$MemberTearOff {
+  const _$MemberTearOff();
 
-  _Members call(
+  _Member call(
       {required String uid,
       required String name,
       String? avatar,
       required bool organizer,
       @TimestampConverter() DateTime? createdAt}) {
-    return _Members(
+    return _Member(
       uid: uid,
       name: name,
       avatar: avatar,
@@ -37,16 +37,16 @@ class _$MembersTearOff {
     );
   }
 
-  Members fromJson(Map<String, Object?> json) {
-    return Members.fromJson(json);
+  Member fromJson(Map<String, Object?> json) {
+    return Member.fromJson(json);
   }
 }
 
 /// @nodoc
-const $Members = _$MembersTearOff();
+const $Member = _$MemberTearOff();
 
 /// @nodoc
-mixin _$Members {
+mixin _$Member {
   String get uid => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String? get avatar => throw _privateConstructorUsedError;
@@ -56,13 +56,13 @@ mixin _$Members {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $MembersCopyWith<Members> get copyWith => throw _privateConstructorUsedError;
+  $MemberCopyWith<Member> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $MembersCopyWith<$Res> {
-  factory $MembersCopyWith(Members value, $Res Function(Members) then) =
-      _$MembersCopyWithImpl<$Res>;
+abstract class $MemberCopyWith<$Res> {
+  factory $MemberCopyWith(Member value, $Res Function(Member) then) =
+      _$MemberCopyWithImpl<$Res>;
   $Res call(
       {String uid,
       String name,
@@ -72,12 +72,12 @@ abstract class $MembersCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$MembersCopyWithImpl<$Res> implements $MembersCopyWith<$Res> {
-  _$MembersCopyWithImpl(this._value, this._then);
+class _$MemberCopyWithImpl<$Res> implements $MemberCopyWith<$Res> {
+  _$MemberCopyWithImpl(this._value, this._then);
 
-  final Members _value;
+  final Member _value;
   // ignore: unused_field
-  final $Res Function(Members) _then;
+  final $Res Function(Member) _then;
 
   @override
   $Res call({
@@ -113,9 +113,9 @@ class _$MembersCopyWithImpl<$Res> implements $MembersCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$MembersCopyWith<$Res> implements $MembersCopyWith<$Res> {
-  factory _$MembersCopyWith(_Members value, $Res Function(_Members) then) =
-      __$MembersCopyWithImpl<$Res>;
+abstract class _$MemberCopyWith<$Res> implements $MemberCopyWith<$Res> {
+  factory _$MemberCopyWith(_Member value, $Res Function(_Member) then) =
+      __$MemberCopyWithImpl<$Res>;
   @override
   $Res call(
       {String uid,
@@ -126,13 +126,13 @@ abstract class _$MembersCopyWith<$Res> implements $MembersCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$MembersCopyWithImpl<$Res> extends _$MembersCopyWithImpl<$Res>
-    implements _$MembersCopyWith<$Res> {
-  __$MembersCopyWithImpl(_Members _value, $Res Function(_Members) _then)
-      : super(_value, (v) => _then(v as _Members));
+class __$MemberCopyWithImpl<$Res> extends _$MemberCopyWithImpl<$Res>
+    implements _$MemberCopyWith<$Res> {
+  __$MemberCopyWithImpl(_Member _value, $Res Function(_Member) _then)
+      : super(_value, (v) => _then(v as _Member));
 
   @override
-  _Members get _value => super._value as _Members;
+  _Member get _value => super._value as _Member;
 
   @override
   $Res call({
@@ -142,7 +142,7 @@ class __$MembersCopyWithImpl<$Res> extends _$MembersCopyWithImpl<$Res>
     Object? organizer = freezed,
     Object? createdAt = freezed,
   }) {
-    return _then(_Members(
+    return _then(_Member(
       uid: uid == freezed
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
@@ -169,8 +169,8 @@ class __$MembersCopyWithImpl<$Res> extends _$MembersCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Members extends _Members {
-  _$_Members(
+class _$_Member extends _Member {
+  _$_Member(
       {required this.uid,
       required this.name,
       this.avatar,
@@ -178,8 +178,8 @@ class _$_Members extends _Members {
       @TimestampConverter() this.createdAt})
       : super._();
 
-  factory _$_Members.fromJson(Map<String, dynamic> json) =>
-      _$$_MembersFromJson(json);
+  factory _$_Member.fromJson(Map<String, dynamic> json) =>
+      _$$_MemberFromJson(json);
 
   @override
   final String uid;
@@ -195,14 +195,14 @@ class _$_Members extends _Members {
 
   @override
   String toString() {
-    return 'Members(uid: $uid, name: $name, avatar: $avatar, organizer: $organizer, createdAt: $createdAt)';
+    return 'Member(uid: $uid, name: $name, avatar: $avatar, organizer: $organizer, createdAt: $createdAt)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Members &&
+            other is _Member &&
             const DeepCollectionEquality().equals(other.uid, uid) &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.avatar, avatar) &&
@@ -221,25 +221,25 @@ class _$_Members extends _Members {
 
   @JsonKey(ignore: true)
   @override
-  _$MembersCopyWith<_Members> get copyWith =>
-      __$MembersCopyWithImpl<_Members>(this, _$identity);
+  _$MemberCopyWith<_Member> get copyWith =>
+      __$MemberCopyWithImpl<_Member>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_MembersToJson(this);
+    return _$$_MemberToJson(this);
   }
 }
 
-abstract class _Members extends Members {
-  factory _Members(
+abstract class _Member extends Member {
+  factory _Member(
       {required String uid,
       required String name,
       String? avatar,
       required bool organizer,
-      @TimestampConverter() DateTime? createdAt}) = _$_Members;
-  _Members._() : super._();
+      @TimestampConverter() DateTime? createdAt}) = _$_Member;
+  _Member._() : super._();
 
-  factory _Members.fromJson(Map<String, dynamic> json) = _$_Members.fromJson;
+  factory _Member.fromJson(Map<String, dynamic> json) = _$_Member.fromJson;
 
   @override
   String get uid;
@@ -254,6 +254,5 @@ abstract class _Members extends Members {
   DateTime? get createdAt;
   @override
   @JsonKey(ignore: true)
-  _$MembersCopyWith<_Members> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$MemberCopyWith<_Member> get copyWith => throw _privateConstructorUsedError;
 }

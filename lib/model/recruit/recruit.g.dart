@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'recruits.dart';
+part of 'recruit.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Recruits _$$_RecruitsFromJson(Map<String, dynamic> json) => _$_Recruits(
+_$_Recruit _$$_RecruitFromJson(Map<String, dynamic> json) => _$_Recruit(
       title: json['title'] as String,
       playTitle: json['playTitle'] as String,
       format: json['format'] as String?,
@@ -27,7 +27,7 @@ _$_Recruits _$$_RecruitsFromJson(Map<String, dynamic> json) => _$_Recruits(
           const TimestampConverter().fromJson(json['createdAt'] as Timestamp?),
     );
 
-Map<String, dynamic> _$$_RecruitsToJson(_$_Recruits instance) =>
+Map<String, dynamic> _$$_RecruitToJson(_$_Recruit instance) =>
     <String, dynamic>{
       'title': instance.title,
       'playTitle': instance.playTitle,

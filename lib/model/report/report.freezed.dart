@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'reports.dart';
+part of 'report.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,15 +14,15 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-Reports _$ReportsFromJson(Map<String, dynamic> json) {
-  return _Reports.fromJson(json);
+Report _$ReportFromJson(Map<String, dynamic> json) {
+  return _Report.fromJson(json);
 }
 
 /// @nodoc
-class _$ReportsTearOff {
-  const _$ReportsTearOff();
+class _$ReportTearOff {
+  const _$ReportTearOff();
 
-  _Reports call(
+  _Report call(
       {required String sendId,
       required String sendName,
       required String reportId,
@@ -30,7 +30,7 @@ class _$ReportsTearOff {
       String? details,
       String? chat,
       @TimestampConverter() DateTime? createdAt}) {
-    return _Reports(
+    return _Report(
       sendId: sendId,
       sendName: sendName,
       reportId: reportId,
@@ -41,16 +41,16 @@ class _$ReportsTearOff {
     );
   }
 
-  Reports fromJson(Map<String, Object?> json) {
-    return Reports.fromJson(json);
+  Report fromJson(Map<String, Object?> json) {
+    return Report.fromJson(json);
   }
 }
 
 /// @nodoc
-const $Reports = _$ReportsTearOff();
+const $Report = _$ReportTearOff();
 
 /// @nodoc
-mixin _$Reports {
+mixin _$Report {
   String get sendId => throw _privateConstructorUsedError;
   String get sendName => throw _privateConstructorUsedError;
   String get reportId => throw _privateConstructorUsedError;
@@ -62,13 +62,13 @@ mixin _$Reports {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ReportsCopyWith<Reports> get copyWith => throw _privateConstructorUsedError;
+  $ReportCopyWith<Report> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ReportsCopyWith<$Res> {
-  factory $ReportsCopyWith(Reports value, $Res Function(Reports) then) =
-      _$ReportsCopyWithImpl<$Res>;
+abstract class $ReportCopyWith<$Res> {
+  factory $ReportCopyWith(Report value, $Res Function(Report) then) =
+      _$ReportCopyWithImpl<$Res>;
   $Res call(
       {String sendId,
       String sendName,
@@ -80,12 +80,12 @@ abstract class $ReportsCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ReportsCopyWithImpl<$Res> implements $ReportsCopyWith<$Res> {
-  _$ReportsCopyWithImpl(this._value, this._then);
+class _$ReportCopyWithImpl<$Res> implements $ReportCopyWith<$Res> {
+  _$ReportCopyWithImpl(this._value, this._then);
 
-  final Reports _value;
+  final Report _value;
   // ignore: unused_field
-  final $Res Function(Reports) _then;
+  final $Res Function(Report) _then;
 
   @override
   $Res call({
@@ -131,9 +131,9 @@ class _$ReportsCopyWithImpl<$Res> implements $ReportsCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$ReportsCopyWith<$Res> implements $ReportsCopyWith<$Res> {
-  factory _$ReportsCopyWith(_Reports value, $Res Function(_Reports) then) =
-      __$ReportsCopyWithImpl<$Res>;
+abstract class _$ReportCopyWith<$Res> implements $ReportCopyWith<$Res> {
+  factory _$ReportCopyWith(_Report value, $Res Function(_Report) then) =
+      __$ReportCopyWithImpl<$Res>;
   @override
   $Res call(
       {String sendId,
@@ -146,13 +146,13 @@ abstract class _$ReportsCopyWith<$Res> implements $ReportsCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$ReportsCopyWithImpl<$Res> extends _$ReportsCopyWithImpl<$Res>
-    implements _$ReportsCopyWith<$Res> {
-  __$ReportsCopyWithImpl(_Reports _value, $Res Function(_Reports) _then)
-      : super(_value, (v) => _then(v as _Reports));
+class __$ReportCopyWithImpl<$Res> extends _$ReportCopyWithImpl<$Res>
+    implements _$ReportCopyWith<$Res> {
+  __$ReportCopyWithImpl(_Report _value, $Res Function(_Report) _then)
+      : super(_value, (v) => _then(v as _Report));
 
   @override
-  _Reports get _value => super._value as _Reports;
+  _Report get _value => super._value as _Report;
 
   @override
   $Res call({
@@ -164,7 +164,7 @@ class __$ReportsCopyWithImpl<$Res> extends _$ReportsCopyWithImpl<$Res>
     Object? chat = freezed,
     Object? createdAt = freezed,
   }) {
-    return _then(_Reports(
+    return _then(_Report(
       sendId: sendId == freezed
           ? _value.sendId
           : sendId // ignore: cast_nullable_to_non_nullable
@@ -199,8 +199,8 @@ class __$ReportsCopyWithImpl<$Res> extends _$ReportsCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Reports extends _Reports {
-  _$_Reports(
+class _$_Report extends _Report {
+  _$_Report(
       {required this.sendId,
       required this.sendName,
       required this.reportId,
@@ -210,8 +210,8 @@ class _$_Reports extends _Reports {
       @TimestampConverter() this.createdAt})
       : super._();
 
-  factory _$_Reports.fromJson(Map<String, dynamic> json) =>
-      _$$_ReportsFromJson(json);
+  factory _$_Report.fromJson(Map<String, dynamic> json) =>
+      _$$_ReportFromJson(json);
 
   @override
   final String sendId;
@@ -231,14 +231,14 @@ class _$_Reports extends _Reports {
 
   @override
   String toString() {
-    return 'Reports(sendId: $sendId, sendName: $sendName, reportId: $reportId, reason: $reason, details: $details, chat: $chat, createdAt: $createdAt)';
+    return 'Report(sendId: $sendId, sendName: $sendName, reportId: $reportId, reason: $reason, details: $details, chat: $chat, createdAt: $createdAt)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Reports &&
+            other is _Report &&
             const DeepCollectionEquality().equals(other.sendId, sendId) &&
             const DeepCollectionEquality().equals(other.sendName, sendName) &&
             const DeepCollectionEquality().equals(other.reportId, reportId) &&
@@ -261,27 +261,27 @@ class _$_Reports extends _Reports {
 
   @JsonKey(ignore: true)
   @override
-  _$ReportsCopyWith<_Reports> get copyWith =>
-      __$ReportsCopyWithImpl<_Reports>(this, _$identity);
+  _$ReportCopyWith<_Report> get copyWith =>
+      __$ReportCopyWithImpl<_Report>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ReportsToJson(this);
+    return _$$_ReportToJson(this);
   }
 }
 
-abstract class _Reports extends Reports {
-  factory _Reports(
+abstract class _Report extends Report {
+  factory _Report(
       {required String sendId,
       required String sendName,
       required String reportId,
       required String reason,
       String? details,
       String? chat,
-      @TimestampConverter() DateTime? createdAt}) = _$_Reports;
-  _Reports._() : super._();
+      @TimestampConverter() DateTime? createdAt}) = _$_Report;
+  _Report._() : super._();
 
-  factory _Reports.fromJson(Map<String, dynamic> json) = _$_Reports.fromJson;
+  factory _Report.fromJson(Map<String, dynamic> json) = _$_Report.fromJson;
 
   @override
   String get sendId;
@@ -300,6 +300,5 @@ abstract class _Reports extends Reports {
   DateTime? get createdAt;
   @override
   @JsonKey(ignore: true)
-  _$ReportsCopyWith<_Reports> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$ReportCopyWith<_Report> get copyWith => throw _privateConstructorUsedError;
 }

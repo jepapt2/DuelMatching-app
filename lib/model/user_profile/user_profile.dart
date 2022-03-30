@@ -91,8 +91,6 @@ Query<Profile> userCollectionQuery() {
         toFirestore: (model, _) => model.toJson(),
       )
       .orderBy('activeAt');
-  // .where(FieldPath.documentId,
-  //     whereNotIn: ['5XfmclOlLxhs27P86bu6et98DQ03']);
 }
 
 CollectionReference<Friend> friendCollection(String id) {

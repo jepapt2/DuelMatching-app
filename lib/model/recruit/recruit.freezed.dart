@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'recruits.dart';
+part of 'recruit.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,15 +14,15 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-Recruits _$RecruitsFromJson(Map<String, dynamic> json) {
-  return _Recruits.fromJson(json);
+Recruit _$RecruitFromJson(Map<String, dynamic> json) {
+  return _Recruit.fromJson(json);
 }
 
 /// @nodoc
-class _$RecruitsTearOff {
-  const _$RecruitsTearOff();
+class _$RecruitTearOff {
+  const _$RecruitTearOff();
 
-  _Recruits call(
+  _Recruit call(
       {required String title,
       required String playTitle,
       String? format,
@@ -40,7 +40,7 @@ class _$RecruitsTearOff {
       int? order,
       required String organizerId,
       @TimestampConverter() DateTime? createdAt}) {
-    return _Recruits(
+    return _Recruit(
       title: title,
       playTitle: playTitle,
       format: format,
@@ -61,16 +61,16 @@ class _$RecruitsTearOff {
     );
   }
 
-  Recruits fromJson(Map<String, Object?> json) {
-    return Recruits.fromJson(json);
+  Recruit fromJson(Map<String, Object?> json) {
+    return Recruit.fromJson(json);
   }
 }
 
 /// @nodoc
-const $Recruits = _$RecruitsTearOff();
+const $Recruit = _$RecruitTearOff();
 
 /// @nodoc
-mixin _$Recruits {
+mixin _$Recruit {
   String get title => throw _privateConstructorUsedError;
   String get playTitle => throw _privateConstructorUsedError;
   String? get format => throw _privateConstructorUsedError;
@@ -95,14 +95,13 @@ mixin _$Recruits {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $RecruitsCopyWith<Recruits> get copyWith =>
-      throw _privateConstructorUsedError;
+  $RecruitCopyWith<Recruit> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $RecruitsCopyWith<$Res> {
-  factory $RecruitsCopyWith(Recruits value, $Res Function(Recruits) then) =
-      _$RecruitsCopyWithImpl<$Res>;
+abstract class $RecruitCopyWith<$Res> {
+  factory $RecruitCopyWith(Recruit value, $Res Function(Recruit) then) =
+      _$RecruitCopyWithImpl<$Res>;
   $Res call(
       {String title,
       String playTitle,
@@ -124,12 +123,12 @@ abstract class $RecruitsCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$RecruitsCopyWithImpl<$Res> implements $RecruitsCopyWith<$Res> {
-  _$RecruitsCopyWithImpl(this._value, this._then);
+class _$RecruitCopyWithImpl<$Res> implements $RecruitCopyWith<$Res> {
+  _$RecruitCopyWithImpl(this._value, this._then);
 
-  final Recruits _value;
+  final Recruit _value;
   // ignore: unused_field
-  final $Res Function(Recruits) _then;
+  final $Res Function(Recruit) _then;
 
   @override
   $Res call({
@@ -225,9 +224,9 @@ class _$RecruitsCopyWithImpl<$Res> implements $RecruitsCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$RecruitsCopyWith<$Res> implements $RecruitsCopyWith<$Res> {
-  factory _$RecruitsCopyWith(_Recruits value, $Res Function(_Recruits) then) =
-      __$RecruitsCopyWithImpl<$Res>;
+abstract class _$RecruitCopyWith<$Res> implements $RecruitCopyWith<$Res> {
+  factory _$RecruitCopyWith(_Recruit value, $Res Function(_Recruit) then) =
+      __$RecruitCopyWithImpl<$Res>;
   @override
   $Res call(
       {String title,
@@ -250,13 +249,13 @@ abstract class _$RecruitsCopyWith<$Res> implements $RecruitsCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$RecruitsCopyWithImpl<$Res> extends _$RecruitsCopyWithImpl<$Res>
-    implements _$RecruitsCopyWith<$Res> {
-  __$RecruitsCopyWithImpl(_Recruits _value, $Res Function(_Recruits) _then)
-      : super(_value, (v) => _then(v as _Recruits));
+class __$RecruitCopyWithImpl<$Res> extends _$RecruitCopyWithImpl<$Res>
+    implements _$RecruitCopyWith<$Res> {
+  __$RecruitCopyWithImpl(_Recruit _value, $Res Function(_Recruit) _then)
+      : super(_value, (v) => _then(v as _Recruit));
 
   @override
-  _Recruits get _value => super._value as _Recruits;
+  _Recruit get _value => super._value as _Recruit;
 
   @override
   $Res call({
@@ -278,7 +277,7 @@ class __$RecruitsCopyWithImpl<$Res> extends _$RecruitsCopyWithImpl<$Res>
     Object? organizerId = freezed,
     Object? createdAt = freezed,
   }) {
-    return _then(_Recruits(
+    return _then(_Recruit(
       title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -353,8 +352,8 @@ class __$RecruitsCopyWithImpl<$Res> extends _$RecruitsCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Recruits extends _Recruits {
-  _$_Recruits(
+class _$_Recruit extends _Recruit {
+  _$_Recruit(
       {required this.title,
       required this.playTitle,
       this.format,
@@ -374,8 +373,8 @@ class _$_Recruits extends _Recruits {
       @TimestampConverter() this.createdAt})
       : super._();
 
-  factory _$_Recruits.fromJson(Map<String, dynamic> json) =>
-      _$$_RecruitsFromJson(json);
+  factory _$_Recruit.fromJson(Map<String, dynamic> json) =>
+      _$$_RecruitFromJson(json);
 
   @override
   final String title;
@@ -418,14 +417,14 @@ class _$_Recruits extends _Recruits {
 
   @override
   String toString() {
-    return 'Recruits(title: $title, playTitle: $playTitle, format: $format, place: $place, point: $point, start: $start, end: $end, limit: $limit, friendOnly: $friendOnly, recruitNumber: $recruitNumber, overview: $overview, memberCount: $memberCount, full: $full, cancel: $cancel, order: $order, organizerId: $organizerId, createdAt: $createdAt)';
+    return 'Recruit(title: $title, playTitle: $playTitle, format: $format, place: $place, point: $point, start: $start, end: $end, limit: $limit, friendOnly: $friendOnly, recruitNumber: $recruitNumber, overview: $overview, memberCount: $memberCount, full: $full, cancel: $cancel, order: $order, organizerId: $organizerId, createdAt: $createdAt)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Recruits &&
+            other is _Recruit &&
             const DeepCollectionEquality().equals(other.title, title) &&
             const DeepCollectionEquality().equals(other.playTitle, playTitle) &&
             const DeepCollectionEquality().equals(other.format, format) &&
@@ -472,17 +471,17 @@ class _$_Recruits extends _Recruits {
 
   @JsonKey(ignore: true)
   @override
-  _$RecruitsCopyWith<_Recruits> get copyWith =>
-      __$RecruitsCopyWithImpl<_Recruits>(this, _$identity);
+  _$RecruitCopyWith<_Recruit> get copyWith =>
+      __$RecruitCopyWithImpl<_Recruit>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_RecruitsToJson(this);
+    return _$$_RecruitToJson(this);
   }
 }
 
-abstract class _Recruits extends Recruits {
-  factory _Recruits(
+abstract class _Recruit extends Recruit {
+  factory _Recruit(
       {required String title,
       required String playTitle,
       String? format,
@@ -499,10 +498,10 @@ abstract class _Recruits extends Recruits {
       required bool cancel,
       int? order,
       required String organizerId,
-      @TimestampConverter() DateTime? createdAt}) = _$_Recruits;
-  _Recruits._() : super._();
+      @TimestampConverter() DateTime? createdAt}) = _$_Recruit;
+  _Recruit._() : super._();
 
-  factory _Recruits.fromJson(Map<String, dynamic> json) = _$_Recruits.fromJson;
+  factory _Recruit.fromJson(Map<String, dynamic> json) = _$_Recruit.fromJson;
 
   @override
   String get title;
@@ -544,6 +543,6 @@ abstract class _Recruits extends Recruits {
   DateTime? get createdAt;
   @override
   @JsonKey(ignore: true)
-  _$RecruitsCopyWith<_Recruits> get copyWith =>
+  _$RecruitCopyWith<_Recruit> get copyWith =>
       throw _privateConstructorUsedError;
 }

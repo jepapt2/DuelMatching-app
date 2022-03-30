@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:duel_matching/model/reports/reports.dart';
+import 'package:duel_matching/model/report/report.dart';
 import 'package:duel_matching/model/request/request.dart';
 import 'package:duel_matching/model/user_profile/user_profile.dart';
-import 'package:duel_matching/parts/friends_when_consumer.dart';
-import 'package:duel_matching/parts/user_when_consumer.dart';
-import 'package:duel_matching/viewmodel/user_profile.dart';
+import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -572,7 +570,7 @@ class UserProfileScreen extends HookConsumerWidget {
         try {
           _formKey.currentState!.save();
           await friendDocumentDelete(isFriend);
-          await reportsCollection().add(Reports(
+          await reportsCollection().add(Report(
               sendId: FirebaseAuth.instance.currentUser!.uid,
               sendName: sendName,
               reportId: id,
