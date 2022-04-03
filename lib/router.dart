@@ -1,4 +1,5 @@
 import 'package:duel_matching/model/user_profile/user_profile.dart';
+import 'package:duel_matching/screens/block_list.dart';
 import 'package:duel_matching/screens/login.dart';
 import 'package:duel_matching/screens/notice.dart';
 import 'package:duel_matching/screens/my_profile.dart';
@@ -46,15 +47,6 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      path: '/profile_edit',
-      builder: (context, state) => ProfileEditScreen(),
-    ),
-    GoRoute(
-      path: '/profile',
-      builder: (context, state) => MyProfileScreen(
-          myProfile: true, id: FirebaseAuth.instance.currentUser!.uid),
-    ),
-    GoRoute(
       path: '/recruit_new',
       builder: (context, state) => RecruitNewScreen(),
     ),
@@ -64,6 +56,19 @@ final router = GoRouter(
         final recruitId = state.params['id']!;
         return RecruitScreen(id: recruitId);
       },
+    ),
+    GoRoute(
+      path: '/profile_edit',
+      builder: (context, state) => ProfileEditScreen(),
+    ),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => MyProfileScreen(
+          myProfile: true, id: FirebaseAuth.instance.currentUser!.uid),
+    ),
+    GoRoute(
+      path: '/block',
+      builder: (context, state) => const BlockListScreen(),
     ),
   ],
   redirect: (state) {

@@ -1,3 +1,4 @@
+import 'package:duel_matching/parts/image.dart';
 import 'package:flutter/material.dart';
 import 'package:duel_matching/extension/string.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -140,13 +141,5 @@ class UserCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  ImageProvider<Object> avatarImage(String? avatar) {
-    if (avatar.isNotNullAndNotEmpty) {
-      return NetworkImage(avatar!);
-    } else {
-      return const AssetImage('assets/images/initial_avatar.png');
-    }
   }
 }
