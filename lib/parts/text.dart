@@ -9,3 +9,17 @@ RichText getRequiredLabel(String fieldName) {
         TextSpan(text: '*', style: TextStyle(color: Colors.red))
       ]));
 }
+
+Widget getOverflowEllipsis(String text, double? fontSize, int maxLines,
+    double? width, Color? textColor) {
+  return SizedBox(
+    width: width,
+    child: Text(
+      text,
+      style: TextStyle(color: textColor ?? Colors.black54, fontSize: fontSize),
+      overflow: TextOverflow.ellipsis,
+      maxLines: maxLines,
+      textAlign: TextAlign.start,
+    ),
+  );
+}

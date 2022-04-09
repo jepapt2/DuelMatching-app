@@ -27,11 +27,9 @@ class UserCard extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            CircleAvatar(
-              backgroundColor: const Color(0xffeff0f3),
-              foregroundColor: const Color(0xff2a2a2a),
+            AvatarImage(
+              avatar: avatar,
               radius: 50,
-              foregroundImage: avatarImage(avatar),
             ),
             ...adress.isNotNullAndNotEmpty &&
                     favorite.isNotNullAndNotEmpty &&

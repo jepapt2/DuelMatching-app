@@ -38,13 +38,8 @@ class BlockListScreen extends HookConsumerWidget {
                                 horizontal: 5.0, vertical: 2.0),
                             child: Row(
                               children: [
-                                CircleAvatar(
-                                  backgroundColor: const Color(0xffeff0f3),
-                                  foregroundColor: const Color(0xff2a2a2a),
-                                  radius: 25,
-                                  foregroundImage:
-                                      avatarImage(snapshot.data().avatar),
-                                ),
+                                AvatarImage(
+                                    avatar: snapshot.data().avatar, radius: 25),
                                 const SizedBox(width: 10.0),
                                 ConstrainedBox(
                                   constraints: BoxConstraints(
@@ -79,38 +74,39 @@ class BlockListScreen extends HookConsumerWidget {
                       // }
                     },
                     loadingBuilder: (context) => Center(
-                            child: Column(
-                          children: const [
-                            SizedBox(
-                              height: 100.0,
-                            ),
-                            CircularProgressIndicator(),
-                          ],
-                        )),
+                        child: Column(
+                      children: const [
+                        SizedBox(
+                          height: 100.0,
+                        ),
+                        CircularProgressIndicator(),
+                      ],
+                    )),
                     errorBuilder: (context, error, _) => Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const SizedBox(
-                                height: 100.0,
-                              ),
-                              const Text('ユーザの取得に失敗しました'),
-                              ElevatedButton(
-                                style: ButtonStyle(
-                                    textStyle: MaterialStateProperty.all(
-                                        const TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.redAccent)),
-                                child: const Text('更新する'),
-                                onPressed: () {
-                                  GoRouter.of(context).pop();
-                                  GoRouter.of(context).push('/block');
-                                },
-                              ),
-                            ],
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(
+                            height: 100.0,
                           ),
-                        ))
+                          const Text('ユーザの取得に失敗しました'),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                                textStyle: MaterialStateProperty.all(
+                                    const TextStyle(
+                                        fontWeight: FontWeight.bold)),
+                                backgroundColor: MaterialStateProperty.all(
+                                    Colors.redAccent)),
+                            child: const Text('更新する'),
+                            onPressed: () {
+                              GoRouter.of(context).pop();
+                              GoRouter.of(context).push('/block');
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
                 : const Center(child: Text('ブロックしているユーザはいません')),
           ),
         );

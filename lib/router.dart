@@ -36,7 +36,7 @@ final router = GoRouter(
       path: '/notice',
       pageBuilder: (context, state) => NoTransitionPage<void>(
         key: state.pageKey,
-        child: const NoticeScreen(),
+        child: NoticeScreen(),
       ),
     ),
     GoRoute(

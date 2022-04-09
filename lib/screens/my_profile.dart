@@ -1,3 +1,4 @@
+import 'package:duel_matching/parts/image.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -111,11 +112,7 @@ class MyProfileScreen extends HookConsumerWidget {
                         ),
                   Positioned(
                     top: 150,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 50,
-                      backgroundImage: avatarImage(user.avatar),
-                    ),
+                    child: AvatarImage(avatar: user.avatar, radius: 50),
                   ),
                 ]),
               ),

@@ -6,6 +6,7 @@ import 'package:duel_matching/model/recruit/recruit.dart';
 import 'package:duel_matching/model/user_profile/user_profile.dart';
 import 'package:duel_matching/model/users_search/users_search.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
+import 'package:duel_matching/parts/recruit_card.dart';
 import 'package:duel_matching/parts/search_button.dart';
 import 'package:duel_matching/parts/user_card.dart';
 import 'package:duel_matching/viewmodel/recruit_provider.dart';
@@ -28,16 +29,20 @@ class RecruitsScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final timeNow = useMemoized(DateTime.now);
-    final recruitsQuery = ref.watch(recruitsQueryProvider(timeNow).notifier);
     final searchQuery = useState<UsersSearch>(UsersSearch(
       sort: 'activeAt',
     ));
 
+    final recruitsQuery = useState(recruitsCollection()
+        .orderBy('createdAt', descending: false)
+        .orderBy('limit')
+        .where('full', isEqualTo: false)
+        .where('cancel', isEqualTo: false));
+
     return UserWhenConsumer(
       child: (myProfile) => FriendsWhenConsumer(child: (friends) {
-        final blockIds = useState<List<String>>([...?myProfile.blockList]);
-
         return PrimaryScaffold(
+          user: myProfile,
           appBarAction: [
             IconButton(
                 iconSize: 33,
@@ -48,117 +53,60 @@ class RecruitsScreen extends HookConsumerWidget {
           sliverChild: SliverList(
             delegate: SliverChildListDelegate(
               [
-                FirestoreQueryBuilder(
-                    query: recruitsQuery.state,
-                    builder: (context,
-                        FirestoreQueryBuilderSnapshot<Recruit> snapshot, _) {
-                      List<QueryDocumentSnapshot<Recruit>> docs = snapshot.docs
-                          .where(
-                              (element) => !blockIds.value.contains(element.id))
-                          .toList();
-                      if (snapshot.isFetching) {
-                        return Center(
-                            child: Column(
-                          children: const [
-                            SizedBox(
-                              height: 100.0,
-                            ),
-                            CircularProgressIndicator(),
-                          ],
-                        ));
-                      }
-
-                      if (snapshot.hasError) {
-                        return Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const SizedBox(
-                                height: 100.0,
-                              ),
-                              const Text('ユーザの取得に失敗しました'),
-                              ElevatedButton(
-                                style: ButtonStyle(
-                                    textStyle: MaterialStateProperty.all(
-                                        const TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.redAccent)),
-                                child: const Text('更新する'),
-                                onPressed: () {
-                                  recruitsQuery.update((state) =>
-                                      getUsersQuery(searchQuery, timeNow));
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                      if (docs.isEmpty) {
-                        return Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const SizedBox(
-                                height: 100.0,
-                              ),
-                              const Text('ユーザが見つかりませんでした'),
-                              ElevatedButton(
-                                style: ButtonStyle(
-                                    textStyle: MaterialStateProperty.all(
-                                        const TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.redAccent)),
-                                child: const Text('再検索する'),
-                                onPressed: () {
-                                  searchDialog(context, ref, searchQuery,
-                                      recruitsQuery, timeNow);
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 5,
-                            crossAxisSpacing: 5,
-                            childAspectRatio: 1,
-                          ),
-                          itemCount: docs.length,
-                          itemBuilder: (context, index) {
-                            // if we reached the end of the currently obtained items, we try to
-                            // obtain more items
-                            if (snapshot.hasMore && index + 1 == docs.length) {
-                              // Tell FirestoreQueryBuilder to try to obtain more items.
-                              // It is safe to call this function from within the build method.
-                              snapshot.fetchMore();
-                            }
-
-                            final user = docs[index].data();
-                            final id = docs[index].id;
-
-                            return GestureDetector(
-                              onTap: () =>
-                                  GoRouter.of(context).push('/user/$id'),
-                              child: UserCard(
-                                adress: user.title,
-                                favorite: user.memberCount.toString(),
-                                comment: user.start.toString(),
-                                name: user.organizerId,
-                              ),
-                            );
+                FirestoreListView(
+                  query: recruitsQuery.value,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder:
+                      (context, QueryDocumentSnapshot<Recruit> snapshot) =>
+                          Column(
+                    children: [
+                      RecruitCard(
+                          title: snapshot.data().title,
+                          playTitle: snapshot.data().playTitle,
+                          format: snapshot.data().format,
+                          place: snapshot.data().place,
+                          point: snapshot.data().point,
+                          start: snapshot.data().start!,
+                          end: snapshot.data().end,
+                          reqruitNumber: snapshot.data().recruitNumber,
+                          memberCount: snapshot.data().memberCount),
+                      const Divider()
+                    ],
+                  ),
+                  loadingBuilder: (context) => Center(
+                      child: Column(
+                    children: const [
+                      SizedBox(
+                        height: 100.0,
+                      ),
+                      CircularProgressIndicator(),
+                    ],
+                  )),
+                  errorBuilder: (context, error, _) => Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(
+                          height: 100.0,
+                        ),
+                        const Text('対戦募集の取得に失敗しました'),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                              textStyle: MaterialStateProperty.all(
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.redAccent)),
+                          child: const Text('更新する'),
+                          onPressed: () {
+                            GoRouter.of(context).pop();
+                            GoRouter.of(context).push('/recruits');
                           },
                         ),
-                      );
-                    }),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -175,8 +123,47 @@ class RecruitsScreen extends HookConsumerWidget {
   }
 
   searchDialog(context, WidgetRef ref, ValueNotifier<UsersSearch> searchQuery,
-      StateController<Query<Recruit>> recruitsQuery, DateTime time) {
+      ValueNotifier<Query<Recruit>> recruitsQuery, DateTime time) {
     BuildContext innerContext;
+    getRecruitsQuery() {
+      // if (search.value.sort == 'activeAt') {
+      //   searchUser = userCollection().orderBy('activeAt', descending: true);
+      // } else if (search.value.sort == 'createdAtDesc') {
+      //   searchUser = userCollection().orderBy('createdAt', descending: true);
+      // } else if (search.value.sort == 'createdAtAsc') {
+      //   searchUser = userCollection().orderBy('createdAt');
+      // } else {
+      //   searchUser = userCollection().orderBy('activeAt', descending: true);
+      // }
+
+      // if (search.value.playTitle.isNotNullAndNotEmpty) {
+      //   searchUser =
+      //       searchUser.where('playTitle', arrayContains: search.value.playTitle);
+      // }
+
+      // if (search.value.adress.isNotNullAndNotEmpty) {
+      //   searchUser = searchUser.where('adress', isEqualTo: search.value.adress);
+      // }
+
+      // if (search.value.remoteDuel != null && search.value.remoteDuel!) {
+      //   searchUser = searchUser.where('remoteDuel', isEqualTo: true);
+      // }
+
+      // if (search.value.sort == 'createdAtAsc') {
+      //   searchUser = searchUser.endBefore([time]);
+      // } else {
+      //   searchUser = searchUser.startAfter([time]);
+      // }
+      Query<Recruit> searchRecruit = recruitsCollection()
+          .orderBy('createdAt', descending: true)
+          .orderBy('limit')
+          .endBefore([time.toUtc().millisecondsSinceEpoch])
+          .where('full', isEqualTo: false)
+          .where('cancel', isEqualTo: false);
+
+      recruitsQuery.value = searchRecruit;
+    }
+
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -267,8 +254,7 @@ class RecruitsScreen extends HookConsumerWidget {
                         remoteDuel: _formKey.currentState?.value['remoteDuel'],
                         sort: _formKey.currentState?.value['sort'],
                       );
-                      recruitsQuery
-                          .update((state) => getUsersQuery(searchQuery, time));
+                      getRecruitsQuery();
                     }),
                   ],
                 ),
@@ -278,43 +264,5 @@ class RecruitsScreen extends HookConsumerWidget {
         );
       },
     );
-  }
-
-  Query<Recruit> getUsersQuery(
-      ValueNotifier<UsersSearch> search, DateTime time) {
-    // if (search.value.sort == 'activeAt') {
-    //   searchUser = userCollection().orderBy('activeAt', descending: true);
-    // } else if (search.value.sort == 'createdAtDesc') {
-    //   searchUser = userCollection().orderBy('createdAt', descending: true);
-    // } else if (search.value.sort == 'createdAtAsc') {
-    //   searchUser = userCollection().orderBy('createdAt');
-    // } else {
-    //   searchUser = userCollection().orderBy('activeAt', descending: true);
-    // }
-
-    // if (search.value.playTitle.isNotNullAndNotEmpty) {
-    //   searchUser =
-    //       searchUser.where('playTitle', arrayContains: search.value.playTitle);
-    // }
-
-    // if (search.value.adress.isNotNullAndNotEmpty) {
-    //   searchUser = searchUser.where('adress', isEqualTo: search.value.adress);
-    // }
-
-    // if (search.value.remoteDuel != null && search.value.remoteDuel!) {
-    //   searchUser = searchUser.where('remoteDuel', isEqualTo: true);
-    // }
-
-    // if (search.value.sort == 'createdAtAsc') {
-    //   searchUser = searchUser.endBefore([time]);
-    // } else {
-    //   searchUser = searchUser.startAfter([time]);
-    // }
-    Query<Recruit> searchRecruit = recruitsCollection()
-        .where('full', isEqualTo: false)
-        .where('cancel', isEqualTo: false)
-        .where('limit', isLessThan: time);
-
-    return searchRecruit;
   }
 }

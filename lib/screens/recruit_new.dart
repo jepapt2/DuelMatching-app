@@ -129,7 +129,7 @@ class RecruitNewScreen extends HookConsumerWidget {
                           validator: FormBuilderValidators.compose([
                             FormBuilderValidators.required(context,
                                 errorText: '詳細な場所を入力してください'),
-                            FormBuilderValidators.maxLength(context, 30,
+                            FormBuilderValidators.maxLength(context, 50,
                                 errorText: '詳細な場所は50文字以下です'),
                           ]),
                         ),

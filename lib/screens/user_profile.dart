@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duel_matching/model/report/report.dart';
 import 'package:duel_matching/model/request/request.dart';
 import 'package:duel_matching/model/user_profile/user_profile.dart';
+import 'package:duel_matching/parts/image.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -142,10 +143,9 @@ class UserProfileScreen extends HookConsumerWidget {
                                   ),
                             Positioned(
                               top: 150,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
+                              child: AvatarImage(
+                                avatar: user.avatar,
                                 radius: 50,
-                                backgroundImage: avatarImage(user.avatar),
                               ),
                             ),
                           ]),
@@ -608,8 +608,10 @@ class UserProfileScreen extends HookConsumerWidget {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('ユーザを報告'),
-                      IconButton(onPressed: () => null, icon: Icon(Icons.close))
+                      const Text('ユーザを報告'),
+                      IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(Icons.close))
                     ],
                   ),
                   titlePadding: const EdgeInsets.only(

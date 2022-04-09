@@ -25,7 +25,7 @@ final recruitsQueryProvider =
   Query<Recruit> searchRecruit = recruitsCollection()
       .where('full', isEqualTo: false)
       .where('cancel', isEqualTo: false)
-      .where('limit', isLessThan: time);
+      .where('limit', isGreaterThan: time);
 
   return searchRecruit;
 });

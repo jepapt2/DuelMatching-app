@@ -39,6 +39,7 @@ class UsersScreen extends HookConsumerWidget {
         ]);
 
         return PrimaryScaffold(
+          user: user,
           appBarAction: [
             IconButton(
                 iconSize: 33,
