@@ -1,4 +1,4 @@
-import 'package:duel_matching/model/user_profile/user_profile.dart';
+import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/primary_buttomnavigattionbar.dart';
 import 'package:duel_matching/parts/primary_drawer.dart';
 import 'package:duel_matching/parts/primary_sliverappbar.dart';

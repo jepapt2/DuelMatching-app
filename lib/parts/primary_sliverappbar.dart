@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duel_matching/extension/string.dart';
-import 'package:duel_matching/model/user_profile/user_profile.dart';
+import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

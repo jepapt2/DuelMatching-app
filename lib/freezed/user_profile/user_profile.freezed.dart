@@ -195,6 +195,168 @@ abstract class _UserProfile extends UserProfile {
       throw _privateConstructorUsedError;
 }
 
+/// @nodoc
+class _$ProfileWithIdTearOff {
+  const _$ProfileWithIdTearOff();
+
+  _ProfileWithId call({required String id, required Profile profile}) {
+    return _ProfileWithId(
+      id: id,
+      profile: profile,
+    );
+  }
+}
+
+/// @nodoc
+const $ProfileWithId = _$ProfileWithIdTearOff();
+
+/// @nodoc
+mixin _$ProfileWithId {
+  String get id => throw _privateConstructorUsedError;
+  Profile get profile => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $ProfileWithIdCopyWith<ProfileWithId> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ProfileWithIdCopyWith<$Res> {
+  factory $ProfileWithIdCopyWith(
+          ProfileWithId value, $Res Function(ProfileWithId) then) =
+      _$ProfileWithIdCopyWithImpl<$Res>;
+  $Res call({String id, Profile profile});
+
+  $ProfileCopyWith<$Res> get profile;
+}
+
+/// @nodoc
+class _$ProfileWithIdCopyWithImpl<$Res>
+    implements $ProfileWithIdCopyWith<$Res> {
+  _$ProfileWithIdCopyWithImpl(this._value, this._then);
+
+  final ProfileWithId _value;
+  // ignore: unused_field
+  final $Res Function(ProfileWithId) _then;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? profile = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      profile: profile == freezed
+          ? _value.profile
+          : profile // ignore: cast_nullable_to_non_nullable
+              as Profile,
+    ));
+  }
+
+  @override
+  $ProfileCopyWith<$Res> get profile {
+    return $ProfileCopyWith<$Res>(_value.profile, (value) {
+      return _then(_value.copyWith(profile: value));
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$ProfileWithIdCopyWith<$Res>
+    implements $ProfileWithIdCopyWith<$Res> {
+  factory _$ProfileWithIdCopyWith(
+          _ProfileWithId value, $Res Function(_ProfileWithId) then) =
+      __$ProfileWithIdCopyWithImpl<$Res>;
+  @override
+  $Res call({String id, Profile profile});
+
+  @override
+  $ProfileCopyWith<$Res> get profile;
+}
+
+/// @nodoc
+class __$ProfileWithIdCopyWithImpl<$Res>
+    extends _$ProfileWithIdCopyWithImpl<$Res>
+    implements _$ProfileWithIdCopyWith<$Res> {
+  __$ProfileWithIdCopyWithImpl(
+      _ProfileWithId _value, $Res Function(_ProfileWithId) _then)
+      : super(_value, (v) => _then(v as _ProfileWithId));
+
+  @override
+  _ProfileWithId get _value => super._value as _ProfileWithId;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? profile = freezed,
+  }) {
+    return _then(_ProfileWithId(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      profile: profile == freezed
+          ? _value.profile
+          : profile // ignore: cast_nullable_to_non_nullable
+              as Profile,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_ProfileWithId extends _ProfileWithId {
+  _$_ProfileWithId({required this.id, required this.profile}) : super._();
+
+  @override
+  final String id;
+  @override
+  final Profile profile;
+
+  @override
+  String toString() {
+    return 'ProfileWithId(id: $id, profile: $profile)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _ProfileWithId &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.profile, profile));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(profile));
+
+  @JsonKey(ignore: true)
+  @override
+  _$ProfileWithIdCopyWith<_ProfileWithId> get copyWith =>
+      __$ProfileWithIdCopyWithImpl<_ProfileWithId>(this, _$identity);
+}
+
+abstract class _ProfileWithId extends ProfileWithId {
+  factory _ProfileWithId({required String id, required Profile profile}) =
+      _$_ProfileWithId;
+  _ProfileWithId._() : super._();
+
+  @override
+  String get id;
+  @override
+  Profile get profile;
+  @override
+  @JsonKey(ignore: true)
+  _$ProfileWithIdCopyWith<_ProfileWithId> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 Profile _$ProfileFromJson(Map<String, dynamic> json) {
   return _Profile.fromJson(json);
 }

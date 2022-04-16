@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duel_matching/extension/string.dart';
+import 'package:duel_matching/freezed/users_view.dart/users_view.dart';
 import 'package:duel_matching/input_options/adress.dart';
 import 'package:duel_matching/input_options/play_title.dart';
-import 'package:duel_matching/model/recruit/recruit.dart';
-import 'package:duel_matching/model/user_profile/user_profile.dart';
-import 'package:duel_matching/model/users_search/users_search.dart';
+import 'package:duel_matching/freezed/recruit/recruit.dart';
+import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/parts/recruit_card.dart';
 import 'package:duel_matching/parts/search_button.dart';
@@ -35,9 +35,9 @@ class RecruitsScreen extends HookConsumerWidget {
 
     final recruitsQuery = useState(recruitsCollection()
         .orderBy('createdAt', descending: false)
-        .orderBy('limit')
         .where('full', isEqualTo: false)
-        .where('cancel', isEqualTo: false));
+        .where('cancel', isEqualTo: false)
+        .where('close', isEqualTo: false));
 
     return UserWhenConsumer(
       child: (myProfile) => FriendsWhenConsumer(child: (friends) {

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:duel_matching/model/member/member.dart';
-import 'package:duel_matching/model/recruit/recruit.dart';
+import 'package:duel_matching/freezed/member/member.dart';
+import 'package:duel_matching/freezed/recruit/recruit.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

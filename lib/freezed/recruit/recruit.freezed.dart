@@ -37,6 +37,7 @@ class _$RecruitTearOff {
       required int memberCount,
       required bool full,
       required bool cancel,
+      required bool close,
       int? order,
       required String organizerId,
       @TimestampConverter() DateTime? createdAt}) {
@@ -55,6 +56,7 @@ class _$RecruitTearOff {
       memberCount: memberCount,
       full: full,
       cancel: cancel,
+      close: close,
       order: order,
       organizerId: organizerId,
       createdAt: createdAt,
@@ -88,6 +90,7 @@ mixin _$Recruit {
   int get memberCount => throw _privateConstructorUsedError;
   bool get full => throw _privateConstructorUsedError;
   bool get cancel => throw _privateConstructorUsedError;
+  bool get close => throw _privateConstructorUsedError;
   int? get order => throw _privateConstructorUsedError;
   String get organizerId => throw _privateConstructorUsedError;
   @TimestampConverter()
@@ -117,6 +120,7 @@ abstract class $RecruitCopyWith<$Res> {
       int memberCount,
       bool full,
       bool cancel,
+      bool close,
       int? order,
       String organizerId,
       @TimestampConverter() DateTime? createdAt});
@@ -146,6 +150,7 @@ class _$RecruitCopyWithImpl<$Res> implements $RecruitCopyWith<$Res> {
     Object? memberCount = freezed,
     Object? full = freezed,
     Object? cancel = freezed,
+    Object? close = freezed,
     Object? order = freezed,
     Object? organizerId = freezed,
     Object? createdAt = freezed,
@@ -207,6 +212,10 @@ class _$RecruitCopyWithImpl<$Res> implements $RecruitCopyWith<$Res> {
           ? _value.cancel
           : cancel // ignore: cast_nullable_to_non_nullable
               as bool,
+      close: close == freezed
+          ? _value.close
+          : close // ignore: cast_nullable_to_non_nullable
+              as bool,
       order: order == freezed
           ? _value.order
           : order // ignore: cast_nullable_to_non_nullable
@@ -243,6 +252,7 @@ abstract class _$RecruitCopyWith<$Res> implements $RecruitCopyWith<$Res> {
       int memberCount,
       bool full,
       bool cancel,
+      bool close,
       int? order,
       String organizerId,
       @TimestampConverter() DateTime? createdAt});
@@ -273,6 +283,7 @@ class __$RecruitCopyWithImpl<$Res> extends _$RecruitCopyWithImpl<$Res>
     Object? memberCount = freezed,
     Object? full = freezed,
     Object? cancel = freezed,
+    Object? close = freezed,
     Object? order = freezed,
     Object? organizerId = freezed,
     Object? createdAt = freezed,
@@ -334,6 +345,10 @@ class __$RecruitCopyWithImpl<$Res> extends _$RecruitCopyWithImpl<$Res>
           ? _value.cancel
           : cancel // ignore: cast_nullable_to_non_nullable
               as bool,
+      close: close == freezed
+          ? _value.close
+          : close // ignore: cast_nullable_to_non_nullable
+              as bool,
       order: order == freezed
           ? _value.order
           : order // ignore: cast_nullable_to_non_nullable
@@ -368,6 +383,7 @@ class _$_Recruit extends _Recruit {
       required this.memberCount,
       required this.full,
       required this.cancel,
+      required this.close,
       this.order,
       required this.organizerId,
       @TimestampConverter() this.createdAt})
@@ -408,6 +424,8 @@ class _$_Recruit extends _Recruit {
   @override
   final bool cancel;
   @override
+  final bool close;
+  @override
   final int? order;
   @override
   final String organizerId;
@@ -417,7 +435,7 @@ class _$_Recruit extends _Recruit {
 
   @override
   String toString() {
-    return 'Recruit(title: $title, playTitle: $playTitle, format: $format, place: $place, point: $point, start: $start, end: $end, limit: $limit, friendOnly: $friendOnly, recruitNumber: $recruitNumber, overview: $overview, memberCount: $memberCount, full: $full, cancel: $cancel, order: $order, organizerId: $organizerId, createdAt: $createdAt)';
+    return 'Recruit(title: $title, playTitle: $playTitle, format: $format, place: $place, point: $point, start: $start, end: $end, limit: $limit, friendOnly: $friendOnly, recruitNumber: $recruitNumber, overview: $overview, memberCount: $memberCount, full: $full, cancel: $cancel, close: $close, order: $order, organizerId: $organizerId, createdAt: $createdAt)';
   }
 
   @override
@@ -442,6 +460,7 @@ class _$_Recruit extends _Recruit {
                 .equals(other.memberCount, memberCount) &&
             const DeepCollectionEquality().equals(other.full, full) &&
             const DeepCollectionEquality().equals(other.cancel, cancel) &&
+            const DeepCollectionEquality().equals(other.close, close) &&
             const DeepCollectionEquality().equals(other.order, order) &&
             const DeepCollectionEquality()
                 .equals(other.organizerId, organizerId) &&
@@ -465,6 +484,7 @@ class _$_Recruit extends _Recruit {
       const DeepCollectionEquality().hash(memberCount),
       const DeepCollectionEquality().hash(full),
       const DeepCollectionEquality().hash(cancel),
+      const DeepCollectionEquality().hash(close),
       const DeepCollectionEquality().hash(order),
       const DeepCollectionEquality().hash(organizerId),
       const DeepCollectionEquality().hash(createdAt));
@@ -496,6 +516,7 @@ abstract class _Recruit extends Recruit {
       required int memberCount,
       required bool full,
       required bool cancel,
+      required bool close,
       int? order,
       required String organizerId,
       @TimestampConverter() DateTime? createdAt}) = _$_Recruit;
@@ -534,6 +555,8 @@ abstract class _Recruit extends Recruit {
   bool get full;
   @override
   bool get cancel;
+  @override
+  bool get close;
   @override
   int? get order;
   @override

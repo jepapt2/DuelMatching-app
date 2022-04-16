@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:duel_matching/model/report/report.dart';
-import 'package:duel_matching/model/request/request.dart';
-import 'package:duel_matching/model/user_profile/user_profile.dart';
+import 'package:duel_matching/freezed/report/report.dart';
+import 'package:duel_matching/freezed/request/request.dart';
+import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/image.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';

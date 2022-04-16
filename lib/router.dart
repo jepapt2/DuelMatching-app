@@ -1,4 +1,4 @@
-import 'package:duel_matching/model/user_profile/user_profile.dart';
+import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/screens/block_list.dart';
 import 'package:duel_matching/screens/login.dart';
 import 'package:duel_matching/screens/notice.dart';

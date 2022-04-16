@@ -1,4 +1,4 @@
-import 'package:duel_matching/model/user_profile/user_profile.dart';
+import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/router.dart';
 import 'package:duel_matching/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';

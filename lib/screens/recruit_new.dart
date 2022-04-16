@@ -1,9 +1,9 @@
-import 'package:duel_matching/model/member/member.dart';
-import 'package:duel_matching/model/recruit/recruit.dart';
+import 'package:duel_matching/freezed/member/member.dart';
+import 'package:duel_matching/freezed/recruit/recruit.dart';
 import 'package:duel_matching/parts/text.dart';
 import 'package:duel_matching/input_options/adress.dart';
 import 'package:duel_matching/input_options/play_title.dart';
-import 'package:duel_matching/model/user_profile/user_profile.dart';
+import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -249,6 +249,7 @@ class RecruitNewScreen extends HookConsumerWidget {
                 memberCount: 0,
                 full: false,
                 cancel: false,
+                close: false,
                 organizerId: FirebaseAuth.instance.currentUser!.uid,
                 createdAt: DateTime.now()))
             .then((docRef) async {

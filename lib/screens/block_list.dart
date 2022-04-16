@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:duel_matching/model/user_profile/user_profile.dart';
+import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/image.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';

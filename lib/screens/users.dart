@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duel_matching/extension/string.dart';
+import 'package:duel_matching/freezed/users_view.dart/users_view.dart';
 import 'package:duel_matching/input_options/adress.dart';
 import 'package:duel_matching/input_options/play_title.dart';
-import 'package:duel_matching/model/user_profile/user_profile.dart';
-import 'package:duel_matching/model/users_search/users_search.dart';
+import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
+import 'package:duel_matching/parts/scroll_detector.dart';
 import 'package:duel_matching/parts/search_button.dart';
 import 'package:duel_matching/parts/user_card.dart';
+import 'package:duel_matching/viewmodel/future_scroll.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:duel_matching/viewmodel/users_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,144 +26,143 @@ class UsersScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timeNow = useMemoized(DateTime.now);
-    final usersQueryProvider = ref.watch(usersProvider(timeNow).notifier);
-    final searchQuery = useState<UsersSearch>(UsersSearch(
-      sort: 'activeAt',
-    ));
+    Size _screenSize = MediaQuery.of(context).size;
+    final usersController = ref.watch(futureScrollNotifierProvider);
+    final usersControllerNotifier =
+        ref.watch(futureScrollNotifierProvider.notifier);
 
     return UserWhenConsumer(
       child: (user) => FriendsWhenConsumer(child: (friends) {
-        final blockIds = useState<List<String>>([
+        final hideIds = [
           FirebaseAuth.instance.currentUser!.uid,
           ...friends.map((f) => f.uid).toList(),
           ...?user.blockList
-        ]);
+        ];
+
+        useEffect(() {
+          Future.delayed(
+            Duration.zero,
+            () => usersControllerNotifier.loadUsers(hideIds),
+          );
+        }, []);
 
         return PrimaryScaffold(
           user: user,
           appBarAction: [
             IconButton(
                 iconSize: 33,
-                onPressed: () => searchDialog(
-                    context, ref, searchQuery, usersQueryProvider, timeNow),
+                onPressed: () => searchDialog(context, ref, usersController,
+                    usersControllerNotifier, hideIds),
                 icon: const Icon(Icons.manage_search_outlined))
           ],
           sliverChild: SliverList(
             delegate: SliverChildListDelegate(
               [
-                FirestoreQueryBuilder(
-                    query: usersQueryProvider.state,
-                    builder: (context,
-                        FirestoreQueryBuilderSnapshot<Profile> snapshot, _) {
-                      List<QueryDocumentSnapshot<Profile>> docs = snapshot.docs
-                          .where(
-                              (element) => !blockIds.value.contains(element.id))
-                          .toList();
-                      if (snapshot.isFetching) {
-                        return Center(
-                            child: Column(
-                          children: const [
-                            SizedBox(
-                              height: 100.0,
-                            ),
-                            CircularProgressIndicator(),
-                          ],
-                        ));
-                      }
-
-                      if (snapshot.hasError) {
-                        return Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const SizedBox(
-                                height: 100.0,
-                              ),
-                              const Text('ユーザの取得に失敗しました'),
-                              ElevatedButton(
-                                style: ButtonStyle(
-                                    textStyle: MaterialStateProperty.all(
-                                        const TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.redAccent)),
-                                child: const Text('更新する'),
-                                onPressed: () {
-                                  usersQueryProvider.update((state) =>
-                                      getUsersQuery(searchQuery, timeNow));
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                      if (docs.isEmpty) {
-                        return Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const SizedBox(
-                                height: 100.0,
-                              ),
-                              const Text('ユーザが見つかりませんでした'),
-                              ElevatedButton(
-                                style: ButtonStyle(
-                                    textStyle: MaterialStateProperty.all(
-                                        const TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.redAccent)),
-                                child: const Text('再検索する'),
-                                onPressed: () {
-                                  searchDialog(context, ref, searchQuery,
-                                      usersQueryProvider, timeNow);
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
+                if (usersController.list == null && usersController.loading)
+                  Center(
+                      child: Column(
+                    children: const [
+                      SizedBox(
+                        height: 100.0,
+                      ),
+                      CircularProgressIndicator(),
+                    ],
+                  ))
+                else if (usersController.list == null)
+                  Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(
+                          height: 100.0,
+                        ),
+                        const Text('ユーザの取得に失敗しました'),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                              textStyle: MaterialStateProperty.all(
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.redAccent)),
+                          child: const Text('更新する'),
+                          onPressed: () {
+                            usersControllerNotifier.loadUsers(hideIds);
+                          },
+                        ),
+                      ],
+                    ),
+                  )
+                else if (usersController.list!.isEmpty)
+                  Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(
+                          height: 100.0,
+                        ),
+                        const Text('ユーザが見つかりませんでした'),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                              textStyle: MaterialStateProperty.all(
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.redAccent)),
+                          child: const Text('再検索する'),
+                          onPressed: () {
+                            searchDialog(context, ref, usersController,
+                                usersControllerNotifier, hideIds);
+                          },
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  SizedBox(
+                    height: _screenSize.height * 0.8,
+                    child: ScrollDetector(
+                      threshold: 0.8,
+                      loadNext: () =>
+                          usersControllerNotifier.loadUsers(hideIds),
+                      builder: (context, controller) => GridView.builder(
+                          controller: controller,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            mainAxisSpacing: 5,
+                            mainAxisSpacing: 1,
                             crossAxisSpacing: 5,
                             childAspectRatio: 1,
                           ),
-                          itemCount: docs.length,
-                          itemBuilder: (context, index) {
-                            // if we reached the end of the currently obtained items, we try to
-                            // obtain more items
-                            if (snapshot.hasMore && index + 1 == docs.length) {
-                              // Tell FirestoreQueryBuilder to try to obtain more items.
-                              // It is safe to call this function from within the build method.
-                              snapshot.fetchMore();
-                            }
-
-                            final user = docs[index].data();
-                            final id = docs[index].id;
-
+                          itemCount: usersController.list?.length != null
+                              ? usersController.list!.length
+                              : 0,
+                          itemBuilder: (context, int index) {
                             return GestureDetector(
-                              onTap: () =>
-                                  GoRouter.of(context).push('/user/$id'),
+                              onTap: () => GoRouter.of(context).push(
+                                  '/user/${usersController.list![index].id}'),
                               child: UserCard(
-                                avatar: user.avatar,
-                                adress: user.adress,
-                                favorite: user.favorite,
-                                comment: user.comment,
-                                name: user.name,
+                                name: usersController.list![index].profile.name,
+                                avatar:
+                                    usersController.list![index].profile.avatar,
+                                adress:
+                                    usersController.list![index].profile.adress,
+                                favorite: usersController
+                                    .list![index].profile.favorite,
+                                comment: usersController
+                                    .list![index].profile.comment,
                               ),
                             );
-                          },
-                        ),
-                      );
-                    }),
+                          }),
+                    ),
+                  ),
+                if (usersController.list != null &&
+                    usersController.list!.isNotEmpty &&
+                    usersController.loading)
+                  Center(
+                    child: CircularProgressIndicator(),
+                  )
+                else
+                  SizedBox(
+                    height: 100,
+                  ),
               ],
             ),
           ),
@@ -170,8 +171,8 @@ class UsersScreen extends HookConsumerWidget {
     );
   }
 
-  searchDialog(context, WidgetRef ref, ValueNotifier<UsersSearch> searchQuery,
-      StateController<Query<Profile>> usersQueryProvider, DateTime time) {
+  searchDialog(context, WidgetRef ref, UsersFutureScroll usersController,
+      UsersFutureScrollNotifier usersControllerNotifier, List<String> hideIds) {
     BuildContext innerContext;
     showDialog(
       context: context,
@@ -188,7 +189,7 @@ class UsersScreen extends HookConsumerWidget {
                     children: [
                       FormBuilderDropdown(
                           name: 'playTitle',
-                          initialValue: searchQuery.value.playTitle,
+                          initialValue: usersController.searchItem.playTitle,
                           decoration: const InputDecoration(
                               label: Text('プレイしているタイトル'),
                               floatingLabelBehavior:
@@ -207,7 +208,7 @@ class UsersScreen extends HookConsumerWidget {
                           ]),
                       FormBuilderDropdown(
                           name: 'adress',
-                          initialValue: searchQuery.value.adress,
+                          initialValue: usersController.searchItem.adress,
                           decoration: const InputDecoration(
                               label: Text('居住地'),
                               floatingLabelBehavior:
@@ -227,10 +228,10 @@ class UsersScreen extends HookConsumerWidget {
                       FormBuilderSwitch(
                         title: const Text('リモートデュエル環境'),
                         name: 'remoteDuel',
-                        initialValue: searchQuery.value.remoteDuel,
+                        initialValue: usersController.searchItem.remoteDuel,
                       ),
                       FormBuilderDropdown(
-                          initialValue: searchQuery.value.sort,
+                          initialValue: usersController.searchItem.sort,
                           name: 'sort',
                           decoration: const InputDecoration(
                               label: Text('並び替え'),
@@ -257,15 +258,17 @@ class UsersScreen extends HookConsumerWidget {
                         Navigator.of(innerContext).pop();
                         _formKey.currentState!.save();
 
-                        searchQuery.value = searchQuery.value.copyWith(
-                          playTitle: _formKey.currentState?.value['playTitle'],
-                          adress: _formKey.currentState?.value['adress'],
-                          remoteDuel:
-                              _formKey.currentState?.value['remoteDuel'],
-                          sort: _formKey.currentState?.value['sort'],
+                        usersControllerNotifier.searchUsers(
+                          UsersSearch(
+                            playTitle:
+                                _formKey.currentState?.value['playTitle'],
+                            adress: _formKey.currentState?.value['adress'],
+                            remoteDuel:
+                                _formKey.currentState?.value['remoteDuel'],
+                            sort: _formKey.currentState?.value['sort'],
+                          ),
+                          hideIds,
                         );
-                        usersQueryProvider.update(
-                            (state) => getUsersQuery(searchQuery, time));
                       }),
                     ],
                   ),
@@ -274,40 +277,5 @@ class UsersScreen extends HookConsumerWidget {
         );
       },
     );
-  }
-
-  Query<Profile> getUsersQuery(
-      ValueNotifier<UsersSearch> search, DateTime time) {
-    Query<Profile> searchUser;
-    if (search.value.sort == 'activeAt') {
-      searchUser = userCollection().orderBy('activeAt', descending: true);
-    } else if (search.value.sort == 'createdAtDesc') {
-      searchUser = userCollection().orderBy('createdAt', descending: true);
-    } else if (search.value.sort == 'createdAtAsc') {
-      searchUser = userCollection().orderBy('createdAt');
-    } else {
-      searchUser = userCollection().orderBy('activeAt', descending: true);
-    }
-
-    if (search.value.playTitle.isNotNullAndNotEmpty) {
-      searchUser =
-          searchUser.where('playTitle', arrayContains: search.value.playTitle);
-    }
-
-    if (search.value.adress.isNotNullAndNotEmpty) {
-      searchUser = searchUser.where('adress', isEqualTo: search.value.adress);
-    }
-
-    if (search.value.remoteDuel != null && search.value.remoteDuel!) {
-      searchUser = searchUser.where('remoteDuel', isEqualTo: true);
-    }
-
-    if (search.value.sort == 'createdAtAsc') {
-      searchUser = searchUser.endBefore([time]);
-    } else {
-      searchUser = searchUser.startAfter([time]);
-    }
-
-    return searchUser;
   }
 }

@@ -20,6 +20,7 @@ class Recruit with _$Recruit {
     required final int memberCount,
     required final bool full,
     required final bool cancel,
+    required final bool close,
     int? order,
     required final String organizerId,
     @TimestampConverter() DateTime? createdAt,

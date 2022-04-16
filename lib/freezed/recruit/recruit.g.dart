@@ -21,6 +21,7 @@ _$_Recruit _$$_RecruitFromJson(Map<String, dynamic> json) => _$_Recruit(
       memberCount: json['memberCount'] as int,
       full: json['full'] as bool,
       cancel: json['cancel'] as bool,
+      close: json['close'] as bool,
       order: json['order'] as int?,
       organizerId: json['organizerId'] as String,
       createdAt:
@@ -43,6 +44,7 @@ Map<String, dynamic> _$$_RecruitToJson(_$_Recruit instance) =>
       'memberCount': instance.memberCount,
       'full': instance.full,
       'cancel': instance.cancel,
+      'close': instance.close,
       'order': instance.order,
       'organizerId': instance.organizerId,
       'createdAt': const TimestampConverter().toJson(instance.createdAt),

@@ -16,6 +16,15 @@ class UserProfile with _$UserProfile {
 }
 
 @freezed
+class ProfileWithId with _$ProfileWithId {
+  factory ProfileWithId(
+      {required final String id,
+      required final Profile profile}) = _ProfileWithId;
+
+  const ProfileWithId._();
+}
+
+@freezed
 class Profile with _$Profile {
   factory Profile({
     required final String name,
