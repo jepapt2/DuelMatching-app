@@ -5,10 +5,11 @@ import 'package:duel_matching/input_options/adress.dart';
 import 'package:duel_matching/input_options/play_title.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
+import 'package:duel_matching/parts/primary_sliverappbar.dart';
 import 'package:duel_matching/parts/scroll_detector.dart';
 import 'package:duel_matching/parts/search_button.dart';
 import 'package:duel_matching/parts/user_card.dart';
-import 'package:duel_matching/viewmodel/future_scroll.dart';
+import 'package:duel_matching/viewmodel/users_future_scroll.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:duel_matching/viewmodel/users_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,10 +27,9 @@ class UsersScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Size _screenSize = MediaQuery.of(context).size;
-    final usersController = ref.watch(futureScrollNotifierProvider);
+    final usersController = ref.watch(usersFutureScrollProvider);
     final usersControllerNotifier =
-        ref.watch(futureScrollNotifierProvider.notifier);
+        ref.watch(usersFutureScrollProvider.notifier);
 
     return UserWhenConsumer(
       child: (user) => FriendsWhenConsumer(child: (friends) {
@@ -48,122 +48,137 @@ class UsersScreen extends HookConsumerWidget {
 
         return PrimaryScaffold(
           user: user,
-          appBarAction: [
-            IconButton(
-                iconSize: 33,
-                onPressed: () => searchDialog(context, ref, usersController,
-                    usersControllerNotifier, hideIds),
-                icon: const Icon(Icons.manage_search_outlined))
-          ],
-          sliverChild: SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                if (usersController.list == null && usersController.loading)
-                  Center(
-                      child: Column(
-                    children: const [
-                      SizedBox(
-                        height: 100.0,
-                      ),
-                      CircularProgressIndicator(),
+          child: ScrollDetector(
+            threshold: 0.8,
+            loadNext: () => usersControllerNotifier.loadUsers(hideIds),
+            builder: (context, controller) => RefreshIndicator(
+              onRefresh: () => usersControllerNotifier.refreshUsers(hideIds),
+              child: CustomScrollView(
+                controller: controller,
+                slivers: [
+                  PrimarySliverAppBar(
+                    user: user,
+                    appBarAction: [
+                      IconButton(
+                          iconSize: 33,
+                          onPressed: () => searchDialog(
+                              context,
+                              ref,
+                              usersController,
+                              usersControllerNotifier,
+                              hideIds),
+                          icon: const Icon(Icons.manage_search_outlined))
                     ],
-                  ))
-                else if (usersController.list == null)
-                  Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(
-                          height: 100.0,
-                        ),
-                        const Text('ユーザの取得に失敗しました'),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                              textStyle: MaterialStateProperty.all(
-                                  const TextStyle(fontWeight: FontWeight.bold)),
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.redAccent)),
-                          child: const Text('更新する'),
-                          onPressed: () {
-                            usersControllerNotifier.loadUsers(hideIds);
-                          },
-                        ),
-                      ],
-                    ),
-                  )
-                else if (usersController.list!.isEmpty)
-                  Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(
-                          height: 100.0,
-                        ),
-                        const Text('ユーザが見つかりませんでした'),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                              textStyle: MaterialStateProperty.all(
-                                  const TextStyle(fontWeight: FontWeight.bold)),
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.redAccent)),
-                          child: const Text('再検索する'),
-                          onPressed: () {
-                            searchDialog(context, ref, usersController,
-                                usersControllerNotifier, hideIds);
-                          },
-                        ),
-                      ],
-                    ),
-                  )
-                else
-                  SizedBox(
-                    height: _screenSize.height * 0.8,
-                    child: ScrollDetector(
-                      threshold: 0.8,
-                      loadNext: () =>
-                          usersControllerNotifier.loadUsers(hideIds),
-                      builder: (context, controller) => GridView.builder(
-                          controller: controller,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 1,
-                            crossAxisSpacing: 5,
-                            childAspectRatio: 1,
-                          ),
-                          itemCount: usersController.list?.length != null
-                              ? usersController.list!.length
-                              : 0,
-                          itemBuilder: (context, int index) {
-                            return GestureDetector(
-                              onTap: () => GoRouter.of(context).push(
-                                  '/user/${usersController.list![index].id}'),
-                              child: UserCard(
-                                name: usersController.list![index].profile.name,
-                                avatar:
-                                    usersController.list![index].profile.avatar,
-                                adress:
-                                    usersController.list![index].profile.adress,
-                                favorite: usersController
-                                    .list![index].profile.favorite,
-                                comment: usersController
-                                    .list![index].profile.comment,
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        if (usersController.list == null &&
+                            usersController.loading)
+                          Center(
+                              child: Column(
+                            children: const [
+                              SizedBox(
+                                height: 100.0,
                               ),
-                            );
-                          }),
+                              CircularProgressIndicator(),
+                            ],
+                          ))
+                        else if (usersController.list == null)
+                          Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(
+                                  height: 100.0,
+                                ),
+                                const Text('ユーザの取得に失敗しました'),
+                                ElevatedButton(
+                                  style: ButtonStyle(
+                                      textStyle: MaterialStateProperty.all(
+                                          const TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.redAccent)),
+                                  child: const Text('更新する'),
+                                  onPressed: () {
+                                    usersControllerNotifier
+                                        .refreshUsers(hideIds);
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                        else if (usersController.list!.isEmpty)
+                          Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(
+                                  height: 100.0,
+                                ),
+                                const Text('ユーザが見つかりませんでした'),
+                                ElevatedButton(
+                                  style: ButtonStyle(
+                                      textStyle: MaterialStateProperty.all(
+                                          const TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.redAccent)),
+                                  child: const Text('再検索する'),
+                                  onPressed: () {
+                                    searchDialog(context, ref, usersController,
+                                        usersControllerNotifier, hideIds);
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                        else
+                          GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 1,
+                                crossAxisSpacing: 5,
+                                childAspectRatio: 1,
+                              ),
+                              itemCount: usersController.list?.length != null
+                                  ? usersController.list!.length
+                                  : 0,
+                              itemBuilder: (context, int index) {
+                                return GestureDetector(
+                                  onTap: () => GoRouter.of(context).push(
+                                      '/user/${usersController.list![index].id}'),
+                                  child: UserCard(
+                                    name: usersController
+                                        .list![index].profile.name,
+                                    avatar: usersController
+                                        .list![index].profile.avatar,
+                                    adress: usersController
+                                        .list![index].profile.adress,
+                                    favorite: usersController
+                                        .list![index].profile.favorite,
+                                    comment: usersController
+                                        .list![index].profile.comment,
+                                  ),
+                                );
+                              }),
+                        if (usersController.list != null &&
+                            usersController.list!.isNotEmpty &&
+                            usersController.loading)
+                          const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                      ],
                     ),
-                  ),
-                if (usersController.list != null &&
-                    usersController.list!.isNotEmpty &&
-                    usersController.loading)
-                  Center(
-                    child: CircularProgressIndicator(),
                   )
-                else
-                  SizedBox(
-                    height: 100,
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
         );

@@ -290,7 +290,11 @@ class ProfileEditScreen extends HookConsumerWidget {
   Widget headerInput(
       context, ValueNotifier<XFile?> inputHeaderImage, String? initialHeader) {
     Future getImageFromCamera() async {
-      final pickedFile = await picker.pickImage(source: ImageSource.camera);
+      final pickedFile = await picker.pickImage(
+          source: ImageSource.camera,
+          maxHeight: 200,
+          maxWidth: 1200,
+          imageQuality: 85);
 
       if (pickedFile != null) {
         Navigator.pop(context);
@@ -299,7 +303,11 @@ class ProfileEditScreen extends HookConsumerWidget {
     }
 
     Future getImageFromGallery() async {
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      final pickedFile = await picker.pickImage(
+          source: ImageSource.gallery,
+          maxHeight: 200,
+          maxWidth: 1200,
+          imageQuality: 85);
 
       if (pickedFile != null) {
         Navigator.pop(context);
@@ -373,7 +381,11 @@ class ProfileEditScreen extends HookConsumerWidget {
   Widget avatarInput(
       context, ValueNotifier<XFile?> inputAvatarImage, String? initialAvatar) {
     Future getImageFromCamera() async {
-      final pickedFile = await picker.pickImage(source: ImageSource.camera);
+      final pickedFile = await picker.pickImage(
+          source: ImageSource.camera,
+          maxHeight: 500,
+          maxWidth: 500,
+          imageQuality: 85);
 
       if (pickedFile != null) {
         Navigator.pop(context);
@@ -382,7 +394,11 @@ class ProfileEditScreen extends HookConsumerWidget {
     }
 
     Future getImageFromGallery() async {
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      final pickedFile = await picker.pickImage(
+          source: ImageSource.gallery,
+          maxHeight: 500,
+          maxWidth: 500,
+          imageQuality: 85);
 
       if (pickedFile != null) {
         Navigator.pop(context);

@@ -9,33 +9,22 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class PrimaryScaffold extends StatelessWidget {
   const PrimaryScaffold(
       {Key? key,
-      required this.sliverChild,
+      required this.child,
       required this.user,
       this.appBarText,
-      this.appBarAction,
       this.floatingActionButton})
       : super(key: key);
 
-  final Widget sliverChild;
+  final dynamic child;
   final Profile user;
   final String? appBarText;
-  final List<Widget>? appBarAction;
   final Widget? floatingActionButton;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          PrimarySliverAppBar(
-            user: user,
-            appBarText: appBarText,
-            appBarAction: appBarAction,
-          ),
-          sliverChild,
-        ],
-      ),
-      drawer: PrimaryDrawer(),
+      body: child,
+      drawer: const PrimaryDrawer(),
       bottomNavigationBar: const PrimaryButtomNavigationBar(),
       floatingActionButton: floatingActionButton,
     );

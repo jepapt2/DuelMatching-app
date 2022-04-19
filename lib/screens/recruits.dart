@@ -43,14 +43,14 @@ class RecruitsScreen extends HookConsumerWidget {
       child: (myProfile) => FriendsWhenConsumer(child: (friends) {
         return PrimaryScaffold(
           user: myProfile,
-          appBarAction: [
-            IconButton(
-                iconSize: 33,
-                onPressed: () => searchDialog(
-                    context, ref, searchQuery, recruitsQuery, timeNow),
-                icon: const Icon(Icons.manage_search_outlined))
-          ],
-          sliverChild: SliverList(
+          // appBarAction: [
+          //   IconButton(
+          //       iconSize: 33,
+          //       onPressed: () => searchDialog(
+          //           context, ref, searchQuery, recruitsQuery, timeNow),
+          //       icon: const Icon(Icons.manage_search_outlined))
+          // ],
+          child: SliverList(
             delegate: SliverChildListDelegate(
               [
                 FirestoreListView(

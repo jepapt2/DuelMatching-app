@@ -4,7 +4,7 @@ import 'package:duel_matching/freezed/users_view.dart/users_view.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:duel_matching/extension/string.dart';
 
-final futureScrollNotifierProvider =
+final usersFutureScrollProvider =
     StateNotifierProvider<UsersFutureScrollNotifier, UsersFutureScroll>(
         (ref) => UsersFutureScrollNotifier());
 
@@ -92,6 +92,11 @@ class UsersFutureScrollNotifier extends StateNotifier<UsersFutureScroll> {
     }
     state = state.copyWith(query: searchUser, hitBottom: false);
 
+    loadUsers(hideIds);
+  }
+
+  Future<void> refreshUsers(List<String> hideIds) async {
+    state = state.copyWith(list: null, lastDocument: null, hitBottom: false);
     loadUsers(hideIds);
   }
 }
