@@ -24,6 +24,7 @@ class UsersFutureScroll with _$UsersFutureScroll {
     ProfileWithId? lastDocument,
     @Default(false) bool loading,
     @Default(false) bool hitBottom,
+    @Default(false) bool error,
   }) = _UsersFutureScroll;
 
   const UsersFutureScroll._();

@@ -84,7 +84,7 @@ class UsersScreen extends HookConsumerWidget {
                               CircularProgressIndicator(),
                             ],
                           ))
-                        else if (usersController.list == null)
+                        else if (usersController.error)
                           Center(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -110,6 +110,8 @@ class UsersScreen extends HookConsumerWidget {
                               ],
                             ),
                           )
+                        else if (usersController.list == null)
+                          const SizedBox()
                         else if (usersController.list!.isEmpty)
                           Center(
                             child: Column(

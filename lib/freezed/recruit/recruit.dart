@@ -4,6 +4,15 @@ part 'recruit.freezed.dart';
 part 'recruit.g.dart';
 
 @freezed
+class RecruitWithId with _$RecruitWithId {
+  factory RecruitWithId(
+      {required final String id,
+      required final Recruit recruit}) = _RecruitWithId;
+
+  const RecruitWithId._();
+}
+
+@freezed
 class Recruit with _$Recruit {
   factory Recruit({
     required final String title,

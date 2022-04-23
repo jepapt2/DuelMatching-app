@@ -14,58 +14,91 @@ class UsersFutureScrollNotifier extends StateNotifier<UsersFutureScroll> {
             query: userCollection().orderBy('activeAt', descending: true),
             searchItem: UsersSearch(sort: 'activeAt')));
 
-  Future<void> loadUsers(List<String> hideIds) async {
+  Future<void> loadUsers(List<String>? hideIds) async {
     if (state.loading || state.hitBottom) {
       return;
     }
-    state = state.copyWith(loading: true);
+    state = state.copyWith(loading: true, error: false);
 
     if (state.lastDocument != null) {
-      QuerySnapshot<Profile> document;
+      try {
+        QuerySnapshot<Profile> document;
 
-      if (state.searchItem.sort == 'activeAt') {
-        document = await state.query
-            .startAfter([state.lastDocument!.profile.activeAt])
-            .limit(10)
-            .get();
-      } else if (state.searchItem.sort == 'createdAtDesc') {
-        document = await state.query
-            .startAfter([state.lastDocument!.profile.createdAt])
-            .limit(10)
-            .get();
-      } else {
-        document = await state.query
-            .endBefore([state.lastDocument!.profile.createdAt])
-            .limit(10)
-            .get();
+        if (state.searchItem.sort == 'activeAt') {
+          document = await state.query
+              .startAfter([state.lastDocument!.profile.activeAt])
+              .limit(10)
+              .get();
+        } else if (state.searchItem.sort == 'createdAtDesc') {
+          document = await state.query
+              .startAfter([state.lastDocument!.profile.createdAt])
+              .limit(10)
+              .get();
+        } else {
+          document = await state.query
+              .endBefore([state.lastDocument!.profile.createdAt])
+              .limit(10)
+              .get();
+        }
+
+        List<ProfileWithId> getList = document.docs
+            .map((e) => ProfileWithId(id: e.id, profile: e.data()))
+            .toList();
+        List<ProfileWithId> organizedList;
+        if (hideIds != null && hideIds.isNotEmpty) {
+          organizedList = getList
+              .where((element) => !hideIds.contains(element.id))
+              .toList();
+        } else {
+          organizedList = getList;
+        }
+
+        state = state.copyWith(
+            list: [...?state.list, ...organizedList],
+            lastDocument: organizedList.isNotEmpty
+                ? organizedList.last
+                : state.list!.last,
+            hitBottom: getList.length < 10,
+            loading: false);
+      } catch (_) {
+        state = state.copyWith(
+            error: true,
+            list: null,
+            lastDocument: null,
+            hitBottom: false,
+            loading: false);
       }
-      List<ProfileWithId> getList = document.docs
-          .map((e) => ProfileWithId(id: e.id, profile: e.data()))
-          .toList();
-      List<ProfileWithId> organizedList =
-          getList.where((element) => !hideIds.contains(element.id)).toList();
-      state = state.copyWith(
-          list: [...?state.list, ...organizedList],
-          lastDocument:
-              organizedList.isNotEmpty ? organizedList.last : state.list!.last,
-          hitBottom: getList.length < 10,
-          loading: false);
     } else {
-      QuerySnapshot<Profile> document = await state.query.limit(10).get();
-      List<ProfileWithId> getList = document.docs
-          .map((e) => ProfileWithId(id: e.id, profile: e.data()))
-          .toList();
-      List<ProfileWithId> organizedList =
-          getList.where((element) => !hideIds.contains(element.id)).toList();
-      state = state.copyWith(
-          list: [...organizedList],
-          lastDocument: organizedList.isNotEmpty ? organizedList.last : null,
-          hitBottom: getList.length < 10,
-          loading: false);
+      try {
+        QuerySnapshot<Profile> document = await state.query.limit(10).get();
+        List<ProfileWithId> getList = document.docs
+            .map((e) => ProfileWithId(id: e.id, profile: e.data()))
+            .toList();
+        List<ProfileWithId> organizedList;
+        if (hideIds != null && hideIds.isNotEmpty) {
+          organizedList = getList
+              .where((element) => !hideIds.contains(element.id))
+              .toList();
+        } else {
+          organizedList = getList;
+        }
+        state = state.copyWith(
+            list: [...organizedList],
+            lastDocument: organizedList.isNotEmpty ? organizedList.last : null,
+            hitBottom: getList.length < 10,
+            loading: false);
+      } catch (_) {
+        state = state.copyWith(
+            error: true,
+            list: null,
+            lastDocument: null,
+            hitBottom: false,
+            loading: false);
+      }
     }
   }
 
-  void searchUsers(UsersSearch search, List<String> hideIds) {
+  void searchUsers(UsersSearch search, List<String>? hideIds) {
     state = state.copyWith(list: null, lastDocument: null, searchItem: search);
     Query<Profile> searchUser;
     if (search.sort == 'activeAt') {
@@ -95,8 +128,9 @@ class UsersFutureScrollNotifier extends StateNotifier<UsersFutureScroll> {
     loadUsers(hideIds);
   }
 
-  Future<void> refreshUsers(List<String> hideIds) async {
-    state = state.copyWith(list: null, lastDocument: null, hitBottom: false);
+  Future<void> refreshUsers(List<String>? hideIds) async {
+    state = state.copyWith(
+        list: null, lastDocument: null, hitBottom: false, error: false);
     loadUsers(hideIds);
   }
 }

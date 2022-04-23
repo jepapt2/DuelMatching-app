@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'users_view.dart';
+part of 'recruits_view.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,60 +15,70 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-class _$UsersSearchTearOff {
-  const _$UsersSearchTearOff();
+class _$RecruitsSearchTearOff {
+  const _$RecruitsSearchTearOff();
 
-  _UsersSearch call(
-      {String sort = 'activeAt',
+  _RecruitsSearch call(
+      {String sort = 'startDesc',
       String? playTitle,
-      String? adress,
-      bool? remoteDuel}) {
-    return _UsersSearch(
+      String? place,
+      Timestamp? start,
+      bool? friendOnly = false}) {
+    return _RecruitsSearch(
       sort: sort,
       playTitle: playTitle,
-      adress: adress,
-      remoteDuel: remoteDuel,
+      place: place,
+      start: start,
+      friendOnly: friendOnly,
     );
   }
 }
 
 /// @nodoc
-const $UsersSearch = _$UsersSearchTearOff();
+const $RecruitsSearch = _$RecruitsSearchTearOff();
 
 /// @nodoc
-mixin _$UsersSearch {
+mixin _$RecruitsSearch {
   String get sort => throw _privateConstructorUsedError;
   String? get playTitle => throw _privateConstructorUsedError;
-  String? get adress => throw _privateConstructorUsedError;
-  bool? get remoteDuel => throw _privateConstructorUsedError;
+  String? get place => throw _privateConstructorUsedError;
+  Timestamp? get start => throw _privateConstructorUsedError;
+  bool? get friendOnly => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $UsersSearchCopyWith<UsersSearch> get copyWith =>
+  $RecruitsSearchCopyWith<RecruitsSearch> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UsersSearchCopyWith<$Res> {
-  factory $UsersSearchCopyWith(
-          UsersSearch value, $Res Function(UsersSearch) then) =
-      _$UsersSearchCopyWithImpl<$Res>;
-  $Res call({String sort, String? playTitle, String? adress, bool? remoteDuel});
+abstract class $RecruitsSearchCopyWith<$Res> {
+  factory $RecruitsSearchCopyWith(
+          RecruitsSearch value, $Res Function(RecruitsSearch) then) =
+      _$RecruitsSearchCopyWithImpl<$Res>;
+  $Res call(
+      {String sort,
+      String? playTitle,
+      String? place,
+      Timestamp? start,
+      bool? friendOnly});
 }
 
 /// @nodoc
-class _$UsersSearchCopyWithImpl<$Res> implements $UsersSearchCopyWith<$Res> {
-  _$UsersSearchCopyWithImpl(this._value, this._then);
+class _$RecruitsSearchCopyWithImpl<$Res>
+    implements $RecruitsSearchCopyWith<$Res> {
+  _$RecruitsSearchCopyWithImpl(this._value, this._then);
 
-  final UsersSearch _value;
+  final RecruitsSearch _value;
   // ignore: unused_field
-  final $Res Function(UsersSearch) _then;
+  final $Res Function(RecruitsSearch) _then;
 
   @override
   $Res call({
     Object? sort = freezed,
     Object? playTitle = freezed,
-    Object? adress = freezed,
-    Object? remoteDuel = freezed,
+    Object? place = freezed,
+    Object? start = freezed,
+    Object? friendOnly = freezed,
   }) {
     return _then(_value.copyWith(
       sort: sort == freezed
@@ -79,46 +89,57 @@ class _$UsersSearchCopyWithImpl<$Res> implements $UsersSearchCopyWith<$Res> {
           ? _value.playTitle
           : playTitle // ignore: cast_nullable_to_non_nullable
               as String?,
-      adress: adress == freezed
-          ? _value.adress
-          : adress // ignore: cast_nullable_to_non_nullable
+      place: place == freezed
+          ? _value.place
+          : place // ignore: cast_nullable_to_non_nullable
               as String?,
-      remoteDuel: remoteDuel == freezed
-          ? _value.remoteDuel
-          : remoteDuel // ignore: cast_nullable_to_non_nullable
+      start: start == freezed
+          ? _value.start
+          : start // ignore: cast_nullable_to_non_nullable
+              as Timestamp?,
+      friendOnly: friendOnly == freezed
+          ? _value.friendOnly
+          : friendOnly // ignore: cast_nullable_to_non_nullable
               as bool?,
     ));
   }
 }
 
 /// @nodoc
-abstract class _$UsersSearchCopyWith<$Res>
-    implements $UsersSearchCopyWith<$Res> {
-  factory _$UsersSearchCopyWith(
-          _UsersSearch value, $Res Function(_UsersSearch) then) =
-      __$UsersSearchCopyWithImpl<$Res>;
+abstract class _$RecruitsSearchCopyWith<$Res>
+    implements $RecruitsSearchCopyWith<$Res> {
+  factory _$RecruitsSearchCopyWith(
+          _RecruitsSearch value, $Res Function(_RecruitsSearch) then) =
+      __$RecruitsSearchCopyWithImpl<$Res>;
   @override
-  $Res call({String sort, String? playTitle, String? adress, bool? remoteDuel});
+  $Res call(
+      {String sort,
+      String? playTitle,
+      String? place,
+      Timestamp? start,
+      bool? friendOnly});
 }
 
 /// @nodoc
-class __$UsersSearchCopyWithImpl<$Res> extends _$UsersSearchCopyWithImpl<$Res>
-    implements _$UsersSearchCopyWith<$Res> {
-  __$UsersSearchCopyWithImpl(
-      _UsersSearch _value, $Res Function(_UsersSearch) _then)
-      : super(_value, (v) => _then(v as _UsersSearch));
+class __$RecruitsSearchCopyWithImpl<$Res>
+    extends _$RecruitsSearchCopyWithImpl<$Res>
+    implements _$RecruitsSearchCopyWith<$Res> {
+  __$RecruitsSearchCopyWithImpl(
+      _RecruitsSearch _value, $Res Function(_RecruitsSearch) _then)
+      : super(_value, (v) => _then(v as _RecruitsSearch));
 
   @override
-  _UsersSearch get _value => super._value as _UsersSearch;
+  _RecruitsSearch get _value => super._value as _RecruitsSearch;
 
   @override
   $Res call({
     Object? sort = freezed,
     Object? playTitle = freezed,
-    Object? adress = freezed,
-    Object? remoteDuel = freezed,
+    Object? place = freezed,
+    Object? start = freezed,
+    Object? friendOnly = freezed,
   }) {
-    return _then(_UsersSearch(
+    return _then(_RecruitsSearch(
       sort: sort == freezed
           ? _value.sort
           : sort // ignore: cast_nullable_to_non_nullable
@@ -127,13 +148,17 @@ class __$UsersSearchCopyWithImpl<$Res> extends _$UsersSearchCopyWithImpl<$Res>
           ? _value.playTitle
           : playTitle // ignore: cast_nullable_to_non_nullable
               as String?,
-      adress: adress == freezed
-          ? _value.adress
-          : adress // ignore: cast_nullable_to_non_nullable
+      place: place == freezed
+          ? _value.place
+          : place // ignore: cast_nullable_to_non_nullable
               as String?,
-      remoteDuel: remoteDuel == freezed
-          ? _value.remoteDuel
-          : remoteDuel // ignore: cast_nullable_to_non_nullable
+      start: start == freezed
+          ? _value.start
+          : start // ignore: cast_nullable_to_non_nullable
+              as Timestamp?,
+      friendOnly: friendOnly == freezed
+          ? _value.friendOnly
+          : friendOnly // ignore: cast_nullable_to_non_nullable
               as bool?,
     ));
   }
@@ -141,9 +166,13 @@ class __$UsersSearchCopyWithImpl<$Res> extends _$UsersSearchCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UsersSearch extends _UsersSearch {
-  _$_UsersSearch(
-      {this.sort = 'activeAt', this.playTitle, this.adress, this.remoteDuel})
+class _$_RecruitsSearch extends _RecruitsSearch {
+  _$_RecruitsSearch(
+      {this.sort = 'startDesc',
+      this.playTitle,
+      this.place,
+      this.start,
+      this.friendOnly = false})
       : super._();
 
   @JsonKey()
@@ -152,25 +181,29 @@ class _$_UsersSearch extends _UsersSearch {
   @override
   final String? playTitle;
   @override
-  final String? adress;
+  final String? place;
   @override
-  final bool? remoteDuel;
+  final Timestamp? start;
+  @JsonKey()
+  @override
+  final bool? friendOnly;
 
   @override
   String toString() {
-    return 'UsersSearch(sort: $sort, playTitle: $playTitle, adress: $adress, remoteDuel: $remoteDuel)';
+    return 'RecruitsSearch(sort: $sort, playTitle: $playTitle, place: $place, start: $start, friendOnly: $friendOnly)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _UsersSearch &&
+            other is _RecruitsSearch &&
             const DeepCollectionEquality().equals(other.sort, sort) &&
             const DeepCollectionEquality().equals(other.playTitle, playTitle) &&
-            const DeepCollectionEquality().equals(other.adress, adress) &&
+            const DeepCollectionEquality().equals(other.place, place) &&
+            const DeepCollectionEquality().equals(other.start, start) &&
             const DeepCollectionEquality()
-                .equals(other.remoteDuel, remoteDuel));
+                .equals(other.friendOnly, friendOnly));
   }
 
   @override
@@ -178,50 +211,54 @@ class _$_UsersSearch extends _UsersSearch {
       runtimeType,
       const DeepCollectionEquality().hash(sort),
       const DeepCollectionEquality().hash(playTitle),
-      const DeepCollectionEquality().hash(adress),
-      const DeepCollectionEquality().hash(remoteDuel));
+      const DeepCollectionEquality().hash(place),
+      const DeepCollectionEquality().hash(start),
+      const DeepCollectionEquality().hash(friendOnly));
 
   @JsonKey(ignore: true)
   @override
-  _$UsersSearchCopyWith<_UsersSearch> get copyWith =>
-      __$UsersSearchCopyWithImpl<_UsersSearch>(this, _$identity);
+  _$RecruitsSearchCopyWith<_RecruitsSearch> get copyWith =>
+      __$RecruitsSearchCopyWithImpl<_RecruitsSearch>(this, _$identity);
 }
 
-abstract class _UsersSearch extends UsersSearch {
-  factory _UsersSearch(
+abstract class _RecruitsSearch extends RecruitsSearch {
+  factory _RecruitsSearch(
       {String sort,
       String? playTitle,
-      String? adress,
-      bool? remoteDuel}) = _$_UsersSearch;
-  _UsersSearch._() : super._();
+      String? place,
+      Timestamp? start,
+      bool? friendOnly}) = _$_RecruitsSearch;
+  _RecruitsSearch._() : super._();
 
   @override
   String get sort;
   @override
   String? get playTitle;
   @override
-  String? get adress;
+  String? get place;
   @override
-  bool? get remoteDuel;
+  Timestamp? get start;
+  @override
+  bool? get friendOnly;
   @override
   @JsonKey(ignore: true)
-  _$UsersSearchCopyWith<_UsersSearch> get copyWith =>
+  _$RecruitsSearchCopyWith<_RecruitsSearch> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-class _$UsersFutureScrollTearOff {
-  const _$UsersFutureScrollTearOff();
+class _$RecruitsFutureScrollTearOff {
+  const _$RecruitsFutureScrollTearOff();
 
-  _UsersFutureScroll call(
-      {List<ProfileWithId>? list,
-      required Query<Profile> query,
-      required UsersSearch searchItem,
-      ProfileWithId? lastDocument,
+  _RecruitsFutureScroll call(
+      {List<RecruitWithId>? list,
+      required Query<Recruit> query,
+      required RecruitsSearch searchItem,
+      RecruitWithId? lastDocument,
       bool loading = false,
       bool hitBottom = false,
       bool error = false}) {
-    return _UsersFutureScroll(
+    return _RecruitsFutureScroll(
       list: list,
       query: query,
       searchItem: searchItem,
@@ -234,49 +271,49 @@ class _$UsersFutureScrollTearOff {
 }
 
 /// @nodoc
-const $UsersFutureScroll = _$UsersFutureScrollTearOff();
+const $RecruitsFutureScroll = _$RecruitsFutureScrollTearOff();
 
 /// @nodoc
-mixin _$UsersFutureScroll {
-  List<ProfileWithId>? get list => throw _privateConstructorUsedError;
-  Query<Profile> get query => throw _privateConstructorUsedError;
-  UsersSearch get searchItem => throw _privateConstructorUsedError;
-  ProfileWithId? get lastDocument => throw _privateConstructorUsedError;
+mixin _$RecruitsFutureScroll {
+  List<RecruitWithId>? get list => throw _privateConstructorUsedError;
+  Query<Recruit> get query => throw _privateConstructorUsedError;
+  RecruitsSearch get searchItem => throw _privateConstructorUsedError;
+  RecruitWithId? get lastDocument => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
   bool get hitBottom => throw _privateConstructorUsedError;
   bool get error => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $UsersFutureScrollCopyWith<UsersFutureScroll> get copyWith =>
+  $RecruitsFutureScrollCopyWith<RecruitsFutureScroll> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UsersFutureScrollCopyWith<$Res> {
-  factory $UsersFutureScrollCopyWith(
-          UsersFutureScroll value, $Res Function(UsersFutureScroll) then) =
-      _$UsersFutureScrollCopyWithImpl<$Res>;
+abstract class $RecruitsFutureScrollCopyWith<$Res> {
+  factory $RecruitsFutureScrollCopyWith(RecruitsFutureScroll value,
+          $Res Function(RecruitsFutureScroll) then) =
+      _$RecruitsFutureScrollCopyWithImpl<$Res>;
   $Res call(
-      {List<ProfileWithId>? list,
-      Query<Profile> query,
-      UsersSearch searchItem,
-      ProfileWithId? lastDocument,
+      {List<RecruitWithId>? list,
+      Query<Recruit> query,
+      RecruitsSearch searchItem,
+      RecruitWithId? lastDocument,
       bool loading,
       bool hitBottom,
       bool error});
 
-  $UsersSearchCopyWith<$Res> get searchItem;
-  $ProfileWithIdCopyWith<$Res>? get lastDocument;
+  $RecruitsSearchCopyWith<$Res> get searchItem;
+  $RecruitWithIdCopyWith<$Res>? get lastDocument;
 }
 
 /// @nodoc
-class _$UsersFutureScrollCopyWithImpl<$Res>
-    implements $UsersFutureScrollCopyWith<$Res> {
-  _$UsersFutureScrollCopyWithImpl(this._value, this._then);
+class _$RecruitsFutureScrollCopyWithImpl<$Res>
+    implements $RecruitsFutureScrollCopyWith<$Res> {
+  _$RecruitsFutureScrollCopyWithImpl(this._value, this._then);
 
-  final UsersFutureScroll _value;
+  final RecruitsFutureScroll _value;
   // ignore: unused_field
-  final $Res Function(UsersFutureScroll) _then;
+  final $Res Function(RecruitsFutureScroll) _then;
 
   @override
   $Res call({
@@ -292,19 +329,19 @@ class _$UsersFutureScrollCopyWithImpl<$Res>
       list: list == freezed
           ? _value.list
           : list // ignore: cast_nullable_to_non_nullable
-              as List<ProfileWithId>?,
+              as List<RecruitWithId>?,
       query: query == freezed
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
-              as Query<Profile>,
+              as Query<Recruit>,
       searchItem: searchItem == freezed
           ? _value.searchItem
           : searchItem // ignore: cast_nullable_to_non_nullable
-              as UsersSearch,
+              as RecruitsSearch,
       lastDocument: lastDocument == freezed
           ? _value.lastDocument
           : lastDocument // ignore: cast_nullable_to_non_nullable
-              as ProfileWithId?,
+              as RecruitWithId?,
       loading: loading == freezed
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
@@ -321,56 +358,56 @@ class _$UsersFutureScrollCopyWithImpl<$Res>
   }
 
   @override
-  $UsersSearchCopyWith<$Res> get searchItem {
-    return $UsersSearchCopyWith<$Res>(_value.searchItem, (value) {
+  $RecruitsSearchCopyWith<$Res> get searchItem {
+    return $RecruitsSearchCopyWith<$Res>(_value.searchItem, (value) {
       return _then(_value.copyWith(searchItem: value));
     });
   }
 
   @override
-  $ProfileWithIdCopyWith<$Res>? get lastDocument {
+  $RecruitWithIdCopyWith<$Res>? get lastDocument {
     if (_value.lastDocument == null) {
       return null;
     }
 
-    return $ProfileWithIdCopyWith<$Res>(_value.lastDocument!, (value) {
+    return $RecruitWithIdCopyWith<$Res>(_value.lastDocument!, (value) {
       return _then(_value.copyWith(lastDocument: value));
     });
   }
 }
 
 /// @nodoc
-abstract class _$UsersFutureScrollCopyWith<$Res>
-    implements $UsersFutureScrollCopyWith<$Res> {
-  factory _$UsersFutureScrollCopyWith(
-          _UsersFutureScroll value, $Res Function(_UsersFutureScroll) then) =
-      __$UsersFutureScrollCopyWithImpl<$Res>;
+abstract class _$RecruitsFutureScrollCopyWith<$Res>
+    implements $RecruitsFutureScrollCopyWith<$Res> {
+  factory _$RecruitsFutureScrollCopyWith(_RecruitsFutureScroll value,
+          $Res Function(_RecruitsFutureScroll) then) =
+      __$RecruitsFutureScrollCopyWithImpl<$Res>;
   @override
   $Res call(
-      {List<ProfileWithId>? list,
-      Query<Profile> query,
-      UsersSearch searchItem,
-      ProfileWithId? lastDocument,
+      {List<RecruitWithId>? list,
+      Query<Recruit> query,
+      RecruitsSearch searchItem,
+      RecruitWithId? lastDocument,
       bool loading,
       bool hitBottom,
       bool error});
 
   @override
-  $UsersSearchCopyWith<$Res> get searchItem;
+  $RecruitsSearchCopyWith<$Res> get searchItem;
   @override
-  $ProfileWithIdCopyWith<$Res>? get lastDocument;
+  $RecruitWithIdCopyWith<$Res>? get lastDocument;
 }
 
 /// @nodoc
-class __$UsersFutureScrollCopyWithImpl<$Res>
-    extends _$UsersFutureScrollCopyWithImpl<$Res>
-    implements _$UsersFutureScrollCopyWith<$Res> {
-  __$UsersFutureScrollCopyWithImpl(
-      _UsersFutureScroll _value, $Res Function(_UsersFutureScroll) _then)
-      : super(_value, (v) => _then(v as _UsersFutureScroll));
+class __$RecruitsFutureScrollCopyWithImpl<$Res>
+    extends _$RecruitsFutureScrollCopyWithImpl<$Res>
+    implements _$RecruitsFutureScrollCopyWith<$Res> {
+  __$RecruitsFutureScrollCopyWithImpl(
+      _RecruitsFutureScroll _value, $Res Function(_RecruitsFutureScroll) _then)
+      : super(_value, (v) => _then(v as _RecruitsFutureScroll));
 
   @override
-  _UsersFutureScroll get _value => super._value as _UsersFutureScroll;
+  _RecruitsFutureScroll get _value => super._value as _RecruitsFutureScroll;
 
   @override
   $Res call({
@@ -382,23 +419,23 @@ class __$UsersFutureScrollCopyWithImpl<$Res>
     Object? hitBottom = freezed,
     Object? error = freezed,
   }) {
-    return _then(_UsersFutureScroll(
+    return _then(_RecruitsFutureScroll(
       list: list == freezed
           ? _value.list
           : list // ignore: cast_nullable_to_non_nullable
-              as List<ProfileWithId>?,
+              as List<RecruitWithId>?,
       query: query == freezed
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
-              as Query<Profile>,
+              as Query<Recruit>,
       searchItem: searchItem == freezed
           ? _value.searchItem
           : searchItem // ignore: cast_nullable_to_non_nullable
-              as UsersSearch,
+              as RecruitsSearch,
       lastDocument: lastDocument == freezed
           ? _value.lastDocument
           : lastDocument // ignore: cast_nullable_to_non_nullable
-              as ProfileWithId?,
+              as RecruitWithId?,
       loading: loading == freezed
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
@@ -417,8 +454,8 @@ class __$UsersFutureScrollCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UsersFutureScroll extends _UsersFutureScroll {
-  _$_UsersFutureScroll(
+class _$_RecruitsFutureScroll extends _RecruitsFutureScroll {
+  _$_RecruitsFutureScroll(
       {this.list,
       required this.query,
       required this.searchItem,
@@ -429,13 +466,13 @@ class _$_UsersFutureScroll extends _UsersFutureScroll {
       : super._();
 
   @override
-  final List<ProfileWithId>? list;
+  final List<RecruitWithId>? list;
   @override
-  final Query<Profile> query;
+  final Query<Recruit> query;
   @override
-  final UsersSearch searchItem;
+  final RecruitsSearch searchItem;
   @override
-  final ProfileWithId? lastDocument;
+  final RecruitWithId? lastDocument;
   @JsonKey()
   @override
   final bool loading;
@@ -448,14 +485,14 @@ class _$_UsersFutureScroll extends _UsersFutureScroll {
 
   @override
   String toString() {
-    return 'UsersFutureScroll(list: $list, query: $query, searchItem: $searchItem, lastDocument: $lastDocument, loading: $loading, hitBottom: $hitBottom, error: $error)';
+    return 'RecruitsFutureScroll(list: $list, query: $query, searchItem: $searchItem, lastDocument: $lastDocument, loading: $loading, hitBottom: $hitBottom, error: $error)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _UsersFutureScroll &&
+            other is _RecruitsFutureScroll &&
             const DeepCollectionEquality().equals(other.list, list) &&
             const DeepCollectionEquality().equals(other.query, query) &&
             const DeepCollectionEquality()
@@ -480,29 +517,30 @@ class _$_UsersFutureScroll extends _UsersFutureScroll {
 
   @JsonKey(ignore: true)
   @override
-  _$UsersFutureScrollCopyWith<_UsersFutureScroll> get copyWith =>
-      __$UsersFutureScrollCopyWithImpl<_UsersFutureScroll>(this, _$identity);
+  _$RecruitsFutureScrollCopyWith<_RecruitsFutureScroll> get copyWith =>
+      __$RecruitsFutureScrollCopyWithImpl<_RecruitsFutureScroll>(
+          this, _$identity);
 }
 
-abstract class _UsersFutureScroll extends UsersFutureScroll {
-  factory _UsersFutureScroll(
-      {List<ProfileWithId>? list,
-      required Query<Profile> query,
-      required UsersSearch searchItem,
-      ProfileWithId? lastDocument,
+abstract class _RecruitsFutureScroll extends RecruitsFutureScroll {
+  factory _RecruitsFutureScroll(
+      {List<RecruitWithId>? list,
+      required Query<Recruit> query,
+      required RecruitsSearch searchItem,
+      RecruitWithId? lastDocument,
       bool loading,
       bool hitBottom,
-      bool error}) = _$_UsersFutureScroll;
-  _UsersFutureScroll._() : super._();
+      bool error}) = _$_RecruitsFutureScroll;
+  _RecruitsFutureScroll._() : super._();
 
   @override
-  List<ProfileWithId>? get list;
+  List<RecruitWithId>? get list;
   @override
-  Query<Profile> get query;
+  Query<Recruit> get query;
   @override
-  UsersSearch get searchItem;
+  RecruitsSearch get searchItem;
   @override
-  ProfileWithId? get lastDocument;
+  RecruitWithId? get lastDocument;
   @override
   bool get loading;
   @override
@@ -511,6 +549,6 @@ abstract class _UsersFutureScroll extends UsersFutureScroll {
   bool get error;
   @override
   @JsonKey(ignore: true)
-  _$UsersFutureScrollCopyWith<_UsersFutureScroll> get copyWith =>
+  _$RecruitsFutureScrollCopyWith<_RecruitsFutureScroll> get copyWith =>
       throw _privateConstructorUsedError;
 }

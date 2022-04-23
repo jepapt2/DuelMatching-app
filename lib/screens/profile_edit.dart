@@ -292,9 +292,9 @@ class ProfileEditScreen extends HookConsumerWidget {
     Future getImageFromCamera() async {
       final pickedFile = await picker.pickImage(
           source: ImageSource.camera,
-          maxHeight: 200,
+          maxHeight: 400,
           maxWidth: 1200,
-          imageQuality: 85);
+          imageQuality: 100);
 
       if (pickedFile != null) {
         Navigator.pop(context);
@@ -305,9 +305,9 @@ class ProfileEditScreen extends HookConsumerWidget {
     Future getImageFromGallery() async {
       final pickedFile = await picker.pickImage(
           source: ImageSource.gallery,
-          maxHeight: 200,
+          maxHeight: 400,
           maxWidth: 1200,
-          imageQuality: 85);
+          imageQuality: 100);
 
       if (pickedFile != null) {
         Navigator.pop(context);

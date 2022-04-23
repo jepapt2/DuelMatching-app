@@ -1,15 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duel_matching/extension/string.dart';
+import 'package:duel_matching/freezed/recruit/recruit.dart';
+import 'package:duel_matching/freezed/recruits_view/recruits_view.dart';
 import 'package:duel_matching/freezed/users_view.dart/users_view.dart';
 import 'package:duel_matching/input_options/adress.dart';
 import 'package:duel_matching/input_options/play_title.dart';
-import 'package:duel_matching/freezed/recruit/recruit.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
+import 'package:duel_matching/parts/primary_sliverappbar.dart';
 import 'package:duel_matching/parts/recruit_card.dart';
+import 'package:duel_matching/parts/scroll_detector.dart';
 import 'package:duel_matching/parts/search_button.dart';
 import 'package:duel_matching/parts/user_card.dart';
-import 'package:duel_matching/viewmodel/recruit_provider.dart';
+import 'package:duel_matching/viewmodel/recruits_future_scroll.dart';
+import 'package:duel_matching/viewmodel/users_future_scroll.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:duel_matching/viewmodel/users_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,8 +22,10 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class RecruitsScreen extends HookConsumerWidget {
   RecruitsScreen({Key? key}) : super(key: key);
@@ -28,92 +34,164 @@ class RecruitsScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timeNow = useMemoized(DateTime.now);
-    final searchQuery = useState<UsersSearch>(UsersSearch(
-      sort: 'activeAt',
-    ));
-
-    final recruitsQuery = useState(recruitsCollection()
-        .orderBy('createdAt', descending: false)
-        .where('full', isEqualTo: false)
-        .where('cancel', isEqualTo: false)
-        .where('close', isEqualTo: false));
+    final recruitsController = ref.watch(recruitsFutureScrollProvider);
+    final recruitsControllerNotifier =
+        ref.watch(recruitsFutureScrollProvider.notifier);
+    final DateTime nowTime = DateTime.now();
 
     return UserWhenConsumer(
-      child: (myProfile) => FriendsWhenConsumer(child: (friends) {
+      child: (user) => FriendsWhenConsumer(child: (friends) {
+        useEffect(() {
+          Future.delayed(
+            Duration.zero,
+            () => recruitsControllerNotifier.loadRecruits(nowTime),
+          );
+        }, []);
+
         return PrimaryScaffold(
-          user: myProfile,
-          // appBarAction: [
-          //   IconButton(
-          //       iconSize: 33,
-          //       onPressed: () => searchDialog(
-          //           context, ref, searchQuery, recruitsQuery, timeNow),
-          //       icon: const Icon(Icons.manage_search_outlined))
-          // ],
-          child: SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                FirestoreListView(
-                  query: recruitsQuery.value,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder:
-                      (context, QueryDocumentSnapshot<Recruit> snapshot) =>
-                          Column(
-                    children: [
-                      RecruitCard(
-                          title: snapshot.data().title,
-                          playTitle: snapshot.data().playTitle,
-                          format: snapshot.data().format,
-                          place: snapshot.data().place,
-                          point: snapshot.data().point,
-                          start: snapshot.data().start!,
-                          end: snapshot.data().end,
-                          reqruitNumber: snapshot.data().recruitNumber,
-                          memberCount: snapshot.data().memberCount),
-                      const Divider()
+          user: user,
+          child: ScrollDetector(
+            threshold: 0.8,
+            loadNext: () => recruitsControllerNotifier.loadRecruits(nowTime),
+            builder: (context, controller) => RefreshIndicator(
+              onRefresh: () =>
+                  recruitsControllerNotifier.recruitsRefresh(nowTime),
+              child: CustomScrollView(
+                controller: controller,
+                slivers: [
+                  PrimarySliverAppBar(
+                    user: user,
+                    appBarAction: [
+                      IconButton(
+                          iconSize: 33,
+                          onPressed: () => searchDialog(
+                              context,
+                              ref,
+                              recruitsController,
+                              recruitsControllerNotifier,
+                              nowTime),
+                          icon: const Icon(Icons.manage_search_outlined))
                     ],
                   ),
-                  loadingBuilder: (context) => Center(
-                      child: Column(
-                    children: const [
-                      SizedBox(
-                        height: 100.0,
-                      ),
-                      CircularProgressIndicator(),
-                    ],
-                  )),
-                  errorBuilder: (context, error, _) => Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(
-                          height: 100.0,
-                        ),
-                        const Text('対戦募集の取得に失敗しました'),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                              textStyle: MaterialStateProperty.all(
-                                  const TextStyle(fontWeight: FontWeight.bold)),
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.redAccent)),
-                          child: const Text('更新する'),
-                          onPressed: () {
-                            GoRouter.of(context).pop();
-                            GoRouter.of(context).push('/recruits');
-                          },
-                        ),
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        if (recruitsController.list == null &&
+                            recruitsController.loading)
+                          Center(
+                              child: Column(
+                            children: const [
+                              SizedBox(
+                                height: 100.0,
+                              ),
+                              CircularProgressIndicator(),
+                            ],
+                          ))
+                        else if (recruitsController.error)
+                          Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(
+                                  height: 100.0,
+                                ),
+                                const Text('募集の取得に失敗しました'),
+                                ElevatedButton(
+                                  style: ButtonStyle(
+                                      textStyle: MaterialStateProperty.all(
+                                          const TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.redAccent)),
+                                  child: const Text('更新する'),
+                                  onPressed: () {
+                                    recruitsControllerNotifier
+                                        .recruitsRefresh(nowTime);
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                        else if (recruitsController.list == null)
+                          const SizedBox()
+                        else if (recruitsController.list!.isEmpty)
+                          Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(
+                                  height: 100.0,
+                                ),
+                                const Text('募集が見つかりませんでした'),
+                                ElevatedButton(
+                                  style: ButtonStyle(
+                                      textStyle: MaterialStateProperty.all(
+                                          const TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.redAccent)),
+                                  child: const Text('再検索する'),
+                                  onPressed: () {
+                                    searchDialog(
+                                        context,
+                                        ref,
+                                        recruitsController,
+                                        recruitsControllerNotifier,
+                                        nowTime);
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                        else
+                          ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: recruitsController.list?.length != null
+                                  ? recruitsController.list!.length
+                                  : 0 + (recruitsController.loading ? 1 : 0),
+                              itemBuilder: (context, int index) {
+                                Recruit recruit =
+                                    recruitsController.list![index].recruit;
+                                if (recruitsController.list!.length >= index) {
+                                  return Column(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => GoRouter.of(context).push(
+                                            '/user/${recruitsController.list![index].id}'),
+                                        child: RecruitCard(
+                                          title: recruit.title,
+                                          playTitle: recruit.playTitle,
+                                          format: recruit.format,
+                                          place: recruit.place,
+                                          point: recruit.point,
+                                          start: recruit.start!,
+                                          end: recruit.end,
+                                          reqruitNumber: recruit.recruitNumber,
+                                          memberCount: recruit.memberCount,
+                                        ),
+                                      ),
+                                      const Divider()
+                                    ],
+                                  );
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }),
                       ],
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            child: const FaIcon(
+            child: FaIcon(
               FontAwesomeIcons.plus,
-              color: Color(0xfffffffe),
+              color: Color(0xffeff0f3),
             ),
             onPressed: () => GoRouter.of(context).push('/recruit_new'),
           ),
@@ -122,48 +200,16 @@ class RecruitsScreen extends HookConsumerWidget {
     );
   }
 
-  searchDialog(context, WidgetRef ref, ValueNotifier<UsersSearch> searchQuery,
-      ValueNotifier<Query<Recruit>> recruitsQuery, DateTime time) {
+  searchDialog(
+      context,
+      WidgetRef ref,
+      RecruitsFutureScroll recruitsController,
+      RecruitsFutureScrollNotifier recruitsControllerNotifier,
+      DateTime nowTime) {
     BuildContext innerContext;
-    getRecruitsQuery() {
-      // if (search.value.sort == 'activeAt') {
-      //   searchUser = userCollection().orderBy('activeAt', descending: true);
-      // } else if (search.value.sort == 'createdAtDesc') {
-      //   searchUser = userCollection().orderBy('createdAt', descending: true);
-      // } else if (search.value.sort == 'createdAtAsc') {
-      //   searchUser = userCollection().orderBy('createdAt');
-      // } else {
-      //   searchUser = userCollection().orderBy('activeAt', descending: true);
-      // }
-
-      // if (search.value.playTitle.isNotNullAndNotEmpty) {
-      //   searchUser =
-      //       searchUser.where('playTitle', arrayContains: search.value.playTitle);
-      // }
-
-      // if (search.value.adress.isNotNullAndNotEmpty) {
-      //   searchUser = searchUser.where('adress', isEqualTo: search.value.adress);
-      // }
-
-      // if (search.value.remoteDuel != null && search.value.remoteDuel!) {
-      //   searchUser = searchUser.where('remoteDuel', isEqualTo: true);
-      // }
-
-      // if (search.value.sort == 'createdAtAsc') {
-      //   searchUser = searchUser.endBefore([time]);
-      // } else {
-      //   searchUser = searchUser.startAfter([time]);
-      // }
-      Query<Recruit> searchRecruit = recruitsCollection()
-          .orderBy('createdAt', descending: true)
-          .orderBy('limit')
-          .endBefore([time.toUtc().millisecondsSinceEpoch])
-          .where('full', isEqualTo: false)
-          .where('cancel', isEqualTo: false);
-
-      recruitsQuery.value = searchRecruit;
-    }
-
+    bool startInputEnabled =
+        recruitsController.searchItem.sort == 'startDesc' ||
+            recruitsController.searchItem.sort == 'startAsc';
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -171,95 +217,180 @@ class RecruitsScreen extends HookConsumerWidget {
         return SimpleDialog(
           insetPadding: const EdgeInsets.all(20.0),
           children: <Widget>[
-            FormBuilder(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    FormBuilderDropdown(
-                        name: 'playTitle',
-                        initialValue: searchQuery.value.playTitle,
-                        decoration: const InputDecoration(
-                            label: Text('プレイしているタイトル'),
-                            floatingLabelBehavior:
-                                FloatingLabelBehavior.always),
-                        items: [
-                          const DropdownMenuItem(
-                            child: Text('タイトルを入力'),
-                            value: null,
+            StatefulBuilder(builder: (context, setState) {
+              return FormBuilder(
+                  key: _formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      children: [
+                        FormBuilderDropdown(
+                            name: 'playTitle',
+                            initialValue:
+                                recruitsController.searchItem.playTitle,
+                            decoration: const InputDecoration(
+                                label: Text('プレイしているタイトル'),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always),
+                            items: [
+                              const DropdownMenuItem(
+                                child: Text('タイトルを入力'),
+                                value: null,
+                              ),
+                              const DropdownMenuItem(
+                                child: Text('その他'),
+                                value: 'その他',
+                              ),
+                              ...playTitleOption
+                                  .map((t) => DropdownMenuItem(
+                                        child: Text(t),
+                                        value: t,
+                                      ))
+                                  .toList()
+                            ]),
+                        FormBuilderDropdown(
+                            name: 'place',
+                            // initialValue: recruitsController.searchItem.place,
+                            decoration: const InputDecoration(
+                                label: Text('開催する場所'),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always),
+                            items: [
+                              const DropdownMenuItem(
+                                child: Text('場所を入力'),
+                                value: null,
+                              ),
+                              const DropdownMenuItem(
+                                child: Text('オンライン'),
+                                value: 'オンライン',
+                              ),
+                              ...adressOption
+                                  .map((t) => DropdownMenuItem(
+                                        child: Text(t),
+                                        value: t,
+                                      ))
+                                  .toList()
+                            ]),
+                        FormBuilderDropdown(
+                            name: 'friendOnly',
+                            initialValue:
+                                recruitsController.searchItem.friendOnly,
+                            decoration: const InputDecoration(
+                                label: Text('募集範囲'),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always),
+                            items: const [
+                              DropdownMenuItem(
+                                child: Text('誰でも'),
+                                value: false,
+                              ),
+                              DropdownMenuItem(
+                                child: Text('フレンドのみ'),
+                                value: true,
+                              ),
+                              DropdownMenuItem(
+                                child: Text('すべて'),
+                                value: null,
+                              ),
+                            ]),
+                        FormBuilderDropdown(
+                            initialValue: recruitsController.searchItem.sort,
+                            name: 'sort',
+                            decoration: const InputDecoration(
+                                label: Text('並び替え'),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always),
+                            onChanged: (value) {
+                              setState(() {
+                                startInputEnabled =
+                                    value == 'startDesc' || value == 'startAsc';
+                              });
+                            },
+                            items: const [
+                              DropdownMenuItem(
+                                child: Text('開始時間が近い順'),
+                                value: 'startDesc',
+                              ),
+                              DropdownMenuItem(
+                                child: Text('開始時間が遠い順'),
+                                value: 'startAsc',
+                              ),
+                              DropdownMenuItem(
+                                child: Text('募集期限が近い順'),
+                                value: 'limitDesc',
+                              ),
+                              DropdownMenuItem(
+                                child: Text('募集期限が遠い順'),
+                                value: 'limitAsc',
+                              ),
+                              DropdownMenuItem(
+                                child: Text('投稿が新しい順'),
+                                value: 'createdAtDesc',
+                              ),
+                              DropdownMenuItem(
+                                child: Text('投稿が古い順'),
+                                value: 'createdAtAsc',
+                              ),
+                            ]),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        FormBuilderDateTimePicker(
+                          initialValue: recruitsController.searchItem.start !=
+                                  null
+                              ? recruitsController.searchItem.start!.toDate()
+                              : null,
+                          locale: const Locale('ja'),
+                          inputType: InputType.date,
+                          format: DateFormat('yyyy/M/d'),
+                          name: 'start',
+                          enabled: startInputEnabled,
+                          decoration: InputDecoration(
+                            label: const Text('開催日(開始時間でソート時のみ)'),
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            isDense: true,
+                            suffix: InkWell(
+                              onTap: () {
+                                _formKey.currentState!.fields['start']
+                                    ?.didChange(null);
+                              },
+                              child: const Icon(
+                                Icons.close,
+                                size: 20,
+                                color: Colors.black54,
+                              ),
+                            ),
                           ),
-                          ...playTitleOption
-                              .map((t) => DropdownMenuItem(
-                                    child: Text(t),
-                                    value: t,
-                                  ))
-                              .toList()
-                        ]),
-                    FormBuilderDropdown(
-                        name: 'adress',
-                        initialValue: searchQuery.value.adress,
-                        decoration: const InputDecoration(
-                            label: Text('居住地'),
-                            floatingLabelBehavior:
-                                FloatingLabelBehavior.always),
-                        items: [
-                          const DropdownMenuItem(
-                            child: Text('都道府県を入力'),
-                            value: null,
-                          ),
-                          ...adressOption
-                              .map((t) => DropdownMenuItem(
-                                    child: Text(t),
-                                    value: t,
-                                  ))
-                              .toList()
-                        ]),
-                    FormBuilderSwitch(
-                      title: Text('リモートデュエル環境'),
-                      name: 'remoteDuel',
-                      initialValue: searchQuery.value.remoteDuel,
-                    ),
-                    FormBuilderDropdown(
-                        initialValue: searchQuery.value.sort,
-                        name: 'sort',
-                        decoration: const InputDecoration(
-                            label: Text('並び替え'),
-                            floatingLabelBehavior:
-                                FloatingLabelBehavior.always),
-                        items: const [
-                          DropdownMenuItem(
-                            child: Text('アクティブ順'),
-                            value: 'activeAt',
-                          ),
-                          DropdownMenuItem(
-                            child: Text('登録が新しい順'),
-                            value: 'createdAtDesc',
-                          ),
-                          DropdownMenuItem(
-                            child: Text('登録が古い順'),
-                            value: 'createdAtAsc',
-                          ),
-                        ]),
-                    const SizedBox(
-                      height: 30.0,
-                    ),
-                    SearchButton(onPressed: () {
-                      Navigator.of(innerContext).pop();
-                      _formKey.currentState!.save();
+                        ),
+                        const SizedBox(
+                          height: 30.0,
+                        ),
+                        SearchButton(onPressed: () {
+                          Navigator.of(innerContext).pop();
+                          _formKey.currentState!.save();
 
-                      searchQuery.value = searchQuery.value.copyWith(
-                        playTitle: _formKey.currentState?.value['playTitle'],
-                        adress: _formKey.currentState?.value['adress'],
-                        remoteDuel: _formKey.currentState?.value['remoteDuel'],
-                        sort: _formKey.currentState?.value['sort'],
-                      );
-                      getRecruitsQuery();
-                    }),
-                  ],
-                ),
-              ),
-            )
+                          Timestamp? startTimestamp =
+                              _formKey.currentState?.value['start'] != null
+                                  ? Timestamp.fromDate(
+                                      _formKey.currentState?.value['start'])
+                                  : null;
+
+                          recruitsControllerNotifier.searchRecruits(
+                            RecruitsSearch(
+                                playTitle:
+                                    _formKey.currentState?.value['playTitle'],
+                                place: _formKey.currentState?.value['place'],
+                                friendOnly:
+                                    _formKey.currentState?.value['friendOnly'],
+                                sort: _formKey.currentState?.value['sort'],
+                                start: startTimestamp),
+                            nowTime,
+                          );
+                        }),
+                      ],
+                    ),
+                  ));
+            })
           ],
         );
       },

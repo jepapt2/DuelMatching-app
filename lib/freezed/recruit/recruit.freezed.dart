@@ -14,6 +14,168 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+/// @nodoc
+class _$RecruitWithIdTearOff {
+  const _$RecruitWithIdTearOff();
+
+  _RecruitWithId call({required String id, required Recruit recruit}) {
+    return _RecruitWithId(
+      id: id,
+      recruit: recruit,
+    );
+  }
+}
+
+/// @nodoc
+const $RecruitWithId = _$RecruitWithIdTearOff();
+
+/// @nodoc
+mixin _$RecruitWithId {
+  String get id => throw _privateConstructorUsedError;
+  Recruit get recruit => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $RecruitWithIdCopyWith<RecruitWithId> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $RecruitWithIdCopyWith<$Res> {
+  factory $RecruitWithIdCopyWith(
+          RecruitWithId value, $Res Function(RecruitWithId) then) =
+      _$RecruitWithIdCopyWithImpl<$Res>;
+  $Res call({String id, Recruit recruit});
+
+  $RecruitCopyWith<$Res> get recruit;
+}
+
+/// @nodoc
+class _$RecruitWithIdCopyWithImpl<$Res>
+    implements $RecruitWithIdCopyWith<$Res> {
+  _$RecruitWithIdCopyWithImpl(this._value, this._then);
+
+  final RecruitWithId _value;
+  // ignore: unused_field
+  final $Res Function(RecruitWithId) _then;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? recruit = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      recruit: recruit == freezed
+          ? _value.recruit
+          : recruit // ignore: cast_nullable_to_non_nullable
+              as Recruit,
+    ));
+  }
+
+  @override
+  $RecruitCopyWith<$Res> get recruit {
+    return $RecruitCopyWith<$Res>(_value.recruit, (value) {
+      return _then(_value.copyWith(recruit: value));
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$RecruitWithIdCopyWith<$Res>
+    implements $RecruitWithIdCopyWith<$Res> {
+  factory _$RecruitWithIdCopyWith(
+          _RecruitWithId value, $Res Function(_RecruitWithId) then) =
+      __$RecruitWithIdCopyWithImpl<$Res>;
+  @override
+  $Res call({String id, Recruit recruit});
+
+  @override
+  $RecruitCopyWith<$Res> get recruit;
+}
+
+/// @nodoc
+class __$RecruitWithIdCopyWithImpl<$Res>
+    extends _$RecruitWithIdCopyWithImpl<$Res>
+    implements _$RecruitWithIdCopyWith<$Res> {
+  __$RecruitWithIdCopyWithImpl(
+      _RecruitWithId _value, $Res Function(_RecruitWithId) _then)
+      : super(_value, (v) => _then(v as _RecruitWithId));
+
+  @override
+  _RecruitWithId get _value => super._value as _RecruitWithId;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? recruit = freezed,
+  }) {
+    return _then(_RecruitWithId(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      recruit: recruit == freezed
+          ? _value.recruit
+          : recruit // ignore: cast_nullable_to_non_nullable
+              as Recruit,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_RecruitWithId extends _RecruitWithId {
+  _$_RecruitWithId({required this.id, required this.recruit}) : super._();
+
+  @override
+  final String id;
+  @override
+  final Recruit recruit;
+
+  @override
+  String toString() {
+    return 'RecruitWithId(id: $id, recruit: $recruit)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _RecruitWithId &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.recruit, recruit));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(recruit));
+
+  @JsonKey(ignore: true)
+  @override
+  _$RecruitWithIdCopyWith<_RecruitWithId> get copyWith =>
+      __$RecruitWithIdCopyWithImpl<_RecruitWithId>(this, _$identity);
+}
+
+abstract class _RecruitWithId extends RecruitWithId {
+  factory _RecruitWithId({required String id, required Recruit recruit}) =
+      _$_RecruitWithId;
+  _RecruitWithId._() : super._();
+
+  @override
+  String get id;
+  @override
+  Recruit get recruit;
+  @override
+  @JsonKey(ignore: true)
+  _$RecruitWithIdCopyWith<_RecruitWithId> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 Recruit _$RecruitFromJson(Map<String, dynamic> json) {
   return _Recruit.fromJson(json);
 }
