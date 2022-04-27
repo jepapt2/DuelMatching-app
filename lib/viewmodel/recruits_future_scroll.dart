@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duel_matching/freezed/recruit/recruit.dart';
 import 'package:duel_matching/freezed/recruits_view/recruits_view.dart';
-import 'package:duel_matching/freezed/user_profile/user_profile.dart';
-import 'package:duel_matching/freezed/users_view.dart/users_view.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:duel_matching/extension/string.dart';
 
@@ -22,7 +20,7 @@ class RecruitsFutureScrollNotifier extends StateNotifier<RecruitsFutureScroll> {
           searchItem: RecruitsSearch(sort: 'startDesc'),
         ));
 
-  Future<void> loadRecruits(DateTime time) async {
+  Future<void> loadRecruits(DateTime time, List<String> blockList) async {
     if (state.loading || state.hitBottom) {
       return;
     }
@@ -52,9 +50,16 @@ class RecruitsFutureScrollNotifier extends StateNotifier<RecruitsFutureScroll> {
             .toList();
         List<RecruitWithId> organizedList;
 
-        organizedList = getList
-            .where((element) => element.recruit.limit!.isAfter(time))
-            .toList();
+        if (blockList.isNotEmpty) {
+          organizedList = getList
+              .where((element) => element.recruit.limit!.isAfter(time))
+              .where((element) => !blockList.contains(element.id))
+              .toList();
+        } else {
+          organizedList = getList
+              .where((element) => element.recruit.limit!.isAfter(time))
+              .toList();
+        }
 
         state = state.copyWith(
             list: [...?state.list, ...organizedList],
@@ -78,9 +83,16 @@ class RecruitsFutureScrollNotifier extends StateNotifier<RecruitsFutureScroll> {
             .map((e) => RecruitWithId(id: e.id, recruit: e.data()))
             .toList();
         List<RecruitWithId> organizedList;
-        organizedList = getList
-            .where((element) => element.recruit.limit!.isAfter(time))
-            .toList();
+        if (blockList.isNotEmpty) {
+          organizedList = getList
+              .where((element) => element.recruit.limit!.isAfter(time))
+              .where((element) => !blockList.contains(element.id))
+              .toList();
+        } else {
+          organizedList = getList
+              .where((element) => element.recruit.limit!.isAfter(time))
+              .toList();
+        }
         state = state.copyWith(
             list: [...organizedList],
             lastDocument: organizedList.isNotEmpty ? organizedList.last : null,
@@ -97,7 +109,8 @@ class RecruitsFutureScrollNotifier extends StateNotifier<RecruitsFutureScroll> {
     }
   }
 
-  void searchRecruits(RecruitsSearch search, DateTime time) {
+  void searchRecruits(
+      RecruitsSearch search, DateTime time, List<String> blockList) {
     state = state.copyWith(list: null, lastDocument: null, searchItem: search);
     Query<Recruit> searchRecruit;
 
@@ -147,12 +160,12 @@ class RecruitsFutureScrollNotifier extends StateNotifier<RecruitsFutureScroll> {
     }
     state = state.copyWith(query: searchRecruit, hitBottom: false);
 
-    loadRecruits(time);
+    loadRecruits(time, blockList);
   }
 
-  Future<void> recruitsRefresh(DateTime time) async {
+  Future<void> recruitsRefresh(DateTime time, List<String> blockList) async {
     state = state.copyWith(
         list: null, lastDocument: null, hitBottom: false, error: false);
-    loadRecruits(time);
+    loadRecruits(time, blockList);
   }
 }

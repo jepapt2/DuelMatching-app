@@ -34,6 +34,13 @@ final userProfileProvider =
   return UserProfile(uid: id, profile: profile, friends: friends);
 });
 
+final disposeUserProfileProvider =
+    StateProvider.family.autoDispose<UserProfile, String>((ref, String id) {
+  final profile = ref.watch(profileProvider(id));
+  final friends = ref.watch(friendsProvider(id));
+  return UserProfile(uid: id, profile: profile, friends: friends);
+});
+
 class UserWhenConsumer extends HookConsumerWidget {
   const UserWhenConsumer({
     Key? key,
@@ -48,6 +55,54 @@ class UserWhenConsumer extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userProfile = ref.watch(
         userProfileProvider(id ?? FirebaseAuth.instance.currentUser!.uid));
+    final profile = userProfile.profile;
+
+    return profile!.when(
+        data: (user) => child(user),
+        error: (error, stack) => Scaffold(
+              appBar: AppBar(),
+              body: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('アカウント情報の取得に失敗しましたuser'),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          textStyle: MaterialStateProperty.all(
+                              const TextStyle(fontWeight: FontWeight.bold)),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.redAccent)),
+                      child: const Text('更新する'),
+                      onPressed: () {
+                        ref.refresh(userProfileProvider(
+                            FirebaseAuth.instance.currentUser!.uid));
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        loading: () => Scaffold(
+              appBar: AppBar(),
+              body: const Center(child: CircularProgressIndicator()),
+            ));
+  }
+}
+
+class UserDisposeWhenConsumer extends HookConsumerWidget {
+  const UserDisposeWhenConsumer({
+    Key? key,
+    this.id,
+    required this.child,
+  }) : super(key: key);
+
+  final String? id;
+  final Widget Function(Profile) child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userProfile = ref.watch(disposeUserProfileProvider(
+        id ?? FirebaseAuth.instance.currentUser!.uid));
     final profile = userProfile.profile;
 
     return profile!.when(
@@ -103,7 +158,7 @@ class FriendsWhenConsumer extends HookConsumerWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text('アカウント情報の取得に失敗しました'),
+                    Text(error.toString()),
                     ElevatedButton(
                       style: ButtonStyle(
                           textStyle: MaterialStateProperty.all(

@@ -14,7 +14,7 @@ final recruitProvider =
 
 final membersProvider =
     StreamProvider.family.autoDispose<List<Member>, String>((ref, id) {
-  final document = membersCollection(id);
+  final document = membersCollection(id).orderBy('organizer');
   final snapshot = document.snapshots();
   final collection = snapshot.map((e) => e.docs.map((e) => e.data()).toList());
   return collection;

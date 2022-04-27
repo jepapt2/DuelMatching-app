@@ -1,28 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:duel_matching/extension/string.dart';
 import 'package:duel_matching/freezed/recruit/recruit.dart';
 import 'package:duel_matching/freezed/recruits_view/recruits_view.dart';
-import 'package:duel_matching/freezed/users_view.dart/users_view.dart';
 import 'package:duel_matching/input_options/adress.dart';
 import 'package:duel_matching/input_options/play_title.dart';
-import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/parts/primary_sliverappbar.dart';
 import 'package:duel_matching/parts/recruit_card.dart';
 import 'package:duel_matching/parts/scroll_detector.dart';
 import 'package:duel_matching/parts/search_button.dart';
-import 'package:duel_matching/parts/user_card.dart';
 import 'package:duel_matching/viewmodel/recruits_future_scroll.dart';
-import 'package:duel_matching/viewmodel/users_future_scroll.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
-import 'package:duel_matching/viewmodel/users_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutterfire_ui/firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -41,10 +32,11 @@ class RecruitsScreen extends HookConsumerWidget {
 
     return UserWhenConsumer(
       child: (user) => FriendsWhenConsumer(child: (friends) {
+        final blockList = [...?user.blockList];
         useEffect(() {
           Future.delayed(
             Duration.zero,
-            () => recruitsControllerNotifier.loadRecruits(nowTime),
+            () => recruitsControllerNotifier.loadRecruits(nowTime, blockList),
           );
         }, []);
 
@@ -52,10 +44,11 @@ class RecruitsScreen extends HookConsumerWidget {
           user: user,
           child: ScrollDetector(
             threshold: 0.8,
-            loadNext: () => recruitsControllerNotifier.loadRecruits(nowTime),
+            loadNext: () =>
+                recruitsControllerNotifier.loadRecruits(nowTime, blockList),
             builder: (context, controller) => RefreshIndicator(
-              onRefresh: () =>
-                  recruitsControllerNotifier.recruitsRefresh(nowTime),
+              onRefresh: () => recruitsControllerNotifier.recruitsRefresh(
+                  nowTime, blockList),
               child: CustomScrollView(
                 controller: controller,
                 slivers: [
@@ -69,7 +62,8 @@ class RecruitsScreen extends HookConsumerWidget {
                               ref,
                               recruitsController,
                               recruitsControllerNotifier,
-                              nowTime),
+                              nowTime,
+                              blockList),
                           icon: const Icon(Icons.manage_search_outlined))
                     ],
                   ),
@@ -106,8 +100,8 @@ class RecruitsScreen extends HookConsumerWidget {
                                               Colors.redAccent)),
                                   child: const Text('更新する'),
                                   onPressed: () {
-                                    recruitsControllerNotifier
-                                        .recruitsRefresh(nowTime);
+                                    recruitsControllerNotifier.recruitsRefresh(
+                                        nowTime, blockList);
                                   },
                                 ),
                               ],
@@ -139,7 +133,8 @@ class RecruitsScreen extends HookConsumerWidget {
                                         ref,
                                         recruitsController,
                                         recruitsControllerNotifier,
-                                        nowTime);
+                                        nowTime,
+                                        blockList);
                                   },
                                 ),
                               ],
@@ -160,7 +155,7 @@ class RecruitsScreen extends HookConsumerWidget {
                                     children: [
                                       GestureDetector(
                                         onTap: () => GoRouter.of(context).push(
-                                            '/user/${recruitsController.list![index].id}'),
+                                            '/recruit/${recruitsController.list![index].id}'),
                                         child: RecruitCard(
                                           title: recruit.title,
                                           playTitle: recruit.playTitle,
@@ -177,7 +172,7 @@ class RecruitsScreen extends HookConsumerWidget {
                                     ],
                                   );
                                 }
-                                return Center(
+                                return const Center(
                                   child: CircularProgressIndicator(),
                                 );
                               }),
@@ -189,7 +184,7 @@ class RecruitsScreen extends HookConsumerWidget {
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            child: FaIcon(
+            child: const FaIcon(
               FontAwesomeIcons.plus,
               color: Color(0xffeff0f3),
             ),
@@ -205,7 +200,8 @@ class RecruitsScreen extends HookConsumerWidget {
       WidgetRef ref,
       RecruitsFutureScroll recruitsController,
       RecruitsFutureScrollNotifier recruitsControllerNotifier,
-      DateTime nowTime) {
+      DateTime nowTime,
+      List<String> blockList) {
     BuildContext innerContext;
     bool startInputEnabled =
         recruitsController.searchItem.sort == 'startDesc' ||
@@ -376,16 +372,16 @@ class RecruitsScreen extends HookConsumerWidget {
                                   : null;
 
                           recruitsControllerNotifier.searchRecruits(
-                            RecruitsSearch(
-                                playTitle:
-                                    _formKey.currentState?.value['playTitle'],
-                                place: _formKey.currentState?.value['place'],
-                                friendOnly:
-                                    _formKey.currentState?.value['friendOnly'],
-                                sort: _formKey.currentState?.value['sort'],
-                                start: startTimestamp),
-                            nowTime,
-                          );
+                              RecruitsSearch(
+                                  playTitle:
+                                      _formKey.currentState?.value['playTitle'],
+                                  place: _formKey.currentState?.value['place'],
+                                  friendOnly: _formKey
+                                      .currentState?.value['friendOnly'],
+                                  sort: _formKey.currentState?.value['sort'],
+                                  start: startTimestamp),
+                              nowTime,
+                              blockList);
                         }),
                       ],
                     ),

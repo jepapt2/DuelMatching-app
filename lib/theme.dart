@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 ThemeData appTheme() {
@@ -40,5 +42,10 @@ ThemeData appTheme() {
           border: UnderlineInputBorder(
               borderSide: BorderSide(color: Color(0xff2a2a2a)))),
       textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(primary: const Color(0xff2a2a2a))));
+          style: TextButton.styleFrom(primary: const Color(0xff2a2a2a))),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+              primary: const Color(0xffff8e3c),
+              textStyle: const TextStyle(
+                  color: Color(0xffeff0f3), fontWeight: FontWeight.bold))));
 }

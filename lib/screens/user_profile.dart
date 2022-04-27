@@ -390,14 +390,6 @@ class UserProfileScreen extends HookConsumerWidget {
     );
   }
 
-  ImageProvider<Object> avatarImage(String? avatar) {
-    if (avatar.isNotNullAndNotEmpty) {
-      return NetworkImage(avatar!);
-    } else {
-      return const AssetImage('assets/images/initial_avatar.png');
-    }
-  }
-
   friendRequestDialog(
       String sendName, String? sendAvatar, String name, BuildContext context) {
     friendRequest() async {
