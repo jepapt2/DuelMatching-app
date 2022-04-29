@@ -40,6 +40,33 @@ class RecruitScreen extends HookConsumerWidget {
                             backgroundColor: const Color(0xffeff0f3),
                             appBar: AppBar(
                               title: Text(recruit.title),
+                              actions: [
+                                PopupMenuButton(
+                                    itemBuilder: (BuildContext context) => [
+                                          PopupMenuItem(
+                                            child: const Text('このグループを抜ける'),
+                                            onTap: () =>
+                                                memberExitDialog(context),
+                                            enabled: FirebaseAuth.instance
+                                                        .currentUser!.uid !=
+                                                    recruit.organizerId &&
+                                                members
+                                                    .map((m) => m.uid)
+                                                    .toList()
+                                                    .contains(FirebaseAuth
+                                                        .instance
+                                                        .currentUser!
+                                                        .uid),
+                                          ),
+                                          PopupMenuItem(
+                                              child: const Text('対戦募集をキャンセルする'),
+                                              onTap: () =>
+                                                  recruitCancelDialog(context),
+                                              enabled: FirebaseAuth.instance
+                                                      .currentUser!.uid ==
+                                                  recruit.organizerId),
+                                        ])
+                              ],
                             ),
                             body: SingleChildScrollView(
                               child: Column(
@@ -63,6 +90,25 @@ class RecruitScreen extends HookConsumerWidget {
                                   const SizedBox(
                                     height: 30.0,
                                   ),
+                                  Visibility(
+                                      visible: recruit.cancel,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 30.0,
+                                        ),
+                                        child: Container(
+                                          color: const Color(0xfffffffe),
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: const Center(
+                                            child: Text(
+                                              'この募集はキャンセルされました',
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                      )),
                                   Container(
                                     color: const Color(0xfffffffe),
                                     padding: const EdgeInsets.symmetric(
@@ -202,7 +248,7 @@ class RecruitScreen extends HookConsumerWidget {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text('概要'),
+                                                const Text('概要'),
                                                 const SizedBox(
                                                   height: 20.0,
                                                 ),
@@ -335,22 +381,15 @@ class RecruitScreen extends HookConsumerWidget {
             ));
   }
 
-  friendRequestDialog(
-      String sendName, String? sendAvatar, String name, BuildContext context) {
-    friendRequest() async {
+  memberExitDialog(BuildContext context) {
+    memberExit() async {
       Navigator.pop(context);
       try {
-        await requestDocument('${FirebaseAuth.instance.currentUser!.uid}_$id')
-            .set(Request(
-                sendId: FirebaseAuth.instance.currentUser!.uid,
-                sendName: sendName,
-                sendAvatar: sendAvatar.isNotNullAndNotEmpty ? sendAvatar : '',
-                recId: id,
-                permission: false,
-                rejection: false,
-                updateAt: DateTime.now()));
+        await membersCollection(id)
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .delete();
         Fluttertoast.showToast(
-            msg: '$nameにフレンド申請しました',
+            msg: 'グループから退出しました',
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.TOP,
             timeInSecForIosWeb: 1,
@@ -359,7 +398,7 @@ class RecruitScreen extends HookConsumerWidget {
             fontSize: 13.0);
       } catch (_) {
         Fluttertoast.showToast(
-            msg: 'フレンド申請に失敗しました',
+            msg: '退出処理に失敗しました',
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.TOP,
             timeInSecForIosWeb: 1,
@@ -369,25 +408,76 @@ class RecruitScreen extends HookConsumerWidget {
       }
     }
 
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return AlertDialog(
-            title: const Text('フレンド申請'),
-            content: Text("$nameにフレンド申請しますか？"),
-            actions: [
-              TextButton(
-                child: const Text("いいえ"),
-                onPressed: () => Navigator.pop(context),
-              ),
-              TextButton(
-                child: const Text("はい"),
-                onPressed: () => friendRequest(),
-              ),
-            ],
-          );
-        });
+    return Future.delayed(
+        const Duration(seconds: 0),
+        () => showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return AlertDialog(
+                title: const Text('グループから抜ける'),
+                content: const Text("このグループから退出しますか？"),
+                actions: [
+                  TextButton(
+                    child: const Text("いいえ"),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  TextButton(
+                    child: const Text("はい"),
+                    onPressed: () => memberExit(),
+                  ),
+                ],
+              );
+            }));
+  }
+
+  recruitCancelDialog(BuildContext context) {
+    recruitCancel() async {
+      Navigator.pop(context);
+      try {
+        await recruitDocument(id).update({'cancel': true});
+        Fluttertoast.showToast(
+            msg: '募集をキャンセルしました',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.greenAccent,
+            textColor: Colors.white,
+            fontSize: 13.0);
+      } catch (_) {
+        Fluttertoast.showToast(
+            msg: 'キャンセル処理に失敗しました',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 13.0);
+      }
+    }
+
+    return Future.delayed(
+        const Duration(seconds: 0),
+        () => showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return AlertDialog(
+                title: const Text('募集のキャンセル'),
+                content:
+                    const Text("キャンセルした募集は再開することができません。\nこの対戦募集をキャンセルしますか？"),
+                actions: [
+                  TextButton(
+                    child: const Text("いいえ"),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  TextButton(
+                    child: const Text("はい"),
+                    onPressed: () => recruitCancel(),
+                  ),
+                ],
+              );
+            }));
   }
 
   Widget joinButton(Profile myProfile, Recruit recruit, List<Member> members,
