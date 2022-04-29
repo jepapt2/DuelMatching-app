@@ -1,8 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duel_matching/freezed/member/member.dart';
 import 'package:duel_matching/freezed/recruit/recruit.dart';
-import 'package:duel_matching/freezed/report/report.dart';
-import 'package:duel_matching/freezed/request/request.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/image.dart';
 import 'package:duel_matching/viewmodel/recruit_provider.dart';
@@ -10,7 +7,6 @@ import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:duel_matching/extension/string.dart';
@@ -529,25 +525,27 @@ class RecruitScreen extends HookConsumerWidget {
         }
       }
 
-      return showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return AlertDialog(
-              title: const Text('参加'),
-              content: const Text("この対戦募集に参加しますか？"),
-              actions: [
-                TextButton(
-                  child: const Text("いいえ"),
-                  onPressed: () => Navigator.pop(context),
-                ),
-                TextButton(
-                  child: const Text("はい"),
-                  onPressed: () => joinMember(),
-                ),
-              ],
-            );
-          });
+      return Future.delayed(
+          const Duration(seconds: 0),
+          () => showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) {
+                return AlertDialog(
+                  title: const Text('参加'),
+                  content: const Text("この対戦募集に参加しますか？"),
+                  actions: [
+                    TextButton(
+                      child: const Text("いいえ"),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    TextButton(
+                      child: const Text("はい"),
+                      onPressed: () => joinMember(),
+                    ),
+                  ],
+                );
+              }));
     }
 
     if (members

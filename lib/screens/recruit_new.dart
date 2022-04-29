@@ -27,7 +27,7 @@ class RecruitNewScreen extends HookConsumerWidget {
             title: const Text('対戦募集の作成'),
             actions: [
               TextButton(
-                  onPressed: () => recruitAdd(user, context),
+                  onPressed: () => recruitAddDialog(user, context),
                   child: const Text('保存')),
             ],
           ),
@@ -226,57 +226,81 @@ class RecruitNewScreen extends HookConsumerWidget {
     );
   }
 
-  recruitAdd(Profile user, BuildContext context) async {
-    _formKey.currentState!.save();
+  recruitAddDialog(Profile user, BuildContext context) async {
+    recruitAdd() {
+      _formKey.currentState!.save();
 
-    String? recruitId;
+      String? recruitId;
 
-    if (_formKey.currentState!.validate()) {
-      try {
-        recruitsCollection()
-            .add(Recruit(
-                title: _formKey.currentState!.value['title'],
-                playTitle: _formKey.currentState!.value['playTitle'],
-                format: _formKey.currentState?.value['format'] ?? '',
-                place: _formKey.currentState!.value['place'],
-                point: _formKey.currentState!.value['point'],
-                friendOnly: _formKey.currentState!.value['friendOnly'],
-                recruitNumber: _formKey.currentState!.value['recruitNumber'],
-                start: _formKey.currentState!.value['start'],
-                end: _formKey.currentState!.value['end'],
-                limit: _formKey.currentState!.value['limit'],
-                overview: _formKey.currentState?.value['overview'] ?? '',
-                memberCount: 0,
-                full: false,
-                cancel: false,
-                close: false,
-                organizerId: FirebaseAuth.instance.currentUser!.uid,
-                createdAt: DateTime.now()))
-            .then((docRef) async {
-          recruitId = docRef.id;
-          if (recruitId != null) {
-            GoRouter.of(context).pop();
-            GoRouter.of(context).push('/recruit/$recruitId');
-          }
-          return await membersCollection(docRef.id)
-              .doc(FirebaseAuth.instance.currentUser!.uid)
-              .set(Member(
-                  uid: FirebaseAuth.instance.currentUser!.uid,
-                  name: user.name,
-                  avatar: user.avatar,
-                  organizer: true,
-                  createdAt: DateTime.now()));
-        });
-      } catch (e) {
-        Fluttertoast.showToast(
-            msg: '対戦募集の作成に失敗しました',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 13.0);
+      if (_formKey.currentState!.validate()) {
+        try {
+          recruitsCollection()
+              .add(Recruit(
+                  title: _formKey.currentState!.value['title'],
+                  playTitle: _formKey.currentState!.value['playTitle'],
+                  format: _formKey.currentState?.value['format'] ?? '',
+                  place: _formKey.currentState!.value['place'],
+                  point: _formKey.currentState!.value['point'],
+                  friendOnly: _formKey.currentState!.value['friendOnly'],
+                  recruitNumber: _formKey.currentState!.value['recruitNumber'],
+                  start: _formKey.currentState!.value['start'],
+                  end: _formKey.currentState!.value['end'],
+                  limit: _formKey.currentState!.value['limit'],
+                  overview: _formKey.currentState?.value['overview'] ?? '',
+                  memberCount: 0,
+                  full: false,
+                  cancel: false,
+                  close: false,
+                  organizerId: FirebaseAuth.instance.currentUser!.uid,
+                  createdAt: DateTime.now()))
+              .then((docRef) async {
+            recruitId = docRef.id;
+            if (recruitId != null) {
+              GoRouter.of(context).pop();
+              GoRouter.of(context).push('/recruit/$recruitId');
+            }
+            return await membersCollection(docRef.id)
+                .doc(FirebaseAuth.instance.currentUser!.uid)
+                .set(Member(
+                    uid: FirebaseAuth.instance.currentUser!.uid,
+                    name: user.name,
+                    avatar: user.avatar,
+                    organizer: true,
+                    createdAt: DateTime.now()));
+          });
+        } catch (e) {
+          Fluttertoast.showToast(
+              msg: '対戦募集の作成に失敗しました',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.TOP,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 13.0);
+        }
       }
     }
+
+    return Future.delayed(
+        const Duration(seconds: 0),
+        () => showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return AlertDialog(
+                title: const Text('対戦募集の開始'),
+                content: const Text("一度作成した募集は変更できません。\nこの内容で作成しますか？"),
+                actions: [
+                  TextButton(
+                    child: const Text("いいえ"),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  TextButton(
+                    child: const Text("はい"),
+                    onPressed: () => recruitAdd(),
+                  ),
+                ],
+              );
+            }));
   }
 }
