@@ -55,6 +55,8 @@ Map<String, dynamic> _$$_ProfileToJson(_$_Profile instance) =>
 
 _$_Friend _$$_FriendFromJson(Map<String, dynamic> json) => _$_Friend(
       name: json['name'] as String,
+      uid: json['uid'] as String,
+      chatRoomId: json['chatRoomId'] as String,
       avatar: json['avatar'] as String?,
       createdAt:
           const TimestampConverter().fromJson(json['createdAt'] as Timestamp?),
@@ -62,6 +64,8 @@ _$_Friend _$$_FriendFromJson(Map<String, dynamic> json) => _$_Friend(
 
 Map<String, dynamic> _$$_FriendToJson(_$_Friend instance) => <String, dynamic>{
       'name': instance.name,
+      'uid': instance.uid,
+      'chatRoomId': instance.chatRoomId,
       'avatar': instance.avatar,
       'createdAt': const TimestampConverter().toJson(instance.createdAt),
     };

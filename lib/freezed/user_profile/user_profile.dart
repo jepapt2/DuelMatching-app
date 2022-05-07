@@ -66,6 +66,8 @@ class FriendWithId with _$FriendWithId {
 class Friend with _$Friend {
   factory Friend({
     required final String name,
+    required final String uid,
+    required final String chatRoomId,
     String? avatar,
     @TimestampConverter() DateTime? createdAt,
   }) = _Friend;

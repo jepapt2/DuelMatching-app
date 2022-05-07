@@ -1054,10 +1054,14 @@ class _$FriendTearOff {
 
   _Friend call(
       {required String name,
+      required String uid,
+      required String chatRoomId,
       String? avatar,
       @TimestampConverter() DateTime? createdAt}) {
     return _Friend(
       name: name,
+      uid: uid,
+      chatRoomId: chatRoomId,
       avatar: avatar,
       createdAt: createdAt,
     );
@@ -1074,6 +1078,8 @@ const $Friend = _$FriendTearOff();
 /// @nodoc
 mixin _$Friend {
   String get name => throw _privateConstructorUsedError;
+  String get uid => throw _privateConstructorUsedError;
+  String get chatRoomId => throw _privateConstructorUsedError;
   String? get avatar => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime? get createdAt => throw _privateConstructorUsedError;
@@ -1088,7 +1094,11 @@ abstract class $FriendCopyWith<$Res> {
   factory $FriendCopyWith(Friend value, $Res Function(Friend) then) =
       _$FriendCopyWithImpl<$Res>;
   $Res call(
-      {String name, String? avatar, @TimestampConverter() DateTime? createdAt});
+      {String name,
+      String uid,
+      String chatRoomId,
+      String? avatar,
+      @TimestampConverter() DateTime? createdAt});
 }
 
 /// @nodoc
@@ -1102,6 +1112,8 @@ class _$FriendCopyWithImpl<$Res> implements $FriendCopyWith<$Res> {
   @override
   $Res call({
     Object? name = freezed,
+    Object? uid = freezed,
+    Object? chatRoomId = freezed,
     Object? avatar = freezed,
     Object? createdAt = freezed,
   }) {
@@ -1109,6 +1121,14 @@ class _$FriendCopyWithImpl<$Res> implements $FriendCopyWith<$Res> {
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
+      chatRoomId: chatRoomId == freezed
+          ? _value.chatRoomId
+          : chatRoomId // ignore: cast_nullable_to_non_nullable
               as String,
       avatar: avatar == freezed
           ? _value.avatar
@@ -1128,7 +1148,11 @@ abstract class _$FriendCopyWith<$Res> implements $FriendCopyWith<$Res> {
       __$FriendCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String name, String? avatar, @TimestampConverter() DateTime? createdAt});
+      {String name,
+      String uid,
+      String chatRoomId,
+      String? avatar,
+      @TimestampConverter() DateTime? createdAt});
 }
 
 /// @nodoc
@@ -1143,6 +1167,8 @@ class __$FriendCopyWithImpl<$Res> extends _$FriendCopyWithImpl<$Res>
   @override
   $Res call({
     Object? name = freezed,
+    Object? uid = freezed,
+    Object? chatRoomId = freezed,
     Object? avatar = freezed,
     Object? createdAt = freezed,
   }) {
@@ -1150,6 +1176,14 @@ class __$FriendCopyWithImpl<$Res> extends _$FriendCopyWithImpl<$Res>
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
+      chatRoomId: chatRoomId == freezed
+          ? _value.chatRoomId
+          : chatRoomId // ignore: cast_nullable_to_non_nullable
               as String,
       avatar: avatar == freezed
           ? _value.avatar
@@ -1167,7 +1201,11 @@ class __$FriendCopyWithImpl<$Res> extends _$FriendCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Friend extends _Friend {
   _$_Friend(
-      {required this.name, this.avatar, @TimestampConverter() this.createdAt})
+      {required this.name,
+      required this.uid,
+      required this.chatRoomId,
+      this.avatar,
+      @TimestampConverter() this.createdAt})
       : super._();
 
   factory _$_Friend.fromJson(Map<String, dynamic> json) =>
@@ -1176,6 +1214,10 @@ class _$_Friend extends _Friend {
   @override
   final String name;
   @override
+  final String uid;
+  @override
+  final String chatRoomId;
+  @override
   final String? avatar;
   @override
   @TimestampConverter()
@@ -1183,7 +1225,7 @@ class _$_Friend extends _Friend {
 
   @override
   String toString() {
-    return 'Friend(name: $name, avatar: $avatar, createdAt: $createdAt)';
+    return 'Friend(name: $name, uid: $uid, chatRoomId: $chatRoomId, avatar: $avatar, createdAt: $createdAt)';
   }
 
   @override
@@ -1192,6 +1234,9 @@ class _$_Friend extends _Friend {
         (other.runtimeType == runtimeType &&
             other is _Friend &&
             const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality().equals(other.uid, uid) &&
+            const DeepCollectionEquality()
+                .equals(other.chatRoomId, chatRoomId) &&
             const DeepCollectionEquality().equals(other.avatar, avatar) &&
             const DeepCollectionEquality().equals(other.createdAt, createdAt));
   }
@@ -1200,6 +1245,8 @@ class _$_Friend extends _Friend {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(uid),
+      const DeepCollectionEquality().hash(chatRoomId),
       const DeepCollectionEquality().hash(avatar),
       const DeepCollectionEquality().hash(createdAt));
 
@@ -1217,6 +1264,8 @@ class _$_Friend extends _Friend {
 abstract class _Friend extends Friend {
   factory _Friend(
       {required String name,
+      required String uid,
+      required String chatRoomId,
       String? avatar,
       @TimestampConverter() DateTime? createdAt}) = _$_Friend;
   _Friend._() : super._();
@@ -1225,6 +1274,10 @@ abstract class _Friend extends Friend {
 
   @override
   String get name;
+  @override
+  String get uid;
+  @override
+  String get chatRoomId;
   @override
   String? get avatar;
   @override

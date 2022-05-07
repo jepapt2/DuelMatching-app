@@ -1,0 +1,470 @@
+import 'package:duel_matching/freezed/notice/notice.dart';
+import 'package:duel_matching/freezed/request/request.dart';
+import 'package:duel_matching/parts/image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firestore_ref/firestore_ref.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+
+class NoticeCard extends StatelessWidget {
+  const NoticeCard(
+      {Key? key, required this.id, required this.notice, required this.nowTime})
+      : super(key: key);
+  final String id;
+  final Notice notice;
+  final DateTime nowTime;
+
+  Widget selectCard() {
+    switch (notice.type) {
+      case 'newMessage':
+        return NewMessageNotice(
+            id: id,
+            text: notice.text!,
+            recId: notice.recId!,
+            recName: notice.recName,
+            recAvatar: notice.recAvatar,
+            roomId: notice.roomId!,
+            read: notice.read,
+            updateAt: notice.updateAt!);
+      case 'newGroupMessage':
+        return NewGroupMessageNotice(
+            id: id,
+            text: notice.text!,
+            recName: notice.recName,
+            roomId: notice.roomId!,
+            read: notice.read,
+            updateAt: notice.updateAt!);
+      case 'friendRequest':
+        return FriendRequestNotice(
+            id: id,
+            recId: notice.recId!,
+            recAvatar: notice.recAvatar,
+            recName: notice.recName,
+            roomId: notice.roomId!,
+            read: notice.read,
+            updateAt: notice.updateAt!);
+      default:
+        return Container();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return selectCard();
+  }
+}
+
+class NewMessageNotice extends StatelessWidget {
+  const NewMessageNotice({
+    Key? key,
+    required this.id,
+    required this.text,
+    required this.recId,
+    required this.recName,
+    this.recAvatar,
+    required this.roomId,
+    required this.read,
+    required this.updateAt,
+  }) : super(key: key);
+
+  final String id;
+  final String text;
+  final String recId;
+  final String recName;
+  final String? recAvatar;
+  final String roomId;
+  final bool read;
+  final DateTime updateAt;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => print('chat'),
+      //TODO チャットに遷移
+      child: Stack(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                  onTap: () => print('profile'),
+                  child: AvatarImage(avatar: recAvatar, radius: 25)),
+              const SizedBox(
+                width: 10.0,
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        recName,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        text,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: const TextStyle(color: Colors.black54),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+              Column(
+                children: [
+                  if (DateTime(updateAt.year, updateAt.month, updateAt.day, 0,
+                          0, 0) ==
+                      DateTime(DateTime.now().year, DateTime.now().month,
+                          DateTime.now().day, 0, 0, 0))
+                    Text(
+                      DateFormat('H:mm').format(updateAt),
+                      style: const TextStyle(color: Colors.black54),
+                    )
+                  else
+                    Text(
+                      DateFormat('M/d').format(updateAt),
+                      style: const TextStyle(color: Colors.black54),
+                    ),
+                  Visibility(
+                    visible: !read,
+                    child: const Icon(
+                      Icons.circle,
+                      size: 18,
+                      color: Color(0xffff8e3c),
+                    ),
+                  )
+                ],
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class NewGroupMessageNotice extends StatelessWidget {
+  const NewGroupMessageNotice({
+    Key? key,
+    required this.id,
+    required this.text,
+    required this.recName,
+    required this.roomId,
+    required this.read,
+    required this.updateAt,
+  }) : super(key: key);
+
+  final String id;
+  final String text;
+  final String recName;
+  final String roomId;
+  final bool read;
+  final DateTime updateAt;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => null,
+      //TODO チャットに遷移
+      child: Stack(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 50,
+                width: 50,
+                child: Center(
+                  child: Icon(
+                    Icons.group,
+                    size: 35.0,
+                    color: Color(0xffff8e3c),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        recName,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        text,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: const TextStyle(color: Colors.black54),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+              Column(
+                children: [
+                  if (DateTime(updateAt.year, updateAt.month, updateAt.day, 0,
+                          0, 0) ==
+                      DateTime(DateTime.now().year, DateTime.now().month,
+                          DateTime.now().day, 0, 0, 0))
+                    Text(
+                      DateFormat('H:mm').format(updateAt),
+                      style: const TextStyle(color: Colors.black54),
+                    )
+                  else
+                    Text(
+                      DateFormat('M/d').format(updateAt),
+                      style: const TextStyle(color: Colors.black54),
+                    ),
+                  Visibility(
+                    visible: !read,
+                    child: const Icon(
+                      Icons.circle,
+                      size: 18,
+                      color: Color(0xffff8e3c),
+                    ),
+                  )
+                ],
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class FriendRequestNotice extends HookWidget {
+  const FriendRequestNotice(
+      {Key? key,
+      required this.id,
+      required this.recId,
+      required this.recName,
+      this.recAvatar,
+      required this.roomId,
+      required this.updateAt,
+      required this.read})
+      : super(key: key);
+
+  final String id;
+  final String recId;
+  final String recName;
+  final String? recAvatar;
+  final String roomId;
+  final DateTime updateAt;
+  final bool read;
+
+  @override
+  Widget build(BuildContext context) {
+    if (read == false) {
+      useEffect(() {
+        noticeCollection(FirebaseAuth.instance.currentUser!.uid)
+            .doc(id)
+            .update({'read': true});
+      }, []);
+    }
+    return GestureDetector(
+      onTap: () => null,
+      //TODO チャットに遷移
+      child: Stack(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onTap: () => GoRouter.of(context).push('/user/$recId'),
+                child: Stack(children: [
+                  AvatarImage(avatar: recAvatar, radius: 25),
+                  const Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: FaIcon(
+                        FontAwesomeIcons.solidEnvelope,
+                        color: Color(0xffff8e3c),
+                        size: 18,
+                      ))
+                ]),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                          text: TextSpan(
+                              style: const TextStyle(color: Color(0xff2a2a2a)),
+                              children: [
+                            TextSpan(
+                              text: recName,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const TextSpan(text: 'からフレンド申請が届きました')
+                          ])),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                              onPressed: () => requestPermissionDialog(context),
+                              child: Text('承認する')),
+                          const SizedBox(
+                            width: 20.0,
+                          ),
+                          OutlinedButton(
+                              onPressed: () => requestRejectionDialog(context),
+                              child: Text('拒否する'))
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+              Column(
+                children: [
+                  if (DateTime(updateAt.year, updateAt.month, updateAt.day, 0,
+                          0, 0) ==
+                      DateTime(DateTime.now().year, DateTime.now().month,
+                          DateTime.now().day, 0, 0, 0))
+                    Text(
+                      DateFormat('H:mm').format(updateAt),
+                      style: const TextStyle(color: Colors.black54),
+                    )
+                  else
+                    Text(
+                      DateFormat('M/d').format(updateAt),
+                      style: const TextStyle(color: Colors.black54),
+                    ),
+                ],
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  requestPermissionDialog(BuildContext context) {
+    requestPermission() async {
+      Navigator.pop(context);
+      try {
+        await requestDocument(
+                '${recId}_${FirebaseAuth.instance.currentUser!.uid}')
+            .update({'permission': true});
+        Fluttertoast.showToast(
+            msg: '$recNameとフレンドになりました',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.greenAccent,
+            textColor: Colors.white,
+            fontSize: 13.0);
+      } catch (_) {
+        Fluttertoast.showToast(
+            msg: 'フレンド追加処理に失敗しました',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 13.0);
+      }
+    }
+
+    return Future.delayed(
+        const Duration(seconds: 0),
+        () => showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return AlertDialog(
+                title: const Text('フレンド承認'),
+                content: Text("$recNameをフレンド登録しますか？"),
+                actions: [
+                  TextButton(
+                    child: const Text("いいえ"),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  TextButton(
+                    child: const Text("はい"),
+                    onPressed: () => requestPermission(),
+                  ),
+                ],
+              );
+            }));
+  }
+
+  requestRejectionDialog(BuildContext context) {
+    requestRejection() async {
+      Navigator.pop(context);
+      try {
+        await requestDocument(
+                '${recId}_${FirebaseAuth.instance.currentUser!.uid}')
+            .update({'rejection': true});
+        Fluttertoast.showToast(
+            msg: '$recNameのフレンド申請を拒否しました',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.greenAccent,
+            textColor: Colors.white,
+            fontSize: 13.0);
+      } catch (_) {
+        Fluttertoast.showToast(
+            msg: 'フレンド拒否の処理に失敗しました',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 13.0);
+      }
+    }
+
+    return Future.delayed(
+        const Duration(seconds: 0),
+        () => showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return AlertDialog(
+                title: const Text('フレンド申請拒否'),
+                content: const Text("フレンド申請を拒否すると通知から削除されます"),
+                actions: [
+                  TextButton(
+                    child: const Text("いいえ"),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  TextButton(
+                    child: const Text("はい"),
+                    onPressed: () => requestRejection(),
+                  ),
+                ],
+              );
+            }));
+  }
+}

@@ -47,5 +47,12 @@ ThemeData appTheme() {
           style: ElevatedButton.styleFrom(
               primary: const Color(0xffff8e3c),
               textStyle: const TextStyle(
-                  color: Color(0xffeff0f3), fontWeight: FontWeight.bold))));
+                  color: Color(0xffeff0f3), fontWeight: FontWeight.bold))),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+              backgroundColor: const Color(0xfffffffe),
+              textStyle: const TextStyle(
+                  color: Color(0xffff8e3c), fontWeight: FontWeight.bold),
+              primary: const Color(0xffff8e3c),
+              side: const BorderSide(color: Color(0xffff8e3c)))));
 }
