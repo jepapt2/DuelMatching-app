@@ -628,8 +628,7 @@ class RecruitCancelNotice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => null,
-      //TODO チャットに遷移
+      onTap: () => GoRouter.of(context).push('/recruit/$roomId'),
       child: Stack(
         children: [
           Row(
@@ -640,7 +639,7 @@ class RecruitCancelNotice extends StatelessWidget {
                 width: 50,
                 child: Center(
                   child: Icon(
-                    IconData(0xf0514, fontFamily: 'MaterialIcons'),
+                    Icons.group_off,
                     size: 35.0,
                     color: Color(0xffff8e3c),
                   ),
@@ -652,46 +651,37 @@ class RecruitCancelNotice extends StatelessWidget {
               Expanded(
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        recName,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
+                  child: RichText(
+                      text: TextSpan(
+                          style: const TextStyle(color: Color(0xff2a2a2a)),
+                          children: [
+                        TextSpan(
+                          text: recName,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const TextSpan(
+                          text: 'がキャンセルされました',
+                          style: const TextStyle(color: Colors.redAccent),
+                        )
+                      ])),
                 ),
               ),
               const SizedBox(
                 width: 10.0,
               ),
-              Column(
-                children: [
-                  if (DateTime(updateAt.year, updateAt.month, updateAt.day, 0,
-                          0, 0) ==
-                      DateTime(DateTime.now().year, DateTime.now().month,
-                          DateTime.now().day, 0, 0, 0))
-                    Text(
-                      DateFormat('H:mm').format(updateAt),
-                      style: const TextStyle(color: Colors.black54),
-                    )
-                  else
-                    Text(
-                      DateFormat('M/d').format(updateAt),
-                      style: const TextStyle(color: Colors.black54),
-                    ),
-                  Visibility(
-                    visible: !read,
-                    child: const Icon(
-                      Icons.circle,
-                      size: 18,
-                      color: Color(0xffff8e3c),
-                    ),
-                  )
-                ],
-              )
+              if (DateTime(
+                      updateAt.year, updateAt.month, updateAt.day, 0, 0, 0) ==
+                  DateTime(DateTime.now().year, DateTime.now().month,
+                      DateTime.now().day, 0, 0, 0))
+                Text(
+                  DateFormat('H:mm').format(updateAt),
+                  style: const TextStyle(color: Colors.black54),
+                )
+              else
+                Text(
+                  DateFormat('M/d').format(updateAt),
+                  style: const TextStyle(color: Colors.black54),
+                )
             ],
           )
         ],
