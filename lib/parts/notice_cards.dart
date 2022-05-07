@@ -46,6 +46,24 @@ class NoticeCard extends StatelessWidget {
             recName: notice.recName,
             roomId: notice.roomId!,
             read: notice.read,
+            updateAt: notice.updateAt!,
+            nowTime: nowTime);
+      case 'newFriend':
+        return NewFriendNotice(
+            id: id,
+            recId: notice.recId!,
+            recAvatar: notice.recAvatar,
+            recName: notice.recName,
+            roomId: notice.roomId!,
+            read: notice.read,
+            updateAt: notice.updateAt!,
+            nowTime: nowTime);
+      case 'recruitCancel':
+        return RecruitCancelNotice(
+            id: id,
+            recName: notice.recName,
+            roomId: notice.roomId!,
+            read: notice.read,
             updateAt: notice.updateAt!);
       default:
         return Container();
@@ -261,7 +279,8 @@ class FriendRequestNotice extends HookWidget {
       this.recAvatar,
       required this.roomId,
       required this.updateAt,
-      required this.read})
+      required this.read,
+      required this.nowTime})
       : super(key: key);
 
   final String id;
@@ -271,10 +290,11 @@ class FriendRequestNotice extends HookWidget {
   final String roomId;
   final DateTime updateAt;
   final bool read;
+  final DateTime nowTime;
 
   @override
   Widget build(BuildContext context) {
-    if (read == false) {
+    if (read == false && nowTime.isBefore(updateAt)) {
       useEffect(() {
         noticeCollection(FirebaseAuth.instance.currentUser!.uid)
             .doc(id)
@@ -466,5 +486,216 @@ class FriendRequestNotice extends HookWidget {
                 ],
               );
             }));
+  }
+}
+
+class NewFriendNotice extends HookWidget {
+  const NewFriendNotice(
+      {Key? key,
+      required this.id,
+      required this.recId,
+      required this.recName,
+      this.recAvatar,
+      required this.roomId,
+      required this.updateAt,
+      required this.read,
+      required this.nowTime})
+      : super(key: key);
+
+  final String id;
+  final String recId;
+  final String recName;
+  final String? recAvatar;
+  final String roomId;
+  final DateTime updateAt;
+  final bool read;
+  final DateTime nowTime;
+
+  @override
+  Widget build(BuildContext context) {
+    if (read == false && nowTime.isBefore(updateAt)) {
+      useEffect(() {
+        noticeCollection(FirebaseAuth.instance.currentUser!.uid)
+            .doc(id)
+            .update({'read': true});
+      }, []);
+    }
+    return GestureDetector(
+      onTap: () => null,
+      //TODO チャットに遷移
+      child: Stack(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onTap: () => GoRouter.of(context).push('/user/$recId'),
+                child: Stack(children: [
+                  AvatarImage(avatar: recAvatar, radius: 25),
+                  const Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: FaIcon(
+                        FontAwesomeIcons.solidHandshake,
+                        color: Color(0xffff8e3c),
+                        size: 18,
+                      ))
+                ]),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                          text: TextSpan(
+                              style: const TextStyle(color: Color(0xff2a2a2a)),
+                              children: [
+                            TextSpan(
+                              text: recName,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const TextSpan(text: 'とフレンドになりました')
+                          ])),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+              ElevatedButton(
+                  onPressed: () => null
+                  // TODO チャットに遷移
+                  ,
+                  child: const Icon(
+                    Icons.message,
+                    size: 20.0,
+                  ),
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(40, 36),
+                      maximumSize: const Size(40, 36),
+                      padding: EdgeInsets.symmetric(horizontal: 2.0))),
+              const SizedBox(
+                width: 10.0,
+              ),
+              Column(
+                children: [
+                  if (DateTime(updateAt.year, updateAt.month, updateAt.day, 0,
+                          0, 0) ==
+                      DateTime(DateTime.now().year, DateTime.now().month,
+                          DateTime.now().day, 0, 0, 0))
+                    Text(
+                      DateFormat('H:mm').format(updateAt),
+                      style: const TextStyle(color: Colors.black54),
+                    )
+                  else
+                    Text(
+                      DateFormat('M/d').format(updateAt),
+                      style: const TextStyle(color: Colors.black54),
+                    ),
+                ],
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class RecruitCancelNotice extends StatelessWidget {
+  const RecruitCancelNotice({
+    Key? key,
+    required this.id,
+    required this.recName,
+    required this.roomId,
+    required this.read,
+    required this.updateAt,
+  }) : super(key: key);
+
+  final String id;
+  final String recName;
+  final String roomId;
+  final bool read;
+  final DateTime updateAt;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => null,
+      //TODO チャットに遷移
+      child: Stack(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 50,
+                width: 50,
+                child: Center(
+                  child: Icon(
+                    IconData(0xf0514, fontFamily: 'MaterialIcons'),
+                    size: 35.0,
+                    color: Color(0xffff8e3c),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        recName,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+              Column(
+                children: [
+                  if (DateTime(updateAt.year, updateAt.month, updateAt.day, 0,
+                          0, 0) ==
+                      DateTime(DateTime.now().year, DateTime.now().month,
+                          DateTime.now().day, 0, 0, 0))
+                    Text(
+                      DateFormat('H:mm').format(updateAt),
+                      style: const TextStyle(color: Colors.black54),
+                    )
+                  else
+                    Text(
+                      DateFormat('M/d').format(updateAt),
+                      style: const TextStyle(color: Colors.black54),
+                    ),
+                  Visibility(
+                    visible: !read,
+                    child: const Icon(
+                      Icons.circle,
+                      size: 18,
+                      color: Color(0xffff8e3c),
+                    ),
+                  )
+                ],
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
