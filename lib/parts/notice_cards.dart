@@ -66,7 +66,9 @@ class NoticeCard extends StatelessWidget {
             read: notice.read,
             updateAt: notice.updateAt!);
       default:
-        return Container();
+        return ErrorNotice(
+          updateAt: notice.updateAt,
+        );
     }
   }
 
@@ -686,6 +688,61 @@ class RecruitCancelNotice extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class ErrorNotice extends StatelessWidget {
+  const ErrorNotice({Key? key, this.updateAt}) : super(key: key);
+
+  final DateTime? updateAt;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 50,
+          width: 50,
+          child: Center(
+            child: Icon(
+              Icons.error,
+              size: 35.0,
+              color: Color(0xffff8e3c),
+            ),
+          ),
+        ),
+        const SizedBox(
+          width: 10.0,
+        ),
+        const Expanded(
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'バージョンが古い、またはエラーのためこの通知は表示できません',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+        const SizedBox(
+          width: 10.0,
+        ),
+        Visibility(
+            visible: updateAt != null,
+            child: DateTime(updateAt!.year, updateAt!.month, updateAt!.day, 0,
+                        0, 0) ==
+                    DateTime(DateTime.now().year, DateTime.now().month,
+                        DateTime.now().day, 0, 0, 0)
+                ? Text(
+                    DateFormat('H:mm').format(updateAt!),
+                    style: const TextStyle(color: Colors.black54),
+                  )
+                : Text(
+                    DateFormat('M/d').format(updateAt!),
+                    style: const TextStyle(color: Colors.black54),
+                  ))
+      ],
     );
   }
 }

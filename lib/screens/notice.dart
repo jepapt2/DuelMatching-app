@@ -13,7 +13,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class NoticeScreen extends HookConsumerWidget {
-  const NoticeScreen({Key? key}) : super(key: key);
+  NoticeScreen({Key? key}) : super(key: key);
+
+  final GlobalKey _listViewSizeKey = GlobalKey();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,6 +24,7 @@ class NoticeScreen extends HookConsumerWidget {
     useEffect(() {
       userDocument(FirebaseAuth.instance.currentUser!.uid)
           .update({'readNoticeAt': DateTime.now()});
+      return null;
     }, []);
 
     return UserWhenConsumer(child: (user) {
@@ -36,7 +39,10 @@ class NoticeScreen extends HookConsumerWidget {
                   FirestoreListView(
                     query:
                         noticeCollection(FirebaseAuth.instance.currentUser!.uid)
-                            .orderBy('updateAt', descending: true),
+                            .where('read', isEqualTo: false)
+                            .where('updateAt', isGreaterThan: 1)
+                            .where('type',
+                                whereIn: ['newMessage', 'newGroupMessage']),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder:
@@ -54,19 +60,6 @@ class NoticeScreen extends HookConsumerWidget {
                           const Divider()
                         ],
                       );
-                      // if (snapshot.data()) {
-                      //   return Center(
-                      //     child: Column(
-                      //       mainAxisSize: MainAxisSize.min,
-                      //       children: const [
-                      //         SizedBox(
-                      //           height: 100.0,
-                      //         ),
-                      //         Text('ユーザが見つかりませんでした'),
-                      //       ],
-                      //     ),
-                      //   );
-                      // }
                     },
                     loadingBuilder: (context) => Center(
                         child: Column(
@@ -84,7 +77,7 @@ class NoticeScreen extends HookConsumerWidget {
                           const SizedBox(
                             height: 100.0,
                           ),
-                          const Text('ユーザの取得に失敗しました'),
+                          const Text('通知の取得に失敗しました'),
                           ElevatedButton(
                             style: ButtonStyle(
                                 textStyle: MaterialStateProperty.all(
@@ -93,10 +86,7 @@ class NoticeScreen extends HookConsumerWidget {
                                 backgroundColor: MaterialStateProperty.all(
                                     Colors.redAccent)),
                             child: const Text('更新する'),
-                            onPressed: () {
-                              GoRouter.of(context).pop();
-                              GoRouter.of(context).push('/block');
-                            },
+                            onPressed: () {},
                           ),
                         ],
                       ),
