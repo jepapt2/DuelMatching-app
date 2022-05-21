@@ -2,6 +2,8 @@ import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/router.dart';
 import 'package:duel_matching/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firestore_ref/firestore_ref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutterfire_ui/i10n.dart';
@@ -17,6 +19,18 @@ import 'local/fluttefire.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: getFirebaseOptions());
+  final messaging = FirebaseMessaging.instance;
+  await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  final token = await FirebaseMessaging.instance.getToken();
+  print('🐯 FCM TOKEN: $token');
   runApp(ProviderScope(
     child: MyApp(),
   ));
@@ -47,14 +61,25 @@ class MyApp extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useEffect(() {
-      if (FirebaseAuth.instance.currentUser != null) {
-        userDocument(FirebaseAuth.instance.currentUser!.uid)
-            .update({'activeAt': DateTime.now()});
-      }
+      // トークンの取得
+
+      Future(() async {
+        if (FirebaseAuth.instance.currentUser != null) {
+          final token = await FirebaseMessaging.instance.getToken();
+          userDocument(FirebaseAuth.instance.currentUser!.uid).update({
+            'activeAt': DateTime.now().toUtc(),
+            'noticeToken': FieldValue.arrayUnion([token])
+          });
+        }
+      });
     }, const []);
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user != null) {
-        userDocument(user.uid).update({'activeAt': DateTime.now()});
+        final token = await FirebaseMessaging.instance.getToken();
+        userDocument(user.uid).update({
+          'activeAt': DateTime.now(),
+          'noticeToken': FieldValue.arrayUnion([token])
+        });
       }
     });
 

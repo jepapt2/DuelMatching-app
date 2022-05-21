@@ -205,7 +205,7 @@ class RecruitScreen extends HookConsumerWidget {
                                                         horizontal: 20.0),
                                                 child: Text(recruit.end != null
                                                     ? DateFormat(
-                                                            'yyyy/M/d hh:mm')
+                                                            'yyyy/M/d HH:mm')
                                                         .format(recruit.end!)
                                                     : '未定'),
                                               )
@@ -218,7 +218,7 @@ class RecruitScreen extends HookConsumerWidget {
                                                         vertical: 8.0,
                                                         horizontal: 20.0),
                                                 child: Text(DateFormat(
-                                                        'yyyy/M/d hh:mm')
+                                                        'yyyy/M/d HH:mm')
                                                     .format(recruit.limit!)),
                                               )
                                             ]),

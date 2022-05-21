@@ -6,6 +6,7 @@ import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/parts/primary_sliverappbar.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutterfire_ui/firestore.dart';
@@ -14,8 +15,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class NoticeScreen extends HookConsumerWidget {
   NoticeScreen({Key? key}) : super(key: key);
-
-  final GlobalKey _listViewSizeKey = GlobalKey();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,16 +32,16 @@ class NoticeScreen extends HookConsumerWidget {
             onRefresh: Future.value,
             child: CustomScrollView(
               slivers: [
-                PrimarySliverAppBar(user: user),
+                PrimarySliverAppBar(
+                  user: user,
+                  appBarAction: [],
+                ),
                 SliverList(
                     delegate: SliverChildListDelegate([
                   FirestoreListView(
                     query:
                         noticeCollection(FirebaseAuth.instance.currentUser!.uid)
-                            .where('read', isEqualTo: false)
-                            .where('updateAt', isGreaterThan: 1)
-                            .where('type',
-                                whereIn: ['newMessage', 'newGroupMessage']),
+                            .orderBy('updateAt', descending: true),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder:
@@ -86,7 +85,9 @@ class NoticeScreen extends HookConsumerWidget {
                                 backgroundColor: MaterialStateProperty.all(
                                     Colors.redAccent)),
                             child: const Text('更新する'),
-                            onPressed: () {},
+                            onPressed: () {
+                              GoRouter.of(context).go('/notice');
+                            },
                           ),
                         ],
                       ),

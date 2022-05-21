@@ -27,7 +27,7 @@ class NetworkDetectorNotifier extends StateNotifier<NetworkStatus> {
 
           break;
         default:
-          newState = NetworkStatus.Off;
+          newState = NetworkStatus.On;
           break;
       }
 

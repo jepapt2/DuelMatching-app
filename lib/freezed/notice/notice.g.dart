@@ -13,7 +13,7 @@ _$_Notice _$$_NoticeFromJson(Map<String, dynamic> json) => _$_Notice(
       recId: json['recId'] as String?,
       recAvatar: json['recAvatar'] as String?,
       roomId: json['roomId'] as String?,
-      read: json['read'] as bool,
+      unReadCount: json['unReadCount'] as int,
       updateAt:
           const TimestampConverter().fromJson(json['updateAt'] as Timestamp?),
     );
@@ -25,6 +25,6 @@ Map<String, dynamic> _$$_NoticeToJson(_$_Notice instance) => <String, dynamic>{
       'recId': instance.recId,
       'recAvatar': instance.recAvatar,
       'roomId': instance.roomId,
-      'read': instance.read,
+      'unReadCount': instance.unReadCount,
       'updateAt': const TimestampConverter().toJson(instance.updateAt),
     };

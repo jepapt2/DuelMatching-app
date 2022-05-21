@@ -12,7 +12,7 @@ class Notice with _$Notice {
       String? recId,
       String? recAvatar,
       String? roomId,
-      required final bool read,
+      required final int unReadCount,
       @TimestampConverter() DateTime? updateAt}) = _Notice;
 
   const Notice._();

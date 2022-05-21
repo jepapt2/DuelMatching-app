@@ -1,5 +1,6 @@
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/screens/block_list.dart';
+import 'package:duel_matching/screens/chat.dart';
 import 'package:duel_matching/screens/login.dart';
 import 'package:duel_matching/screens/notice.dart';
 import 'package:duel_matching/screens/my_profile.dart';
@@ -55,6 +56,13 @@ final router = GoRouter(
       builder: (context, state) {
         final recruitId = state.params['id']!;
         return RecruitScreen(id: recruitId);
+      },
+    ),
+    GoRoute(
+      path: '/chatroom/:id',
+      builder: (context, state) {
+        final roomId = state.params['id']!;
+        return ChatScreen(roomId: roomId);
       },
     ),
     GoRoute(

@@ -28,7 +28,7 @@ class NoticeCard extends StatelessWidget {
             recName: notice.recName,
             recAvatar: notice.recAvatar,
             roomId: notice.roomId!,
-            read: notice.read,
+            unReadCount: notice.unReadCount,
             updateAt: notice.updateAt!);
       case 'newGroupMessage':
         return NewGroupMessageNotice(
@@ -36,7 +36,7 @@ class NoticeCard extends StatelessWidget {
             text: notice.text!,
             recName: notice.recName,
             roomId: notice.roomId!,
-            read: notice.read,
+            unReadCount: notice.unReadCount,
             updateAt: notice.updateAt!);
       case 'friendRequest':
         return FriendRequestNotice(
@@ -44,8 +44,7 @@ class NoticeCard extends StatelessWidget {
             recId: notice.recId!,
             recAvatar: notice.recAvatar,
             recName: notice.recName,
-            roomId: notice.roomId!,
-            read: notice.read,
+            unReadCount: notice.unReadCount,
             updateAt: notice.updateAt!,
             nowTime: nowTime);
       case 'newFriend':
@@ -55,7 +54,7 @@ class NoticeCard extends StatelessWidget {
             recAvatar: notice.recAvatar,
             recName: notice.recName,
             roomId: notice.roomId!,
-            read: notice.read,
+            unReadCount: notice.unReadCount,
             updateAt: notice.updateAt!,
             nowTime: nowTime);
       case 'recruitCancel':
@@ -63,7 +62,8 @@ class NoticeCard extends StatelessWidget {
             id: id,
             recName: notice.recName,
             roomId: notice.roomId!,
-            read: notice.read,
+            unReadCount: notice.unReadCount,
+            nowTime: nowTime,
             updateAt: notice.updateAt!);
       default:
         return ErrorNotice(
@@ -87,7 +87,7 @@ class NewMessageNotice extends StatelessWidget {
     required this.recName,
     this.recAvatar,
     required this.roomId,
-    required this.read,
+    required this.unReadCount,
     required this.updateAt,
   }) : super(key: key);
 
@@ -97,74 +97,79 @@ class NewMessageNotice extends StatelessWidget {
   final String recName;
   final String? recAvatar;
   final String roomId;
-  final bool read;
+  final int unReadCount;
   final DateTime updateAt;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => print('chat'),
-      //TODO チャットに遷移
-      child: Stack(
+    return InkWell(
+      onTap: () => GoRouter.of(context).push('/chatroom/$roomId'),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                  onTap: () => print('profile'),
-                  child: AvatarImage(avatar: recAvatar, radius: 25)),
-              const SizedBox(
-                width: 10.0,
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        recName,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        text,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: const TextStyle(color: Colors.black54),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 10.0,
-              ),
-              Column(
+          InkWell(
+              onTap: () => GoRouter.of(context).push('/user/$recId'),
+              child: AvatarImage(avatar: recAvatar, radius: 25)),
+          const SizedBox(
+            width: 10.0,
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (DateTime(updateAt.year, updateAt.month, updateAt.day, 0,
-                          0, 0) ==
-                      DateTime(DateTime.now().year, DateTime.now().month,
-                          DateTime.now().day, 0, 0, 0))
-                    Text(
-                      DateFormat('H:mm').format(updateAt),
-                      style: const TextStyle(color: Colors.black54),
-                    )
-                  else
-                    Text(
-                      DateFormat('M/d').format(updateAt),
-                      style: const TextStyle(color: Colors.black54),
-                    ),
-                  Visibility(
-                    visible: !read,
-                    child: const Icon(
-                      Icons.circle,
-                      size: 18,
-                      color: Color(0xffff8e3c),
-                    ),
-                  )
+                  Text(
+                    recName,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    text,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: const TextStyle(color: Colors.black54),
+                  ),
                 ],
-              )
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 10.0,
+          ),
+          Column(
+            children: [
+              if (DateTime(
+                      updateAt.year, updateAt.month, updateAt.day, 0, 0, 0) ==
+                  DateTime(DateTime.now().year, DateTime.now().month,
+                      DateTime.now().day, 0, 0, 0))
+                Text(
+                  DateFormat('H:mm').format(updateAt),
+                  style: const TextStyle(color: Colors.black54),
+                )
+              else
+                Text(
+                  DateFormat('M/d').format(updateAt),
+                  style: const TextStyle(color: Colors.black54),
+                ),
+              Visibility(
+                  visible: unReadCount > 0,
+                  child: Chip(
+                    label: Text(
+                      unReadCount > 99 ? '99+' : unReadCount.toString(),
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    labelPadding: const EdgeInsets.symmetric(horizontal: 5),
+                    visualDensity:
+                        const VisualDensity(horizontal: 0.0, vertical: -4),
+
+                    // const Icon(
+                    //   Icons.circle,
+                    //   size: 18,
+                    //   color: Color(0xffff8e3c),
+                    // ),
+                  )),
             ],
           )
         ],
@@ -180,7 +185,7 @@ class NewGroupMessageNotice extends StatelessWidget {
     required this.text,
     required this.recName,
     required this.roomId,
-    required this.read,
+    required this.unReadCount,
     required this.updateAt,
   }) : super(key: key);
 
@@ -188,7 +193,7 @@ class NewGroupMessageNotice extends StatelessWidget {
   final String text;
   final String recName;
   final String roomId;
-  final bool read;
+  final int unReadCount;
   final DateTime updateAt;
 
   @override
@@ -255,7 +260,7 @@ class NewGroupMessageNotice extends StatelessWidget {
                       style: const TextStyle(color: Colors.black54),
                     ),
                   Visibility(
-                    visible: !read,
+                    visible: unReadCount > 0,
                     child: const Icon(
                       Icons.circle,
                       size: 18,
@@ -279,9 +284,8 @@ class FriendRequestNotice extends HookWidget {
       required this.recId,
       required this.recName,
       this.recAvatar,
-      required this.roomId,
+      required this.unReadCount,
       required this.updateAt,
-      required this.read,
       required this.nowTime})
       : super(key: key);
 
@@ -289,104 +293,98 @@ class FriendRequestNotice extends HookWidget {
   final String recId;
   final String recName;
   final String? recAvatar;
-  final String roomId;
+  final int unReadCount;
   final DateTime updateAt;
-  final bool read;
   final DateTime nowTime;
 
   @override
   Widget build(BuildContext context) {
-    if (read == false && nowTime.isBefore(updateAt)) {
+    if (unReadCount == 1 && nowTime.isBefore(updateAt)) {
       useEffect(() {
         noticeCollection(FirebaseAuth.instance.currentUser!.uid)
             .doc(id)
             .update({'read': true});
       }, []);
     }
-    return GestureDetector(
-      onTap: () => null,
-      //TODO チャットに遷移
-      child: Stack(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onTap: () => GoRouter.of(context).push('/user/$recId'),
-                child: Stack(children: [
-                  AvatarImage(avatar: recAvatar, radius: 25),
-                  const Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: FaIcon(
-                        FontAwesomeIcons.solidEnvelope,
-                        color: Color(0xffff8e3c),
-                        size: 18,
-                      ))
-                ]),
-              ),
-              const SizedBox(
-                width: 10.0,
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                          text: TextSpan(
-                              style: const TextStyle(color: Color(0xff2a2a2a)),
-                              children: [
-                            TextSpan(
-                              text: recName,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            const TextSpan(text: 'からフレンド申請が届きました')
-                          ])),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () => requestPermissionDialog(context),
-                              child: Text('承認する')),
-                          const SizedBox(
-                            width: 20.0,
+    return Stack(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GestureDetector(
+              onTap: () => GoRouter.of(context).push('/user/$recId'),
+              child: Stack(children: [
+                AvatarImage(avatar: recAvatar, radius: 25),
+                const Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: FaIcon(
+                      FontAwesomeIcons.solidEnvelope,
+                      color: Color(0xffff8e3c),
+                      size: 18,
+                    ))
+              ]),
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(
+                        text: TextSpan(
+                            style: const TextStyle(color: Color(0xff2a2a2a)),
+                            children: [
+                          TextSpan(
+                            text: recName,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          OutlinedButton(
-                              onPressed: () => requestRejectionDialog(context),
-                              child: Text('拒否する'))
-                        ],
-                      )
-                    ],
-                  ),
+                          const TextSpan(text: 'からフレンド申請が届きました')
+                        ])),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () => requestPermissionDialog(context),
+                            child: const Text('承認する')),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        OutlinedButton(
+                            onPressed: () => requestRejectionDialog(context),
+                            child: Text('拒否する'))
+                      ],
+                    )
+                  ],
                 ),
               ),
-              const SizedBox(
-                width: 10.0,
-              ),
-              Column(
-                children: [
-                  if (DateTime(updateAt.year, updateAt.month, updateAt.day, 0,
-                          0, 0) ==
-                      DateTime(DateTime.now().year, DateTime.now().month,
-                          DateTime.now().day, 0, 0, 0))
-                    Text(
-                      DateFormat('H:mm').format(updateAt),
-                      style: const TextStyle(color: Colors.black54),
-                    )
-                  else
-                    Text(
-                      DateFormat('M/d').format(updateAt),
-                      style: const TextStyle(color: Colors.black54),
-                    ),
-                ],
-              )
-            ],
-          )
-        ],
-      ),
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            Column(
+              children: [
+                if (DateTime(
+                        updateAt.year, updateAt.month, updateAt.day, 0, 0, 0) ==
+                    DateTime(DateTime.now().year, DateTime.now().month,
+                        DateTime.now().day, 0, 0, 0))
+                  Text(
+                    DateFormat('H:mm').format(updateAt),
+                    style: const TextStyle(color: Colors.black54),
+                  )
+                else
+                  Text(
+                    DateFormat('M/d').format(updateAt),
+                    style: const TextStyle(color: Colors.black54),
+                  ),
+              ],
+            )
+          ],
+        )
+      ],
     );
   }
 
@@ -500,7 +498,7 @@ class NewFriendNotice extends HookWidget {
       this.recAvatar,
       required this.roomId,
       required this.updateAt,
-      required this.read,
+      required this.unReadCount,
       required this.nowTime})
       : super(key: key);
 
@@ -509,104 +507,97 @@ class NewFriendNotice extends HookWidget {
   final String recName;
   final String? recAvatar;
   final String roomId;
+  final int unReadCount;
   final DateTime updateAt;
-  final bool read;
   final DateTime nowTime;
 
   @override
   Widget build(BuildContext context) {
-    if (read == false && nowTime.isBefore(updateAt)) {
+    if (unReadCount == 1 && nowTime.isBefore(updateAt)) {
       useEffect(() {
         noticeCollection(FirebaseAuth.instance.currentUser!.uid)
             .doc(id)
-            .update({'read': true});
+            .update({'unReadCount': 0});
       }, []);
     }
-    return GestureDetector(
-      onTap: () => null,
-      //TODO チャットに遷移
-      child: Stack(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onTap: () => GoRouter.of(context).push('/user/$recId'),
-                child: Stack(children: [
-                  AvatarImage(avatar: recAvatar, radius: 25),
-                  const Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: FaIcon(
-                        FontAwesomeIcons.solidHandshake,
-                        color: Color(0xffff8e3c),
-                        size: 18,
-                      ))
-                ]),
-              ),
-              const SizedBox(
-                width: 10.0,
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                          text: TextSpan(
-                              style: const TextStyle(color: Color(0xff2a2a2a)),
-                              children: [
-                            TextSpan(
-                              text: recName,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            const TextSpan(text: 'とフレンドになりました')
-                          ])),
-                    ],
-                  ),
+    return Stack(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GestureDetector(
+              onTap: () => GoRouter.of(context).push('/user/$recId'),
+              child: Stack(children: [
+                AvatarImage(avatar: recAvatar, radius: 25),
+                const Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: FaIcon(
+                      FontAwesomeIcons.solidHandshake,
+                      color: Color(0xffff8e3c),
+                      size: 18,
+                    ))
+              ]),
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(
+                        text: TextSpan(
+                            style: const TextStyle(color: Color(0xff2a2a2a)),
+                            children: [
+                          TextSpan(
+                            text: recName,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          const TextSpan(text: 'とフレンドになりました')
+                        ])),
+                  ],
                 ),
               ),
-              const SizedBox(
-                width: 10.0,
-              ),
-              ElevatedButton(
-                  onPressed: () => null
-                  // TODO チャットに遷移
-                  ,
-                  child: const Icon(
-                    Icons.message,
-                    size: 20.0,
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            ElevatedButton(
+                onPressed: () => GoRouter.of(context).push('/chatroom/$roomId'),
+                child: const Icon(
+                  Icons.message,
+                  size: 20.0,
+                ),
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(40, 36),
+                    maximumSize: const Size(40, 36),
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0))),
+            const SizedBox(
+              width: 10.0,
+            ),
+            Column(
+              children: [
+                if (DateTime(
+                        updateAt.year, updateAt.month, updateAt.day, 0, 0, 0) ==
+                    DateTime(DateTime.now().year, DateTime.now().month,
+                        DateTime.now().day, 0, 0, 0))
+                  Text(
+                    DateFormat('H:mm').format(updateAt),
+                    style: const TextStyle(color: Colors.black54),
+                  )
+                else
+                  Text(
+                    DateFormat('M/d').format(updateAt),
+                    style: const TextStyle(color: Colors.black54),
                   ),
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(40, 36),
-                      maximumSize: const Size(40, 36),
-                      padding: EdgeInsets.symmetric(horizontal: 2.0))),
-              const SizedBox(
-                width: 10.0,
-              ),
-              Column(
-                children: [
-                  if (DateTime(updateAt.year, updateAt.month, updateAt.day, 0,
-                          0, 0) ==
-                      DateTime(DateTime.now().year, DateTime.now().month,
-                          DateTime.now().day, 0, 0, 0))
-                    Text(
-                      DateFormat('H:mm').format(updateAt),
-                      style: const TextStyle(color: Colors.black54),
-                    )
-                  else
-                    Text(
-                      DateFormat('M/d').format(updateAt),
-                      style: const TextStyle(color: Colors.black54),
-                    ),
-                ],
-              )
-            ],
-          )
-        ],
-      ),
+              ],
+            )
+          ],
+        )
+      ],
     );
   }
 }
@@ -617,19 +608,27 @@ class RecruitCancelNotice extends StatelessWidget {
     required this.id,
     required this.recName,
     required this.roomId,
-    required this.read,
     required this.updateAt,
+    required this.unReadCount,
+    required this.nowTime,
   }) : super(key: key);
 
   final String id;
   final String recName;
   final String roomId;
-  final bool read;
+  final int unReadCount;
   final DateTime updateAt;
-
+  final DateTime nowTime;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    if (unReadCount == 1 && nowTime.isBefore(updateAt)) {
+      useEffect(() {
+        noticeCollection(FirebaseAuth.instance.currentUser!.uid)
+            .doc(id)
+            .update({'unReadCount': 0});
+      }, []);
+    }
+    return InkWell(
       onTap: () => GoRouter.of(context).push('/recruit/$roomId'),
       child: Stack(
         children: [

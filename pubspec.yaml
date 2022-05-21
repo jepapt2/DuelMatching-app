@@ -40,7 +40,7 @@ dependencies:
   firebase_core: ^1.11.0
   firebase_auth: ^3.3.5
   firebase_storage: ^8.0.5
-  flutterfire_ui: ^0.4.0+4
+  flutterfire_ui: 0.4.0+5
   sign_in_with_apple: ^3.3.0
   twitter_login: ^4.0.1
   cloud_firestore: ^3.1.6
@@ -59,6 +59,9 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   cached_network_image: ^3.2.0
   connectivity_plus: ^2.2.1
+  flutter_chat_ui: ^1.5.8
+  firebase_messaging: ^11.4.0
+  dash_chat_2: ^0.0.6
 
 dev_dependencies:
   flutter_test:

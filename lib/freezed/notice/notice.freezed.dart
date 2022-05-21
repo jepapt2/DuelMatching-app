@@ -29,7 +29,7 @@ class _$NoticeTearOff {
       String? recId,
       String? recAvatar,
       String? roomId,
-      required bool read,
+      required int unReadCount,
       @TimestampConverter() DateTime? updateAt}) {
     return _Notice(
       type: type,
@@ -38,7 +38,7 @@ class _$NoticeTearOff {
       recId: recId,
       recAvatar: recAvatar,
       roomId: roomId,
-      read: read,
+      unReadCount: unReadCount,
       updateAt: updateAt,
     );
   }
@@ -59,7 +59,7 @@ mixin _$Notice {
   String? get recId => throw _privateConstructorUsedError;
   String? get recAvatar => throw _privateConstructorUsedError;
   String? get roomId => throw _privateConstructorUsedError;
-  bool get read => throw _privateConstructorUsedError;
+  int get unReadCount => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime? get updateAt => throw _privateConstructorUsedError;
 
@@ -79,7 +79,7 @@ abstract class $NoticeCopyWith<$Res> {
       String? recId,
       String? recAvatar,
       String? roomId,
-      bool read,
+      int unReadCount,
       @TimestampConverter() DateTime? updateAt});
 }
 
@@ -99,7 +99,7 @@ class _$NoticeCopyWithImpl<$Res> implements $NoticeCopyWith<$Res> {
     Object? recId = freezed,
     Object? recAvatar = freezed,
     Object? roomId = freezed,
-    Object? read = freezed,
+    Object? unReadCount = freezed,
     Object? updateAt = freezed,
   }) {
     return _then(_value.copyWith(
@@ -127,10 +127,10 @@ class _$NoticeCopyWithImpl<$Res> implements $NoticeCopyWith<$Res> {
           ? _value.roomId
           : roomId // ignore: cast_nullable_to_non_nullable
               as String?,
-      read: read == freezed
-          ? _value.read
-          : read // ignore: cast_nullable_to_non_nullable
-              as bool,
+      unReadCount: unReadCount == freezed
+          ? _value.unReadCount
+          : unReadCount // ignore: cast_nullable_to_non_nullable
+              as int,
       updateAt: updateAt == freezed
           ? _value.updateAt
           : updateAt // ignore: cast_nullable_to_non_nullable
@@ -151,7 +151,7 @@ abstract class _$NoticeCopyWith<$Res> implements $NoticeCopyWith<$Res> {
       String? recId,
       String? recAvatar,
       String? roomId,
-      bool read,
+      int unReadCount,
       @TimestampConverter() DateTime? updateAt});
 }
 
@@ -172,7 +172,7 @@ class __$NoticeCopyWithImpl<$Res> extends _$NoticeCopyWithImpl<$Res>
     Object? recId = freezed,
     Object? recAvatar = freezed,
     Object? roomId = freezed,
-    Object? read = freezed,
+    Object? unReadCount = freezed,
     Object? updateAt = freezed,
   }) {
     return _then(_Notice(
@@ -200,10 +200,10 @@ class __$NoticeCopyWithImpl<$Res> extends _$NoticeCopyWithImpl<$Res>
           ? _value.roomId
           : roomId // ignore: cast_nullable_to_non_nullable
               as String?,
-      read: read == freezed
-          ? _value.read
-          : read // ignore: cast_nullable_to_non_nullable
-              as bool,
+      unReadCount: unReadCount == freezed
+          ? _value.unReadCount
+          : unReadCount // ignore: cast_nullable_to_non_nullable
+              as int,
       updateAt: updateAt == freezed
           ? _value.updateAt
           : updateAt // ignore: cast_nullable_to_non_nullable
@@ -222,7 +222,7 @@ class _$_Notice extends _Notice {
       this.recId,
       this.recAvatar,
       this.roomId,
-      required this.read,
+      required this.unReadCount,
       @TimestampConverter() this.updateAt})
       : super._();
 
@@ -242,14 +242,14 @@ class _$_Notice extends _Notice {
   @override
   final String? roomId;
   @override
-  final bool read;
+  final int unReadCount;
   @override
   @TimestampConverter()
   final DateTime? updateAt;
 
   @override
   String toString() {
-    return 'Notice(type: $type, text: $text, recName: $recName, recId: $recId, recAvatar: $recAvatar, roomId: $roomId, read: $read, updateAt: $updateAt)';
+    return 'Notice(type: $type, text: $text, recName: $recName, recId: $recId, recAvatar: $recAvatar, roomId: $roomId, unReadCount: $unReadCount, updateAt: $updateAt)';
   }
 
   @override
@@ -263,7 +263,8 @@ class _$_Notice extends _Notice {
             const DeepCollectionEquality().equals(other.recId, recId) &&
             const DeepCollectionEquality().equals(other.recAvatar, recAvatar) &&
             const DeepCollectionEquality().equals(other.roomId, roomId) &&
-            const DeepCollectionEquality().equals(other.read, read) &&
+            const DeepCollectionEquality()
+                .equals(other.unReadCount, unReadCount) &&
             const DeepCollectionEquality().equals(other.updateAt, updateAt));
   }
 
@@ -276,7 +277,7 @@ class _$_Notice extends _Notice {
       const DeepCollectionEquality().hash(recId),
       const DeepCollectionEquality().hash(recAvatar),
       const DeepCollectionEquality().hash(roomId),
-      const DeepCollectionEquality().hash(read),
+      const DeepCollectionEquality().hash(unReadCount),
       const DeepCollectionEquality().hash(updateAt));
 
   @JsonKey(ignore: true)
@@ -298,7 +299,7 @@ abstract class _Notice extends Notice {
       String? recId,
       String? recAvatar,
       String? roomId,
-      required bool read,
+      required int unReadCount,
       @TimestampConverter() DateTime? updateAt}) = _$_Notice;
   _Notice._() : super._();
 
@@ -317,7 +318,7 @@ abstract class _Notice extends Notice {
   @override
   String? get roomId;
   @override
-  bool get read;
+  int get unReadCount;
   @override
   @TimestampConverter()
   DateTime? get updateAt;

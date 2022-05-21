@@ -65,7 +65,7 @@ class UserWhenConsumer extends HookConsumerWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text('アカウント情報の取得に失敗しましたuser'),
+                    const Text('アカウント情報の取得に失敗しました'),
                     ElevatedButton(
                       style: ButtonStyle(
                           textStyle: MaterialStateProperty.all(

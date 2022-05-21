@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:duel_matching/viewmodel/network_detector_notifier.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,9 @@ class AvatarImage extends StatelessWidget {
           backgroundColor: const Color(0xffeff0f3),
           foregroundColor: const Color(0xff2a2a2a),
           radius: radius,
-          foregroundImage: NetworkImage((avatar!)),
+          foregroundImage: CachedNetworkImageProvider(
+            avatar!,
+          ),
         );
       }
       return CircleAvatar(

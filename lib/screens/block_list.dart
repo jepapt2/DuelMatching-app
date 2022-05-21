@@ -59,19 +59,6 @@ class BlockListScreen extends HookConsumerWidget {
                           const Divider()
                         ],
                       );
-                      // if (snapshot.data()) {
-                      //   return Center(
-                      //     child: Column(
-                      //       mainAxisSize: MainAxisSize.min,
-                      //       children: const [
-                      //         SizedBox(
-                      //           height: 100.0,
-                      //         ),
-                      //         Text('ユーザが見つかりませんでした'),
-                      //       ],
-                      //     ),
-                      //   );
-                      // }
                     },
                     loadingBuilder: (context) => Center(
                         child: Column(

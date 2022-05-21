@@ -86,7 +86,7 @@ class RecruitCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                    '${DateFormat('yyyy/M/d hh:mm').format(start)} ~ ${end != null ? DateFormat('M/d hh:mm').format(end!) : '未定'}'),
+                    '${DateFormat('yyyy/M/d HH:mm').format(start)} ~ ${end != null ? DateFormat('M/d HH:mm').format(end!) : '未定'}'),
               ]),
               TableRow(children: [
                 const Padding(
