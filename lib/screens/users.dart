@@ -170,6 +170,9 @@ class UsersScreen extends HookConsumerWidget {
                                   ),
                                 );
                               }),
+                        const SizedBox(
+                          height: 100.0,
+                        ),
                         if (usersController.list != null &&
                             usersController.list!.isNotEmpty &&
                             usersController.loading)

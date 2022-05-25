@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:duel_matching/freezed/chat_room/chat_room.dart';
 import 'package:duel_matching/freezed/notice/notice.dart';
@@ -90,8 +91,9 @@ class ChatScreen extends HookWidget {
                             id: m.data().userId,
                           ),
                           text: m.data().text,
-                          createdAt: m.data().createdAt!))
+                          createdAt: m.data().createdAt ?? DateTime.now()))
                       .toList();
+
                   return ScrollDetector(
                       threshold: 0.9,
                       loadNext: () {
@@ -171,9 +173,7 @@ class ChatScreen extends HookWidget {
   onSendMessage(ChatMessage message, String roomId) {
     try {
       chatCollection(roomId).add(FirestoreChatMessage(
-          text: message.text,
-          userId: FirebaseAuth.instance.currentUser!.uid,
-          createdAt: DateTime.now()));
+          text: message.text, userId: FirebaseAuth.instance.currentUser!.uid));
     } catch (e) {
       Fluttertoast.showToast(
           msg: 'メッセージの送信に失敗しました',
@@ -208,7 +208,9 @@ class ChatScreen extends HookWidget {
     if (partnersId.contains(FirebaseAuth.instance.currentUser!.uid)) {
       await noticeCollection(FirebaseAuth.instance.currentUser!.uid)
           .doc('${roomId}_newMessage')
-          .update({'unReadCount': 0});
+          .update({'unReadCount': 0}).then((doc) => partnerCollection(roomId)
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .update({'lastReadAt': DateTime.now()}));
     }
     return true;
   }

@@ -157,18 +157,14 @@ class NewMessageNotice extends StatelessWidget {
                   child: Chip(
                     label: Text(
                       unReadCount > 99 ? '99+' : unReadCount.toString(),
-                      style: const TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 15),
                     ),
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     labelPadding: const EdgeInsets.symmetric(horizontal: 5),
                     visualDensity:
                         const VisualDensity(horizontal: 0.0, vertical: -4),
 
-                    // const Icon(
-                    //   Icons.circle,
-                    //   size: 18,
-                    //   color: Color(0xffff8e3c),
-                    // ),
+                    // const
                   )),
             ],
           )

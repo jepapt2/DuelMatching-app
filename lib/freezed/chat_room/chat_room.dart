@@ -24,7 +24,10 @@ CollectionReference<FirestoreChatMessage> chatCollection(String id) {
       .withConverter<FirestoreChatMessage>(
         fromFirestore: (snapshot, _) =>
             FirestoreChatMessage.fromJson(snapshot.data()!),
-        toFirestore: (model, _) => model.toJson(),
+        toFirestore: (model, _) => {
+          ...model.copyWith().toJson(),
+          if (model.createdAt == null) 'createdAt': FieldValue.serverTimestamp()
+        },
       );
 }
 
