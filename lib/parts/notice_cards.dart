@@ -194,9 +194,8 @@ class NewGroupMessageNotice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => null,
-      //TODO チャットに遷移
+    return InkWell(
+      onTap: () => GoRouter.of(context).push('/group/$roomId'),
       child: Stack(
         children: [
           Row(

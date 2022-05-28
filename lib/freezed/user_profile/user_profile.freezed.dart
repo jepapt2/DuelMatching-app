@@ -380,6 +380,7 @@ class _$ProfileTearOff {
       String? sex,
       bool? remoteDuel,
       List<String>? blockList,
+      List<String>? noticeToken,
       @TimestampConverter() DateTime? createdAt,
       @TimestampConverter() DateTime? activeAt,
       required int order}) {
@@ -398,6 +399,7 @@ class _$ProfileTearOff {
       sex: sex,
       remoteDuel: remoteDuel,
       blockList: blockList,
+      noticeToken: noticeToken,
       createdAt: createdAt,
       activeAt: activeAt,
       order: order,
@@ -428,6 +430,7 @@ mixin _$Profile {
   String? get sex => throw _privateConstructorUsedError;
   bool? get remoteDuel => throw _privateConstructorUsedError;
   List<String>? get blockList => throw _privateConstructorUsedError;
+  List<String>? get noticeToken => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime? get createdAt => throw _privateConstructorUsedError;
   @TimestampConverter()
@@ -458,6 +461,7 @@ abstract class $ProfileCopyWith<$Res> {
       String? sex,
       bool? remoteDuel,
       List<String>? blockList,
+      List<String>? noticeToken,
       @TimestampConverter() DateTime? createdAt,
       @TimestampConverter() DateTime? activeAt,
       int order});
@@ -487,6 +491,7 @@ class _$ProfileCopyWithImpl<$Res> implements $ProfileCopyWith<$Res> {
     Object? sex = freezed,
     Object? remoteDuel = freezed,
     Object? blockList = freezed,
+    Object? noticeToken = freezed,
     Object? createdAt = freezed,
     Object? activeAt = freezed,
     Object? order = freezed,
@@ -548,6 +553,10 @@ class _$ProfileCopyWithImpl<$Res> implements $ProfileCopyWith<$Res> {
           ? _value.blockList
           : blockList // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      noticeToken: noticeToken == freezed
+          ? _value.noticeToken
+          : noticeToken // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -584,6 +593,7 @@ abstract class _$ProfileCopyWith<$Res> implements $ProfileCopyWith<$Res> {
       String? sex,
       bool? remoteDuel,
       List<String>? blockList,
+      List<String>? noticeToken,
       @TimestampConverter() DateTime? createdAt,
       @TimestampConverter() DateTime? activeAt,
       int order});
@@ -614,6 +624,7 @@ class __$ProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
     Object? sex = freezed,
     Object? remoteDuel = freezed,
     Object? blockList = freezed,
+    Object? noticeToken = freezed,
     Object? createdAt = freezed,
     Object? activeAt = freezed,
     Object? order = freezed,
@@ -675,6 +686,10 @@ class __$ProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
           ? _value.blockList
           : blockList // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      noticeToken: noticeToken == freezed
+          ? _value.noticeToken
+          : noticeToken // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -709,6 +724,7 @@ class _$_Profile extends _Profile {
       this.sex,
       this.remoteDuel,
       this.blockList,
+      this.noticeToken,
       @TimestampConverter() this.createdAt,
       @TimestampConverter() this.activeAt,
       required this.order})
@@ -746,6 +762,8 @@ class _$_Profile extends _Profile {
   @override
   final List<String>? blockList;
   @override
+  final List<String>? noticeToken;
+  @override
   @TimestampConverter()
   final DateTime? createdAt;
   @override
@@ -756,7 +774,7 @@ class _$_Profile extends _Profile {
 
   @override
   String toString() {
-    return 'Profile(name: $name, avatar: $avatar, header: $header, comment: $comment, introduction: $introduction, favorite: $favorite, playTitle: $playTitle, adress: $adress, activityDay: $activityDay, activityTime: $activityTime, age: $age, sex: $sex, remoteDuel: $remoteDuel, blockList: $blockList, createdAt: $createdAt, activeAt: $activeAt, order: $order)';
+    return 'Profile(name: $name, avatar: $avatar, header: $header, comment: $comment, introduction: $introduction, favorite: $favorite, playTitle: $playTitle, adress: $adress, activityDay: $activityDay, activityTime: $activityTime, age: $age, sex: $sex, remoteDuel: $remoteDuel, blockList: $blockList, noticeToken: $noticeToken, createdAt: $createdAt, activeAt: $activeAt, order: $order)';
   }
 
   @override
@@ -782,6 +800,8 @@ class _$_Profile extends _Profile {
             const DeepCollectionEquality()
                 .equals(other.remoteDuel, remoteDuel) &&
             const DeepCollectionEquality().equals(other.blockList, blockList) &&
+            const DeepCollectionEquality()
+                .equals(other.noticeToken, noticeToken) &&
             const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
             const DeepCollectionEquality().equals(other.activeAt, activeAt) &&
             const DeepCollectionEquality().equals(other.order, order));
@@ -804,6 +824,7 @@ class _$_Profile extends _Profile {
       const DeepCollectionEquality().hash(sex),
       const DeepCollectionEquality().hash(remoteDuel),
       const DeepCollectionEquality().hash(blockList),
+      const DeepCollectionEquality().hash(noticeToken),
       const DeepCollectionEquality().hash(createdAt),
       const DeepCollectionEquality().hash(activeAt),
       const DeepCollectionEquality().hash(order));
@@ -835,6 +856,7 @@ abstract class _Profile extends Profile {
       String? sex,
       bool? remoteDuel,
       List<String>? blockList,
+      List<String>? noticeToken,
       @TimestampConverter() DateTime? createdAt,
       @TimestampConverter() DateTime? activeAt,
       required int order}) = _$_Profile;
@@ -870,6 +892,8 @@ abstract class _Profile extends Profile {
   bool? get remoteDuel;
   @override
   List<String>? get blockList;
+  @override
+  List<String>? get noticeToken;
   @override
   @TimestampConverter()
   DateTime? get createdAt;

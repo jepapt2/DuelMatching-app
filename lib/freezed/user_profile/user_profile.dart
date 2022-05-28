@@ -41,6 +41,7 @@ class Profile with _$Profile {
     String? sex,
     bool? remoteDuel,
     List<String>? blockList,
+    List<String>? noticeToken,
     @TimestampConverter() DateTime? createdAt,
     @TimestampConverter() DateTime? activeAt,
     required final int order,

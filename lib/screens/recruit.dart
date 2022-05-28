@@ -501,8 +501,10 @@ class RecruitScreen extends HookConsumerWidget {
               .set(Member(
                   uid: FirebaseAuth.instance.currentUser!.uid,
                   name: myProfile.name,
-                  avatar: myProfile.avatar,
+                  avatar: myProfile.avatar ?? '',
                   organizer: false,
+                  noticeToken: myProfile.noticeToken ?? [],
+                  noticeTitle: '${recruit.title} (${members.length + 1})',
                   createdAt: DateTime.now()));
           //TODO チャットに遷移
           Fluttertoast.showToast(

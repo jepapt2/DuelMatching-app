@@ -266,6 +266,7 @@ class RecruitNewScreen extends HookConsumerWidget {
                     name: user.name,
                     avatar: user.avatar,
                     organizer: true,
+                    noticeTitle: '${_formKey.currentState!.value['title']} (1)',
                     createdAt: DateTime.now()));
           });
         } catch (e) {

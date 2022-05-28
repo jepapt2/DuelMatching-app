@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:duel_matching/freezed/chat_room/chat_room.dart';
 import 'package:duel_matching/freezed/notice/notice.dart';
@@ -7,10 +6,7 @@ import 'package:duel_matching/parts/scroll_detector.dart';
 import 'package:duel_matching/viewmodel/partner_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
@@ -139,30 +135,6 @@ class ChatScreen extends HookWidget {
                             onSend: (message) => onSendMessage(message, roomId),
                             messages: messages);
                       });
-                  // List<types.Message> messages = snapshot.docs
-                  //     .map((m) => types.TextMessage(
-                  //         author: types.User(id: m.data().userId),
-                  //         text: m.data().text,
-                  //         id: m.id))
-                  //     .toList();
-
-                  // return Chat(
-                  //   l10n: ChatL10nEn(inputPlaceholder: 'メッセージを入力'),
-                  //   onMessageStatusTap: (a, b) => print('tap'),
-                  //   theme: DefaultChatTheme(
-                  //       primaryColor: Colors.blue,
-                  //       inputBorderRadius: BorderRadius.zero),
-                  //   messages: messages,
-                  //   onSendPressed: (partialText) => onSendMessage(partialText, roomId),
-                  //   user: types.User(
-                  //     id: FirebaseAuth.instance.currentUser!.uid,
-                  //   ),
-                  //   onPreviewDataFetched: (_, p) {
-                  //     if (snapshot.hasMore) {
-                  //       snapshot.fetchMore();
-                  //     }
-                  //   },
-                  // );
                 },
               ),
             ),

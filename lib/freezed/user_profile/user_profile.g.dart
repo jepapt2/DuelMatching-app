@@ -25,6 +25,9 @@ _$_Profile _$$_ProfileFromJson(Map<String, dynamic> json) => _$_Profile(
       blockList: (json['blockList'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      noticeToken: (json['noticeToken'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       createdAt:
           const TimestampConverter().fromJson(json['createdAt'] as Timestamp?),
       activeAt:
@@ -48,6 +51,7 @@ Map<String, dynamic> _$$_ProfileToJson(_$_Profile instance) =>
       'sex': instance.sex,
       'remoteDuel': instance.remoteDuel,
       'blockList': instance.blockList,
+      'noticeToken': instance.noticeToken,
       'createdAt': const TimestampConverter().toJson(instance.createdAt),
       'activeAt': const TimestampConverter().toJson(instance.activeAt),
       'order': instance.order,
