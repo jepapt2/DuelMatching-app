@@ -252,6 +252,7 @@ class RecruitNewScreen extends HookConsumerWidget {
                   cancel: false,
                   close: false,
                   organizerId: FirebaseAuth.instance.currentUser!.uid,
+                  membersId: [FirebaseAuth.instance.currentUser!.uid],
                   createdAt: DateTime.now()))
               .then((docRef) async {
             recruitId = docRef.id;

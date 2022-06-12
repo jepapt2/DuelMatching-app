@@ -15,7 +15,6 @@ class FriendsScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Size _screenSize = MediaQuery.of(context).size;
     return UserWhenConsumer(
       child: (user) => FriendsWhenConsumer(child: (friends) {
         List<String> friendsId = friends.map((f) => f.uid).toList();
@@ -40,55 +39,60 @@ class FriendsScreen extends HookConsumerWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 5.0, vertical: 2.0),
-                            child: Row(
-                              children: [
-                                AvatarImage(
-                                    avatar: snapshot.data().avatar, radius: 25),
-                                const SizedBox(width: 10.0),
-                                Expanded(
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          snapshot.data().name,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Visibility(
-                                          visible: snapshot
-                                              .data()
-                                              .comment
-                                              .isNotNullAndNotEmpty,
-                                          child: Text(
-                                            snapshot.data().comment!,
+                            child: InkWell(
+                              onTap: () => GoRouter.of(context)
+                                  .push('/user/${friendProfile.uid}'),
+                              child: Row(
+                                children: [
+                                  AvatarImage(
+                                      avatar: snapshot.data().avatar,
+                                      radius: 25),
+                                  const SizedBox(width: 10.0),
+                                  Expanded(
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            snapshot.data().name,
                                             overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
                                             style: const TextStyle(
-                                                color: Colors.black54),
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                        ),
-                                      ],
+                                          Visibility(
+                                            visible: snapshot
+                                                .data()
+                                                .comment
+                                                .isNotNullAndNotEmpty,
+                                            child: Text(
+                                              snapshot.data().comment!,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
+                                              style: const TextStyle(
+                                                  color: Colors.black54),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: 10.0),
-                                ElevatedButton(
-                                    onPressed: () => GoRouter.of(context).push(
-                                        '/chatroom/${friendProfile.friend.chatRoomId}'),
-                                    child: const Icon(
-                                      Icons.message,
-                                      size: 20.0,
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                        minimumSize: const Size(40, 36),
-                                        maximumSize: const Size(40, 36),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 2.0))),
-                              ],
+                                  const SizedBox(width: 10.0),
+                                  ElevatedButton(
+                                      onPressed: () => GoRouter.of(context).push(
+                                          '/chatroom/${friendProfile.friend.chatRoomId}'),
+                                      child: const Icon(
+                                        Icons.message,
+                                        size: 20.0,
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                          minimumSize: const Size(40, 36),
+                                          maximumSize: const Size(40, 36),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 2.0))),
+                                ],
+                              ),
                             ),
                           ),
                           const Divider()

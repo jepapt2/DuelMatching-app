@@ -31,6 +31,15 @@ CollectionReference<Member> membersCollection(String id) {
       );
 }
 
+Query<Member> membersCollectionGroup() {
+  return FirebaseFirestore.instance
+      .collectionGroup('members')
+      .withConverter<Member>(
+        fromFirestore: (snapshot, _) => Member.fromJson(snapshot.data()!),
+        toFirestore: (model, _) => model.toJson(),
+      );
+}
+
 @freezed
 class FirestoreGroupChatMessage with _$FirestoreGroupChatMessage {
   factory FirestoreGroupChatMessage(

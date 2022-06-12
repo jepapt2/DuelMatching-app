@@ -24,6 +24,8 @@ _$_Recruit _$$_RecruitFromJson(Map<String, dynamic> json) => _$_Recruit(
       close: json['close'] as bool,
       order: json['order'] as int?,
       organizerId: json['organizerId'] as String,
+      membersId:
+          (json['membersId'] as List<dynamic>).map((e) => e as String).toList(),
       createdAt:
           const TimestampConverter().fromJson(json['createdAt'] as Timestamp?),
     );
@@ -47,5 +49,6 @@ Map<String, dynamic> _$$_RecruitToJson(_$_Recruit instance) =>
       'close': instance.close,
       'order': instance.order,
       'organizerId': instance.organizerId,
+      'membersId': instance.membersId,
       'createdAt': const TimestampConverter().toJson(instance.createdAt),
     };

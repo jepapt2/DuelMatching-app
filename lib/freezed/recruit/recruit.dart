@@ -32,6 +32,7 @@ class Recruit with _$Recruit {
     required final bool close,
     int? order,
     required final String organizerId,
+    required final List<String> membersId,
     @TimestampConverter() DateTime? createdAt,
   }) = _Recruit;
 

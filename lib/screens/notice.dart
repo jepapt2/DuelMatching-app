@@ -30,8 +30,8 @@ class NoticeScreen extends HookConsumerWidget {
         // }
         userDocument(FirebaseAuth.instance.currentUser!.uid)
             .update({'readNoticeAt': DateTime.now()});
-        return null;
       });
+      return null;
     }, []);
 
     return UserWhenConsumer(child: (user) {

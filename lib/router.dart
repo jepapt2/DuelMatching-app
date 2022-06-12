@@ -3,6 +3,7 @@ import 'package:duel_matching/screens/block_list.dart';
 import 'package:duel_matching/screens/chat.dart';
 import 'package:duel_matching/screens/friends.dart';
 import 'package:duel_matching/screens/group_chat.dart';
+import 'package:duel_matching/screens/joined_recruit.dart';
 import 'package:duel_matching/screens/login.dart';
 import 'package:duel_matching/screens/notice.dart';
 import 'package:duel_matching/screens/my_profile.dart';
@@ -96,6 +97,10 @@ final router = GoRouter(
       GoRoute(
         path: '/friends',
         builder: (context, state) => const FriendsScreen(),
+      ),
+      GoRoute(
+        path: '/joined',
+        builder: (context, state) => const JoinedRecruitScreen(),
       ),
     ],
     redirect: (state) {

@@ -27,11 +27,11 @@ class PrimaryButtomNavigationBar extends StatelessWidget {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.userAlt),
+            icon: FaIcon(FontAwesomeIcons.userLarge),
             label: '探す',
           ),
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.solidFileAlt),
+            icon: FaIcon(FontAwesomeIcons.solidFileLines),
             label: '募集',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.notifications), label: '通知'),

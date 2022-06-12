@@ -202,6 +202,7 @@ class _$RecruitTearOff {
       required bool close,
       int? order,
       required String organizerId,
+      required List<String> membersId,
       @TimestampConverter() DateTime? createdAt}) {
     return _Recruit(
       title: title,
@@ -221,6 +222,7 @@ class _$RecruitTearOff {
       close: close,
       order: order,
       organizerId: organizerId,
+      membersId: membersId,
       createdAt: createdAt,
     );
   }
@@ -255,6 +257,7 @@ mixin _$Recruit {
   bool get close => throw _privateConstructorUsedError;
   int? get order => throw _privateConstructorUsedError;
   String get organizerId => throw _privateConstructorUsedError;
+  List<String> get membersId => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime? get createdAt => throw _privateConstructorUsedError;
 
@@ -285,6 +288,7 @@ abstract class $RecruitCopyWith<$Res> {
       bool close,
       int? order,
       String organizerId,
+      List<String> membersId,
       @TimestampConverter() DateTime? createdAt});
 }
 
@@ -315,6 +319,7 @@ class _$RecruitCopyWithImpl<$Res> implements $RecruitCopyWith<$Res> {
     Object? close = freezed,
     Object? order = freezed,
     Object? organizerId = freezed,
+    Object? membersId = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_value.copyWith(
@@ -386,6 +391,10 @@ class _$RecruitCopyWithImpl<$Res> implements $RecruitCopyWith<$Res> {
           ? _value.organizerId
           : organizerId // ignore: cast_nullable_to_non_nullable
               as String,
+      membersId: membersId == freezed
+          ? _value.membersId
+          : membersId // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -417,6 +426,7 @@ abstract class _$RecruitCopyWith<$Res> implements $RecruitCopyWith<$Res> {
       bool close,
       int? order,
       String organizerId,
+      List<String> membersId,
       @TimestampConverter() DateTime? createdAt});
 }
 
@@ -448,6 +458,7 @@ class __$RecruitCopyWithImpl<$Res> extends _$RecruitCopyWithImpl<$Res>
     Object? close = freezed,
     Object? order = freezed,
     Object? organizerId = freezed,
+    Object? membersId = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_Recruit(
@@ -519,6 +530,10 @@ class __$RecruitCopyWithImpl<$Res> extends _$RecruitCopyWithImpl<$Res>
           ? _value.organizerId
           : organizerId // ignore: cast_nullable_to_non_nullable
               as String,
+      membersId: membersId == freezed
+          ? _value.membersId
+          : membersId // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -548,6 +563,7 @@ class _$_Recruit extends _Recruit {
       required this.close,
       this.order,
       required this.organizerId,
+      required this.membersId,
       @TimestampConverter() this.createdAt})
       : super._();
 
@@ -592,12 +608,14 @@ class _$_Recruit extends _Recruit {
   @override
   final String organizerId;
   @override
+  final List<String> membersId;
+  @override
   @TimestampConverter()
   final DateTime? createdAt;
 
   @override
   String toString() {
-    return 'Recruit(title: $title, playTitle: $playTitle, format: $format, place: $place, point: $point, start: $start, end: $end, limit: $limit, friendOnly: $friendOnly, recruitNumber: $recruitNumber, overview: $overview, memberCount: $memberCount, full: $full, cancel: $cancel, close: $close, order: $order, organizerId: $organizerId, createdAt: $createdAt)';
+    return 'Recruit(title: $title, playTitle: $playTitle, format: $format, place: $place, point: $point, start: $start, end: $end, limit: $limit, friendOnly: $friendOnly, recruitNumber: $recruitNumber, overview: $overview, memberCount: $memberCount, full: $full, cancel: $cancel, close: $close, order: $order, organizerId: $organizerId, membersId: $membersId, createdAt: $createdAt)';
   }
 
   @override
@@ -626,30 +644,33 @@ class _$_Recruit extends _Recruit {
             const DeepCollectionEquality().equals(other.order, order) &&
             const DeepCollectionEquality()
                 .equals(other.organizerId, organizerId) &&
+            const DeepCollectionEquality().equals(other.membersId, membersId) &&
             const DeepCollectionEquality().equals(other.createdAt, createdAt));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(title),
-      const DeepCollectionEquality().hash(playTitle),
-      const DeepCollectionEquality().hash(format),
-      const DeepCollectionEquality().hash(place),
-      const DeepCollectionEquality().hash(point),
-      const DeepCollectionEquality().hash(start),
-      const DeepCollectionEquality().hash(end),
-      const DeepCollectionEquality().hash(limit),
-      const DeepCollectionEquality().hash(friendOnly),
-      const DeepCollectionEquality().hash(recruitNumber),
-      const DeepCollectionEquality().hash(overview),
-      const DeepCollectionEquality().hash(memberCount),
-      const DeepCollectionEquality().hash(full),
-      const DeepCollectionEquality().hash(cancel),
-      const DeepCollectionEquality().hash(close),
-      const DeepCollectionEquality().hash(order),
-      const DeepCollectionEquality().hash(organizerId),
-      const DeepCollectionEquality().hash(createdAt));
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        const DeepCollectionEquality().hash(title),
+        const DeepCollectionEquality().hash(playTitle),
+        const DeepCollectionEquality().hash(format),
+        const DeepCollectionEquality().hash(place),
+        const DeepCollectionEquality().hash(point),
+        const DeepCollectionEquality().hash(start),
+        const DeepCollectionEquality().hash(end),
+        const DeepCollectionEquality().hash(limit),
+        const DeepCollectionEquality().hash(friendOnly),
+        const DeepCollectionEquality().hash(recruitNumber),
+        const DeepCollectionEquality().hash(overview),
+        const DeepCollectionEquality().hash(memberCount),
+        const DeepCollectionEquality().hash(full),
+        const DeepCollectionEquality().hash(cancel),
+        const DeepCollectionEquality().hash(close),
+        const DeepCollectionEquality().hash(order),
+        const DeepCollectionEquality().hash(organizerId),
+        const DeepCollectionEquality().hash(membersId),
+        const DeepCollectionEquality().hash(createdAt)
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -681,6 +702,7 @@ abstract class _Recruit extends Recruit {
       required bool close,
       int? order,
       required String organizerId,
+      required List<String> membersId,
       @TimestampConverter() DateTime? createdAt}) = _$_Recruit;
   _Recruit._() : super._();
 
@@ -723,6 +745,8 @@ abstract class _Recruit extends Recruit {
   int? get order;
   @override
   String get organizerId;
+  @override
+  List<String> get membersId;
   @override
   @TimestampConverter()
   DateTime? get createdAt;

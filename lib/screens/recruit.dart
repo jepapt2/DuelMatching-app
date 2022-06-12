@@ -506,7 +506,7 @@ class RecruitScreen extends HookConsumerWidget {
                   noticeToken: myProfile.noticeToken ?? [],
                   noticeTitle: '${recruit.title} (${members.length + 1})',
                   createdAt: DateTime.now()));
-          //TODO チャットに遷移
+          GoRouter.of(context).push('/group/$id');
           Fluttertoast.showToast(
               msg: '募集に参加しました',
               toastLength: Toast.LENGTH_SHORT,
@@ -554,10 +554,9 @@ class RecruitScreen extends HookConsumerWidget {
         .map((m) => m.uid)
         .toList()
         .contains(FirebaseAuth.instance.currentUser!.uid)) {
-      //TODO　チャットへのリンク
-      return const ElevatedButton(
-        onPressed: null,
-        child: Text('参加済み'),
+      return ElevatedButton(
+        onPressed: () => GoRouter.of(context).push('/group/$id'),
+        child: const Text('参加済み'),
       );
     }
 
