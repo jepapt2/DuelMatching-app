@@ -41,6 +41,7 @@ class RecruitsScreen extends HookConsumerWidget {
         }, []);
 
         return PrimaryScaffold(
+          pageIndex: 1,
           user: user,
           child: ScrollDetector(
             threshold: 0.8,

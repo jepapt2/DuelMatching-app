@@ -9,18 +9,19 @@ final navigationIndexProvider =
 enum IndexName { users, recruits, notice }
 
 class PrimaryButtomNavigationBar extends StatelessWidget {
-  const PrimaryButtomNavigationBar({Key? key}) : super(key: key);
+  const PrimaryButtomNavigationBar({
+    Key? key,
+    required this.pageIndex,
+  }) : super(key: key);
+
+  final int pageIndex;
 
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
-      final indexNameController = ref.watch(navigationIndexProvider.notifier);
-      final indexName = ref.watch(navigationIndexProvider);
-
       return BottomNavigationBar(
-        currentIndex: indexName.index,
+        currentIndex: pageIndex,
         onTap: (index) {
-          indexNameController.update((state) => IndexName.values[index]);
           GoRouter.of(context)
               .go('/${IndexName.values[index].name.toString()}');
         },

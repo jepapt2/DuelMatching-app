@@ -33,6 +33,16 @@ class PrimaryDrawer extends StatelessWidget {
           ListTile(
             minLeadingWidth: 0.0,
             contentPadding: const EdgeInsets.only(left: 5.0, right: 0.0),
+            leading: const FaIcon(
+              FontAwesomeIcons.solidHandshake,
+              color: Color(0xffff8e3c),
+            ),
+            title: const Text('フレンドリスト'),
+            onTap: () => GoRouter.of(context).push('/friends'),
+          ),
+          ListTile(
+            minLeadingWidth: 0.0,
+            contentPadding: const EdgeInsets.only(left: 5.0, right: 0.0),
             leading: const FaIcon(FontAwesomeIcons.userSlash, size: 20.0),
             title: const Text('ブロックリスト'),
             onTap: () => GoRouter.of(context).push('/block'),

@@ -12,16 +12,27 @@ class AvatarImage extends StatelessWidget {
   final String? avatar;
   final double? radius;
 
+  ImageProvider selectProvider(avatar) {
+    try {
+      return CachedNetworkImageProvider(
+        avatar!,
+      );
+    } catch (_) {
+      return const AssetImage('assets/images/initial_avatar.png');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, _) {
       var network = ref.watch(networkAwareProvider);
+
       if (network == NetworkStatus.On && avatar.isNotNullAndNotEmpty) {
         return CircleAvatar(
           backgroundColor: const Color(0xffeff0f3),
           foregroundColor: const Color(0xff2a2a2a),
           radius: radius,
-          foregroundImage: CachedNetworkImageProvider(
+          foregroundImage: selectProvider(
             avatar!,
           ),
         );

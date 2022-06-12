@@ -42,6 +42,7 @@ class RecruitsScreen extends HookConsumerWidget {
     return UserWhenConsumer(
       child: (myProfile) => FriendsWhenConsumer(child: (friends) {
         return PrimaryScaffold(
+          pageIndex: 1,
           user: myProfile,
           // appBarAction: [
           //   IconButton(

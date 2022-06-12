@@ -14,88 +14,93 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class NoticeScreen extends HookConsumerWidget {
-  NoticeScreen({Key? key}) : super(key: key);
+  NoticeScreen({Key? key, this.noticeData}) : super(key: key);
+
+  final Map<String, dynamic>? noticeData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var nowTime = useMemoized(DateTime.now);
 
     useEffect(() {
-      userDocument(FirebaseAuth.instance.currentUser!.uid)
-          .update({'readNoticeAt': DateTime.now()});
-      return null;
+      Future.delayed(Duration.zero, () {
+        // if (noticeData != null && noticeData!['chatRoomId'] != null) {
+        //   print(noticeData!['chatRoomId']);
+        //   GoRouter.of(context).push('/chatRoom/${noticeData!['chatRoomId']}');
+        // }
+        userDocument(FirebaseAuth.instance.currentUser!.uid)
+            .update({'readNoticeAt': DateTime.now()});
+        return null;
+      });
     }, []);
 
     return UserWhenConsumer(child: (user) {
       return PrimaryScaffold(
-          child: RefreshIndicator(
-            onRefresh: Future.value,
-            child: CustomScrollView(
-              slivers: [
-                PrimarySliverAppBar(
-                  user: user,
-                  appBarAction: [],
-                ),
-                SliverList(
-                    delegate: SliverChildListDelegate([
-                  FirestoreListView(
-                    query:
-                        noticeCollection(FirebaseAuth.instance.currentUser!.uid)
-                            .orderBy('updateAt', descending: true),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder:
-                        (context, QueryDocumentSnapshot<Notice> snapshot) {
-                      return Column(
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 5.0, vertical: 2.0),
-                              child: NoticeCard(
-                                id: snapshot.id,
-                                notice: snapshot.data(),
-                                nowTime: nowTime,
-                              )),
-                          const Divider()
-                        ],
-                      );
-                    },
-                    loadingBuilder: (context) => Center(
-                        child: Column(
-                      children: const [
-                        SizedBox(
+          pageIndex: 2,
+          child: CustomScrollView(
+            slivers: [
+              PrimarySliverAppBar(
+                user: user,
+                appBarAction: [],
+              ),
+              SliverList(
+                  delegate: SliverChildListDelegate([
+                FirestoreListView(
+                  query:
+                      noticeCollection(FirebaseAuth.instance.currentUser!.uid)
+                          .orderBy('updateAt', descending: true),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder:
+                      (context, QueryDocumentSnapshot<Notice> snapshot) {
+                    return Column(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5.0, vertical: 2.0),
+                            child: NoticeCard(
+                              id: snapshot.id,
+                              notice: snapshot.data(),
+                              nowTime: nowTime,
+                            )),
+                        const Divider()
+                      ],
+                    );
+                  },
+                  loadingBuilder: (context) => Center(
+                      child: Column(
+                    children: const [
+                      SizedBox(
+                        height: 100.0,
+                      ),
+                      CircularProgressIndicator(),
+                    ],
+                  )),
+                  errorBuilder: (context, error, _) => Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(
                           height: 100.0,
                         ),
-                        CircularProgressIndicator(),
+                        const Text('通知の取得に失敗しました'),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                              textStyle: MaterialStateProperty.all(
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.redAccent)),
+                          child: const Text('更新する'),
+                          onPressed: () {
+                            GoRouter.of(context).go('/notice');
+                          },
+                        ),
                       ],
-                    )),
-                    errorBuilder: (context, error, _) => Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const SizedBox(
-                            height: 100.0,
-                          ),
-                          const Text('通知の取得に失敗しました'),
-                          ElevatedButton(
-                            style: ButtonStyle(
-                                textStyle: MaterialStateProperty.all(
-                                    const TextStyle(
-                                        fontWeight: FontWeight.bold)),
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.redAccent)),
-                            child: const Text('更新する'),
-                            onPressed: () {
-                              GoRouter.of(context).go('/notice');
-                            },
-                          ),
-                        ],
-                      ),
                     ),
-                  )
-                ]))
-              ],
-            ),
+                  ),
+                )
+              ]))
+            ],
           ),
           user: user);
     });

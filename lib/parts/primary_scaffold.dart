@@ -11,12 +11,14 @@ class PrimaryScaffold extends StatelessWidget {
       {Key? key,
       required this.child,
       required this.user,
+      required this.pageIndex,
       this.appBarText,
       this.floatingActionButton})
       : super(key: key);
 
   final dynamic child;
   final Profile user;
+  final int pageIndex;
   final String? appBarText;
   final Widget? floatingActionButton;
 
@@ -25,7 +27,9 @@ class PrimaryScaffold extends StatelessWidget {
     return Scaffold(
       body: child,
       drawer: const PrimaryDrawer(),
-      bottomNavigationBar: const PrimaryButtomNavigationBar(),
+      bottomNavigationBar: PrimaryButtomNavigationBar(
+        pageIndex: pageIndex,
+      ),
       floatingActionButton: floatingActionButton,
     );
   }

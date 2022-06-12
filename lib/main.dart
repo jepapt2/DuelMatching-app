@@ -12,6 +12,7 @@ import 'package:duel_matching/gen/firebase_options_development.dart'
     as development;
 import 'package:duel_matching/gen/firebase_options_production.dart'
     as production;
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'local/fluttefire.dart';
@@ -73,9 +74,11 @@ class MyApp extends HookWidget {
         }
       });
     }, const []);
+
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user != null) {
         final token = await FirebaseMessaging.instance.getToken();
+
         userDocument(user.uid).update({
           'activeAt': DateTime.now(),
           'noticeToken': FieldValue.arrayUnion([token])

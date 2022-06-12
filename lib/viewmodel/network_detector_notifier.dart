@@ -15,7 +15,6 @@ class NetworkDetectorNotifier extends StateNotifier<NetworkStatus> {
   NetworkDetectorNotifier() : super(NetworkStatus.NotDetermined) {
     lastResult = NetworkStatus.NotDetermined;
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      // Use Connectivity() here to gather more info if you need t
       NetworkStatus newState;
       switch (result) {
         case ConnectivityResult.mobile:
