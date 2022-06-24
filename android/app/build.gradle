@@ -26,6 +26,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     // compileSdkVersion flutter.compileSdkVersion
     compileSdkVersion 31
@@ -43,30 +49,60 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.duel_matching"
+        applicationId "com.dairi.duelmatching"
         minSdkVersion 25
         // targetSdkVersion flutter.targetSdkVersion
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+    flavorDimensions "default"
+    productFlavors {
+
+        development {
+            dimension "default"
+            applicationId "com.dairi.duelmatching.development"
+        }
+
+        staging {
+            dimension "default"
+            applicationId "com.hoge.fuga.staging"
+        }
+
+        production {
+            dimension "default"
+            applicationId "com.hoge.fuga"
+        }
+    }
 
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
     buildToolsVersion '30.0.2'
 }
+
 
 flutter {
     source '../..'
 }
 
 dependencies {
+    def billing_version = "5.0.0"
+    implementation "com.android.billingclient:billing:$billing_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

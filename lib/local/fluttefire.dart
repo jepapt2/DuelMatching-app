@@ -9,4 +9,6 @@ class LabelOverrides extends DefaultLocalizations {
   String get signInWithGoogleButtonText => 'Googleアカウントでログイン';
   @override
   String get signInWithAppleButtonText => 'Appleアカウントでログイン';
+  @override
+  String get unknownError => 'ログインはキャンセルされました';
 }

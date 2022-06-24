@@ -154,26 +154,31 @@ class FriendsWhenConsumer extends HookConsumerWidget {
         data: (friends) => child(friends),
         error: (error, stack) => Scaffold(
               appBar: AppBar(),
-              body: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text('アカウント情報の取得に失敗しました'),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                          textStyle: MaterialStateProperty.all(
-                              const TextStyle(fontWeight: FontWeight.bold)),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.redAccent)),
-                      child: const Text('更新する'),
-                      onPressed: () {
-                        ref.refresh(userProfileProvider(
-                            FirebaseAuth.instance.currentUser!.uid));
-                      },
-                    ),
-                  ],
-                ),
-              ),
+              body: DateTime.now().isAfter(FirebaseAuth
+                      .instance.currentUser!.metadata.creationTime!
+                      .add(const Duration(minutes: 1)))
+                  ? Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('アカウント情報の取得に失敗しました'),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                                textStyle: MaterialStateProperty.all(
+                                    const TextStyle(
+                                        fontWeight: FontWeight.bold)),
+                                backgroundColor: MaterialStateProperty.all(
+                                    Colors.redAccent)),
+                            child: const Text('更新する'),
+                            onPressed: () {
+                              ref.refresh(userProfileProvider(
+                                  FirebaseAuth.instance.currentUser!.uid));
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  : const Center(child: CircularProgressIndicator()),
             ),
         loading: () => Scaffold(
               appBar: AppBar(),

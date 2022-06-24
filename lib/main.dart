@@ -30,8 +30,6 @@ Future<void> main() async {
     provisional: false,
     sound: true,
   );
-  final token = await FirebaseMessaging.instance.getToken();
-  print('🐯 FCM TOKEN: $token');
   runApp(ProviderScope(
     child: MyApp(),
   ));

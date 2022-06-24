@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.duel_matching">
+    package="com.dairi.duelmatching">
+     <uses-permission android:name="com.android.vending.BILLING" />
    <application
         android:label="duel_matching"
         android:name="${applicationName}"

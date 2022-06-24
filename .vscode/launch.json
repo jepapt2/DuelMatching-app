@@ -9,7 +9,7 @@
       "request": "launch",
       "type": "dart",
       "flutterMode": "debug",
-      "args": ["--dart-define=FLAVOR=development"]
+      "args": ["--flavor development --dart-define=FLAVOR=development"]
     },
     {
       "name": "duel_matching (profile mode)",
