@@ -1,4 +1,4 @@
-package com.example.duel_matching
+package com.dairi.duelmatching
 
 import io.flutter.embedding.android.FlutterActivity
 

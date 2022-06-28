@@ -12,6 +12,7 @@ import 'package:duel_matching/screens/profile_edit.dart';
 import 'package:duel_matching/screens/recruit.dart';
 import 'package:duel_matching/screens/recruit_new.dart';
 import 'package:duel_matching/screens/recruits.dart';
+import 'package:duel_matching/screens/store.dart';
 import 'package:duel_matching/screens/user_profile.dart';
 import 'package:duel_matching/screens/users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -101,6 +102,10 @@ final router = GoRouter(
       GoRoute(
         path: '/joined',
         builder: (context, state) => const JoinedRecruitScreen(),
+      ),
+      GoRoute(
+        path: '/store',
+        builder: (context, state) => const StoreScreen(),
       ),
     ],
     redirect: (state) {

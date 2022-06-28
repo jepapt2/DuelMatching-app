@@ -1,4 +1,5 @@
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
+import 'package:duel_matching/gen/revenuecat_options.dart';
 import 'package:duel_matching/router.dart';
 import 'package:duel_matching/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +15,7 @@ import 'package:duel_matching/gen/firebase_options_production.dart'
     as production;
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 import 'local/fluttefire.dart';
 
@@ -30,6 +32,9 @@ Future<void> main() async {
     provisional: false,
     sound: true,
   );
+  await Purchases.setup(getRevenueCatApi());
+  Purchases.setDebugLogsEnabled(
+      const String.fromEnvironment('FLAVOR') == 'development');
   runApp(ProviderScope(
     child: MyApp(),
   ));
@@ -81,6 +86,7 @@ class MyApp extends HookWidget {
           'activeAt': DateTime.now(),
           'noticeToken': FieldValue.arrayUnion([token])
         });
+        await Purchases.logIn(user.uid);
       }
     });
 

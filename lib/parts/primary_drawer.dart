@@ -37,13 +37,12 @@ class PrimaryDrawer extends StatelessWidget {
                           height: 5.0,
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: Text(
                             profile.name,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
-                            style: const TextStyle(
-                                fontSize: 18.0, fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontSize: 18.0),
                           ),
                         )
                       ],
@@ -105,10 +104,18 @@ class PrimaryDrawer extends StatelessWidget {
           ),
           ListTile(
             minLeadingWidth: 0.0,
-            contentPadding: EdgeInsets.only(left: 5.0, right: 0.0),
+            contentPadding: const EdgeInsets.only(left: 5.0, right: 0.0),
+            leading: const Icon(Icons.subscriptions,
+                color: Color(0xffff8e3c), size: 22.0),
+            title: const Text('サブスクリプション'),
+            onTap: () => GoRouter.of(context).push('/store'),
+          ),
+          ListTile(
+            minLeadingWidth: 0.0,
+            contentPadding: const EdgeInsets.only(left: 5.0, right: 0.0),
             leading: Icon(
               Icons.manage_accounts_rounded,
-              color: Color(0xffff8e3c),
+              color: const Color(0xffff8e3c),
             ),
             title: Text('ログアウト'),
             onTap: () => FirebaseAuth.instance.signOut(),

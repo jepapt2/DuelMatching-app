@@ -22,6 +22,9 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
+// START: FlutterFire Configuration
+apply plugin: 'com.google.gms.google-services'
+// END: FlutterFire Configuration
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -67,30 +70,31 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
-    flavorDimensions "default"
-    productFlavors {
+    // flavorDimensions "default"
+    // productFlavors {
 
-        development {
-            dimension "default"
-            applicationId "com.dairi.duelmatching.development"
-        }
+    //     development {
+    //         dimension "default"
+    //         applicationId "com.dairi.duelmatching.development"
+    //     }
 
-        staging {
-            dimension "default"
-            applicationId "com.hoge.fuga.staging"
-        }
+    //     staging {
+    //         dimension "default"
+    //         applicationId "com.hoge.fuga.staging"
+    //     }
 
-        production {
-            dimension "default"
-            applicationId "com.hoge.fuga"
-        }
-    }
+    //     production {
+    //         dimension "default"
+    //         applicationId "com.hoge.fuga"
+    //     }
+    // }
 
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
+            //  signingConfig signingConfigs.debug
         }
     }
     buildToolsVersion '30.0.2'
@@ -102,6 +106,8 @@ flutter {
 }
 
 dependencies {
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    
     def billing_version = "5.0.0"
     implementation "com.android.billingclient:billing:$billing_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
