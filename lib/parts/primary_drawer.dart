@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../freezed/user_profile/user_profile.dart';
 
@@ -118,7 +119,10 @@ class PrimaryDrawer extends StatelessWidget {
               color: const Color(0xffff8e3c),
             ),
             title: Text('ログアウト'),
-            onTap: () => FirebaseAuth.instance.signOut(),
+            onTap: () async {
+              await FirebaseAuth.instance.signOut();
+              await Purchases.logOut();
+            },
           )
         ],
       ),

@@ -35,9 +35,15 @@ Future<void> main() async {
   await Purchases.setup(getRevenueCatApi());
   Purchases.setDebugLogsEnabled(
       const String.fromEnvironment('FLAVOR') == 'development');
+  Purchases.addPurchaserInfoUpdateListener(_purchaserInfoUpdated);
+
   runApp(ProviderScope(
     child: MyApp(),
   ));
+}
+
+void _purchaserInfoUpdated(PurchaserInfo info) {
+  print('purchaserInfoUpdated: $info');
 }
 
 FirebaseOptions getFirebaseOptions() {

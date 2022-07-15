@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 
 apply plugin: 'com.android.application'
 // START: FlutterFire Configuration
-apply plugin: 'com.google.gms.google-services'
+// apply plugin: 'com.google.gms.google-services'
 // END: FlutterFire Configuration
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -80,12 +80,12 @@ android {
 
     //     staging {
     //         dimension "default"
-    //         applicationId "com.hoge.fuga.staging"
+    //         applicationId "com.dairi.duelmatching.development"
     //     }
 
     //     production {
     //         dimension "default"
-    //         applicationId "com.hoge.fuga"
+    //         applicationId "com.dairi.duelmatching.development"
     //     }
     // }
 
@@ -108,7 +108,7 @@ flutter {
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:30.2.0')
     
-    def billing_version = "5.0.0"
+    def billing_version = "4.0.0"
     implementation "com.android.billingclient:billing:$billing_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
