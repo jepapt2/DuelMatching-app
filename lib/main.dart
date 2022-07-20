@@ -14,6 +14,7 @@ import 'package:duel_matching/gen/firebase_options_development.dart'
 import 'package:duel_matching/gen/firebase_options_production.dart'
     as production;
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
@@ -36,6 +37,7 @@ Future<void> main() async {
   Purchases.setDebugLogsEnabled(
       const String.fromEnvironment('FLAVOR') == 'development');
   Purchases.addPurchaserInfoUpdateListener(_purchaserInfoUpdated);
+  MobileAds.instance.initialize();
 
   runApp(ProviderScope(
     child: MyApp(),

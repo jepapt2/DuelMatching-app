@@ -40,6 +40,7 @@ class Profile with _$Profile {
     String? age,
     String? sex,
     bool? remoteDuel,
+    required final int friendCount,
     List<String>? blockList,
     List<String>? noticeToken,
     @TimestampConverter() DateTime? createdAt,

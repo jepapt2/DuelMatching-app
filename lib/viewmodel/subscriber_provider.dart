@@ -1,4 +1,5 @@
 import 'package:duel_matching/freezed/subscriber/subscriber.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -52,5 +53,26 @@ class SubscriberWhenConsumer extends HookConsumerWidget {
               appBar: AppBar(),
               body: const Center(child: CircularProgressIndicator()),
             ));
+  }
+}
+
+class SubscriberBannerWhenConsumer extends HookConsumerWidget {
+  const SubscriberBannerWhenConsumer({Key? key, required this.child})
+      : super(key: key);
+
+  final Widget Function(bool) child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final recruit =
+        ref.watch(subscriberProvider(FirebaseAuth.instance.currentUser!.uid));
+    final isSubscriber = !(recruit.value == null ||
+        recruit.value!.endAt!.isBefore(DateTime.now()));
+
+    return recruit.when(
+      data: (recruit) => child(isSubscriber),
+      error: (error, stack) => const SizedBox(),
+      loading: () => const SizedBox(),
+    );
   }
 }

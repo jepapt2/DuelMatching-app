@@ -379,6 +379,7 @@ class _$ProfileTearOff {
       String? age,
       String? sex,
       bool? remoteDuel,
+      required int friendCount,
       List<String>? blockList,
       List<String>? noticeToken,
       @TimestampConverter() DateTime? createdAt,
@@ -398,6 +399,7 @@ class _$ProfileTearOff {
       age: age,
       sex: sex,
       remoteDuel: remoteDuel,
+      friendCount: friendCount,
       blockList: blockList,
       noticeToken: noticeToken,
       createdAt: createdAt,
@@ -429,6 +431,7 @@ mixin _$Profile {
   String? get age => throw _privateConstructorUsedError;
   String? get sex => throw _privateConstructorUsedError;
   bool? get remoteDuel => throw _privateConstructorUsedError;
+  int get friendCount => throw _privateConstructorUsedError;
   List<String>? get blockList => throw _privateConstructorUsedError;
   List<String>? get noticeToken => throw _privateConstructorUsedError;
   @TimestampConverter()
@@ -460,6 +463,7 @@ abstract class $ProfileCopyWith<$Res> {
       String? age,
       String? sex,
       bool? remoteDuel,
+      int friendCount,
       List<String>? blockList,
       List<String>? noticeToken,
       @TimestampConverter() DateTime? createdAt,
@@ -490,6 +494,7 @@ class _$ProfileCopyWithImpl<$Res> implements $ProfileCopyWith<$Res> {
     Object? age = freezed,
     Object? sex = freezed,
     Object? remoteDuel = freezed,
+    Object? friendCount = freezed,
     Object? blockList = freezed,
     Object? noticeToken = freezed,
     Object? createdAt = freezed,
@@ -549,6 +554,10 @@ class _$ProfileCopyWithImpl<$Res> implements $ProfileCopyWith<$Res> {
           ? _value.remoteDuel
           : remoteDuel // ignore: cast_nullable_to_non_nullable
               as bool?,
+      friendCount: friendCount == freezed
+          ? _value.friendCount
+          : friendCount // ignore: cast_nullable_to_non_nullable
+              as int,
       blockList: blockList == freezed
           ? _value.blockList
           : blockList // ignore: cast_nullable_to_non_nullable
@@ -592,6 +601,7 @@ abstract class _$ProfileCopyWith<$Res> implements $ProfileCopyWith<$Res> {
       String? age,
       String? sex,
       bool? remoteDuel,
+      int friendCount,
       List<String>? blockList,
       List<String>? noticeToken,
       @TimestampConverter() DateTime? createdAt,
@@ -623,6 +633,7 @@ class __$ProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
     Object? age = freezed,
     Object? sex = freezed,
     Object? remoteDuel = freezed,
+    Object? friendCount = freezed,
     Object? blockList = freezed,
     Object? noticeToken = freezed,
     Object? createdAt = freezed,
@@ -682,6 +693,10 @@ class __$ProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
           ? _value.remoteDuel
           : remoteDuel // ignore: cast_nullable_to_non_nullable
               as bool?,
+      friendCount: friendCount == freezed
+          ? _value.friendCount
+          : friendCount // ignore: cast_nullable_to_non_nullable
+              as int,
       blockList: blockList == freezed
           ? _value.blockList
           : blockList // ignore: cast_nullable_to_non_nullable
@@ -723,6 +738,7 @@ class _$_Profile extends _Profile {
       this.age,
       this.sex,
       this.remoteDuel,
+      required this.friendCount,
       this.blockList,
       this.noticeToken,
       @TimestampConverter() this.createdAt,
@@ -760,6 +776,8 @@ class _$_Profile extends _Profile {
   @override
   final bool? remoteDuel;
   @override
+  final int friendCount;
+  @override
   final List<String>? blockList;
   @override
   final List<String>? noticeToken;
@@ -774,7 +792,7 @@ class _$_Profile extends _Profile {
 
   @override
   String toString() {
-    return 'Profile(name: $name, avatar: $avatar, header: $header, comment: $comment, introduction: $introduction, favorite: $favorite, playTitle: $playTitle, adress: $adress, activityDay: $activityDay, activityTime: $activityTime, age: $age, sex: $sex, remoteDuel: $remoteDuel, blockList: $blockList, noticeToken: $noticeToken, createdAt: $createdAt, activeAt: $activeAt, order: $order)';
+    return 'Profile(name: $name, avatar: $avatar, header: $header, comment: $comment, introduction: $introduction, favorite: $favorite, playTitle: $playTitle, adress: $adress, activityDay: $activityDay, activityTime: $activityTime, age: $age, sex: $sex, remoteDuel: $remoteDuel, friendCount: $friendCount, blockList: $blockList, noticeToken: $noticeToken, createdAt: $createdAt, activeAt: $activeAt, order: $order)';
   }
 
   @override
@@ -799,6 +817,8 @@ class _$_Profile extends _Profile {
             const DeepCollectionEquality().equals(other.sex, sex) &&
             const DeepCollectionEquality()
                 .equals(other.remoteDuel, remoteDuel) &&
+            const DeepCollectionEquality()
+                .equals(other.friendCount, friendCount) &&
             const DeepCollectionEquality().equals(other.blockList, blockList) &&
             const DeepCollectionEquality()
                 .equals(other.noticeToken, noticeToken) &&
@@ -808,26 +828,28 @@ class _$_Profile extends _Profile {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(name),
-      const DeepCollectionEquality().hash(avatar),
-      const DeepCollectionEquality().hash(header),
-      const DeepCollectionEquality().hash(comment),
-      const DeepCollectionEquality().hash(introduction),
-      const DeepCollectionEquality().hash(favorite),
-      const DeepCollectionEquality().hash(playTitle),
-      const DeepCollectionEquality().hash(adress),
-      const DeepCollectionEquality().hash(activityDay),
-      const DeepCollectionEquality().hash(activityTime),
-      const DeepCollectionEquality().hash(age),
-      const DeepCollectionEquality().hash(sex),
-      const DeepCollectionEquality().hash(remoteDuel),
-      const DeepCollectionEquality().hash(blockList),
-      const DeepCollectionEquality().hash(noticeToken),
-      const DeepCollectionEquality().hash(createdAt),
-      const DeepCollectionEquality().hash(activeAt),
-      const DeepCollectionEquality().hash(order));
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        const DeepCollectionEquality().hash(name),
+        const DeepCollectionEquality().hash(avatar),
+        const DeepCollectionEquality().hash(header),
+        const DeepCollectionEquality().hash(comment),
+        const DeepCollectionEquality().hash(introduction),
+        const DeepCollectionEquality().hash(favorite),
+        const DeepCollectionEquality().hash(playTitle),
+        const DeepCollectionEquality().hash(adress),
+        const DeepCollectionEquality().hash(activityDay),
+        const DeepCollectionEquality().hash(activityTime),
+        const DeepCollectionEquality().hash(age),
+        const DeepCollectionEquality().hash(sex),
+        const DeepCollectionEquality().hash(remoteDuel),
+        const DeepCollectionEquality().hash(friendCount),
+        const DeepCollectionEquality().hash(blockList),
+        const DeepCollectionEquality().hash(noticeToken),
+        const DeepCollectionEquality().hash(createdAt),
+        const DeepCollectionEquality().hash(activeAt),
+        const DeepCollectionEquality().hash(order)
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -855,6 +877,7 @@ abstract class _Profile extends Profile {
       String? age,
       String? sex,
       bool? remoteDuel,
+      required int friendCount,
       List<String>? blockList,
       List<String>? noticeToken,
       @TimestampConverter() DateTime? createdAt,
@@ -890,6 +913,8 @@ abstract class _Profile extends Profile {
   String? get sex;
   @override
   bool? get remoteDuel;
+  @override
+  int get friendCount;
   @override
   List<String>? get blockList;
   @override

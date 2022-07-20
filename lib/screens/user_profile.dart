@@ -3,6 +3,7 @@ import 'package:duel_matching/freezed/report/report.dart';
 import 'package:duel_matching/freezed/request/request.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/image.dart';
+import 'package:duel_matching/viewmodel/subscriber_provider.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -31,333 +32,382 @@ class UserProfileScreen extends HookConsumerWidget {
                 !user.blockList!
                     .contains(FirebaseAuth.instance.currentUser!.uid);
             bool isFriend = friends.map((f) => f.uid).toList().contains(id);
-            return Scaffold(
-              body: CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    stretchTriggerOffset: 50.0,
-                    automaticallyImplyLeading: false,
-                    shape: Border.all(width: 0, style: BorderStyle.none),
-                    centerTitle: true,
-                    pinned: true,
-                    expandedHeight: 285.0,
-                    leading: Center(
-                      child: GestureDetector(
-                        onTap: () => GoRouter.of(context).pop(),
-                        child: Stack(
-                            alignment: AlignmentDirectional.center,
-                            children: [
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white.withOpacity(0.5),
-                                ),
-                              ),
-                              const Icon(
-                                Icons.arrow_back,
-                                size: 26,
-                              )
-                            ]),
-                      ),
-                    ),
-                    actions: [
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                Container(
-                                  width: 30,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white.withOpacity(0.5),
-                                  ),
-                                ),
-                                PopupMenuButton(
-                                    itemBuilder: (BuildContext context) => [
-                                          PopupMenuItem(
-                                            child: const Text('フレンドから削除'),
-                                            onTap: () => friendDeleteDialog(
-                                                context, user.name, isFriend),
-                                            enabled: isFriend,
-                                          ),
-                                          PopupMenuItem(
-                                            child: const Text('このユーザをブロック'),
-                                            onTap: () => userBlockDialog(
-                                                context, user.name, isFriend),
-                                            enabled: isBlocked,
-                                          ),
-                                          PopupMenuItem(
-                                            child: const Text('このユーザを報告'),
-                                            onTap: () => userReportDialog(
-                                                context,
-                                                user.name,
-                                                myProfile.name,
-                                                isFriend),
-                                          )
-                                        ]),
-                              ]),
-                        ),
-                      ),
-                    ],
-                    flexibleSpace: FlexibleSpaceBar(
-                      collapseMode: CollapseMode.pin,
-                      centerTitle: true,
-                      title: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: FittedBox(
-                          fit: BoxFit.fitWidth,
-                          child: Column(
-                            children: [
-                              Text(
-                                user.name,
-                                style: const TextStyle(
-                                    color: Color(0xff2a2a2a),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      background: Stack(
-                          alignment: AlignmentDirectional.topCenter,
-                          children: [
-                            const SizedBox(
-                              height: 200,
-                            ),
-                            user.header.isNotNullAndNotEmpty
-                                ? Image.network(
-                                    user.header!,
-                                    width: double.infinity,
-                                    height: 200.0,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Container(
-                                    color: Colors.black54,
-                                    width: double.infinity,
-                                    height: 200.0,
-                                  ),
-                            Positioned(
-                              top: 150,
-                              child: AvatarImage(
-                                avatar: user.avatar,
-                                radius: 50,
-                              ),
-                            ),
-                          ]),
-                    ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        isBlocked
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  if (user.comment.isNotNullAndNotEmpty)
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 12.0),
-                                      child: Text(user.comment!),
-                                    ),
-                                  Visibility(
-                                    visible: user
-                                            .activityDay.isNotNullAndNotEmpty ||
-                                        user.activityTime
-                                            .isNotNullAndNotEmpty ||
-                                        user.adress.isNotNullAndNotEmpty ||
-                                        user.age.isNotNullAndNotEmpty ||
-                                        user.favorite.isNotNullAndNotEmpty ||
-                                        user.playTitle != null &&
-                                            user.playTitle!.isNotEmpty ||
-                                        user.remoteDuel != null ||
-                                        user.sex.isNotNullAndNotEmpty,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Card(
-                                        elevation: 10.0,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Table(
-                                            columnWidths: const <int,
-                                                TableColumnWidth>{
-                                              0: IntrinsicColumnWidth(),
-                                              1: FlexColumnWidth(10.0),
-                                            },
-                                            defaultVerticalAlignment:
-                                                TableCellVerticalAlignment
-                                                    .middle,
-                                            children: [
-                                              if (user.playTitle != null &&
-                                                  user.playTitle!.isNotEmpty)
-                                                TableRow(children: [
-                                                  const Text('プレイタイトル'),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Wrap(
-                                                        spacing: 2.0,
-                                                        runSpacing: 5.0,
-                                                        children: user
-                                                            .playTitle!
-                                                            .map((t) => Chip(
-                                                                materialTapTargetSize:
-                                                                    MaterialTapTargetSize
-                                                                        .shrinkWrap,
-                                                                label: Text(t)))
-                                                            .toList()),
-                                                  )
-                                                ]),
-                                              if (user.favorite
-                                                  .isNotNullAndNotEmpty)
-                                                TableRow(children: [
-                                                  const Text('好きなカード'),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(user.favorite!),
-                                                  )
-                                                ]),
-                                              if (user
-                                                  .adress.isNotNullAndNotEmpty)
-                                                TableRow(children: [
-                                                  const Text('居住地'),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(user.adress!),
-                                                  )
-                                                ]),
-                                              if (user.remoteDuel != null)
-                                                TableRow(children: [
-                                                  const Text('リモート対戦環境'),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(user.remoteDuel!
-                                                        ? 'あり'
-                                                        : 'なし'),
-                                                  )
-                                                ]),
-                                              if (user.activityDay
-                                                  .isNotNullAndNotEmpty)
-                                                TableRow(children: [
-                                                  const Text('活動日'),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child:
-                                                        Text(user.activityDay!),
-                                                  )
-                                                ]),
-                                              if (user.activityTime
-                                                  .isNotNullAndNotEmpty)
-                                                TableRow(children: [
-                                                  const Text('活動時間'),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                        user.activityTime!),
-                                                  )
-                                                ]),
-                                              if (user.age.isNotNullAndNotEmpty)
-                                                TableRow(children: [
-                                                  const Text('年齢'),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(user.age!),
-                                                  )
-                                                ]),
-                                              if (user.sex.isNotNullAndNotEmpty)
-                                                TableRow(children: [
-                                                  const Text('性別'),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(user.sex!),
-                                                  )
-                                                ]),
-                                            ],
-                                          ),
-                                        ),
+            return SubscriberWhenConsumer(
+                id: FirebaseAuth.instance.currentUser!.uid,
+                child: (isSubscribed) {
+                  int friendLimit = isSubscribed ? 30 : 10;
+                  return Scaffold(
+                    body: CustomScrollView(
+                      slivers: [
+                        SliverAppBar(
+                          stretchTriggerOffset: 50.0,
+                          automaticallyImplyLeading: false,
+                          shape: Border.all(width: 0, style: BorderStyle.none),
+                          centerTitle: true,
+                          pinned: true,
+                          expandedHeight: 285.0,
+                          leading: Center(
+                            child: GestureDetector(
+                              onTap: () => GoRouter.of(context).pop(),
+                              child: Stack(
+                                  alignment: AlignmentDirectional.center,
+                                  children: [
+                                    Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.white.withOpacity(0.5),
                                       ),
                                     ),
-                                  ),
-                                  if (user.introduction.isNotNullAndNotEmpty)
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Card(
-                                        elevation: 10.0,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: SizedBox(
-                                            width: double.infinity,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                const Text('自己紹介'),
-                                                const SizedBox(
-                                                  height: 20.0,
+                                    const Icon(
+                                      Icons.arrow_back,
+                                      size: 26,
+                                    )
+                                  ]),
+                            ),
+                          ),
+                          actions: [
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    children: [
+                                      Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.white.withOpacity(0.5),
+                                        ),
+                                      ),
+                                      PopupMenuButton(
+                                          itemBuilder: (BuildContext context) =>
+                                              [
+                                                PopupMenuItem(
+                                                  child: const Text('フレンドから削除'),
+                                                  onTap: () =>
+                                                      friendDeleteDialog(
+                                                          context,
+                                                          user.name,
+                                                          isFriend),
+                                                  enabled: isFriend,
                                                 ),
-                                                Text(user.introduction!)
-                                              ],
+                                                PopupMenuItem(
+                                                  child:
+                                                      const Text('このユーザをブロック'),
+                                                  onTap: () => userBlockDialog(
+                                                      context,
+                                                      user.name,
+                                                      isFriend),
+                                                  enabled: isBlocked,
+                                                ),
+                                                PopupMenuItem(
+                                                  child: const Text('このユーザを報告'),
+                                                  onTap: () => userReportDialog(
+                                                      context,
+                                                      user.name,
+                                                      myProfile.name,
+                                                      isFriend),
+                                                )
+                                              ]),
+                                    ]),
+                              ),
+                            ),
+                          ],
+                          flexibleSpace: FlexibleSpaceBar(
+                            collapseMode: CollapseMode.pin,
+                            centerTitle: true,
+                            title: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      user.name,
+                                      style: const TextStyle(
+                                          color: Color(0xff2a2a2a),
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            background: Stack(
+                                alignment: AlignmentDirectional.topCenter,
+                                children: [
+                                  const SizedBox(
+                                    height: 200,
+                                  ),
+                                  user.header.isNotNullAndNotEmpty
+                                      ? Image.network(
+                                          user.header!,
+                                          width: double.infinity,
+                                          height: 200.0,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Container(
+                                          color: Colors.black54,
+                                          width: double.infinity,
+                                          height: 200.0,
+                                        ),
+                                  Positioned(
+                                    top: 150,
+                                    child: AvatarImage(
+                                      avatar: user.avatar,
+                                      radius: 50,
+                                    ),
+                                  ),
+                                ]),
+                          ),
+                        ),
+                        SliverList(
+                          delegate: SliverChildListDelegate(
+                            [
+                              isBlocked
+                                  ? Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        if (user.comment.isNotNullAndNotEmpty)
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 12.0),
+                                            child: Text(user.comment!),
+                                          ),
+                                        Visibility(
+                                          visible: user.activityDay
+                                                  .isNotNullAndNotEmpty ||
+                                              user.activityTime
+                                                  .isNotNullAndNotEmpty ||
+                                              user.adress
+                                                  .isNotNullAndNotEmpty ||
+                                              user.age.isNotNullAndNotEmpty ||
+                                              user.favorite
+                                                  .isNotNullAndNotEmpty ||
+                                              user.playTitle != null &&
+                                                  user.playTitle!.isNotEmpty ||
+                                              user.remoteDuel != null ||
+                                              user.sex.isNotNullAndNotEmpty,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Card(
+                                              elevation: 10.0,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Table(
+                                                  columnWidths: const <int,
+                                                      TableColumnWidth>{
+                                                    0: IntrinsicColumnWidth(),
+                                                    1: FlexColumnWidth(10.0),
+                                                  },
+                                                  defaultVerticalAlignment:
+                                                      TableCellVerticalAlignment
+                                                          .middle,
+                                                  children: [
+                                                    if (user.playTitle !=
+                                                            null &&
+                                                        user.playTitle!
+                                                            .isNotEmpty)
+                                                      TableRow(children: [
+                                                        const Text('プレイタイトル'),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Wrap(
+                                                              spacing: 2.0,
+                                                              runSpacing: 5.0,
+                                                              children: user
+                                                                  .playTitle!
+                                                                  .map((t) => Chip(
+                                                                      materialTapTargetSize:
+                                                                          MaterialTapTargetSize
+                                                                              .shrinkWrap,
+                                                                      label: Text(
+                                                                          t)))
+                                                                  .toList()),
+                                                        )
+                                                      ]),
+                                                    if (user.favorite
+                                                        .isNotNullAndNotEmpty)
+                                                      TableRow(children: [
+                                                        const Text('好きなカード'),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(
+                                                              user.favorite!),
+                                                        )
+                                                      ]),
+                                                    if (user.adress
+                                                        .isNotNullAndNotEmpty)
+                                                      TableRow(children: [
+                                                        const Text('居住地'),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(
+                                                              user.adress!),
+                                                        )
+                                                      ]),
+                                                    if (user.remoteDuel != null)
+                                                      TableRow(children: [
+                                                        const Text('リモート対戦環境'),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(
+                                                              user.remoteDuel!
+                                                                  ? 'あり'
+                                                                  : 'なし'),
+                                                        )
+                                                      ]),
+                                                    if (user.activityDay
+                                                        .isNotNullAndNotEmpty)
+                                                      TableRow(children: [
+                                                        const Text('活動日'),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(user
+                                                              .activityDay!),
+                                                        )
+                                                      ]),
+                                                    if (user.activityTime
+                                                        .isNotNullAndNotEmpty)
+                                                      TableRow(children: [
+                                                        const Text('活動時間'),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(user
+                                                              .activityTime!),
+                                                        )
+                                                      ]),
+                                                    if (user.age
+                                                        .isNotNullAndNotEmpty)
+                                                      TableRow(children: [
+                                                        const Text('年齢'),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child:
+                                                              Text(user.age!),
+                                                        )
+                                                      ]),
+                                                    if (user.sex
+                                                        .isNotNullAndNotEmpty)
+                                                      TableRow(children: [
+                                                        const Text('性別'),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child:
+                                                              Text(user.sex!),
+                                                        )
+                                                      ]),
+                                                  ],
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
+                                        if (user
+                                            .introduction.isNotNullAndNotEmpty)
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Card(
+                                              elevation: 10.0,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: SizedBox(
+                                                  width: double.infinity,
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      const Text('自己紹介'),
+                                                      const SizedBox(
+                                                        height: 20.0,
+                                                      ),
+                                                      Text(user.introduction!)
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        const SizedBox(
+                                          height: 80.0,
+                                        )
+                                      ],
+                                    )
+                                  : Container(
+                                      color: const Color(0xffeff0f3),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: Column(
+                                          children: const [
+                                            Text(
+                                              'ブロックされています',
+                                              style: TextStyle(
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text('このユーザのプロフィールを見ることはできません'),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  const SizedBox(
-                                    height: 80.0,
-                                  )
-                                ],
-                              )
-                            : Container(
-                                color: const Color(0xffeff0f3),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: Column(
-                                    children: const [
-                                      Text(
-                                        'ブロックされています',
-                                        style: TextStyle(
-                                            fontSize: 20.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text('このユーザのプロフィールを見ることはできません'),
-                                    ],
-                                  ),
-                                ),
-                              )
+                                    )
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-              floatingActionButton: isBlocked && !isFriend
-                  ? FloatingActionButton(
-                      child: const FaIcon(
-                        FontAwesomeIcons.userPlus,
-                        color: Color(0xfffffffe),
-                      ),
-                      onPressed: () => friendRequestDialog(
-                          myProfile.name, myProfile.avatar, user.name, context))
-                  : null,
-            );
+                    floatingActionButton: isBlocked && !isFriend
+                        ? FloatingActionButton(
+                            child: const FaIcon(
+                              FontAwesomeIcons.userPlus,
+                              color: Color(0xfffffffe),
+                            ),
+                            onPressed: () {
+                              bool friendLimitOver =
+                                  myProfile.friendCount >= friendLimit;
+                              if (friendLimitOver) {
+                                Fluttertoast.showToast(
+                                    msg: 'フレンド枠がいっぱいです',
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.TOP,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 13.0);
+                              } else {
+                                friendRequestDialog(
+                                    myProfile.name,
+                                    myProfile.avatar,
+                                    friendLimitOver,
+                                    user.name,
+                                    context);
+                              }
+                            })
+                        : null,
+                  );
+                });
           },
           error: (error, stack) => Scaffold(
             appBar: AppBar(),
@@ -390,28 +440,39 @@ class UserProfileScreen extends HookConsumerWidget {
     );
   }
 
-  friendRequestDialog(
-      String sendName, String? sendAvatar, String name, BuildContext context) {
-    friendRequest() async {
-      Navigator.pop(context);
+  friendRequestDialog(String sendName, String? sendAvatar, bool friendLimitOver,
+      String name, BuildContext context) {
+    friendRequest(dialogContext) async {
+      Navigator.pop(dialogContext);
       try {
-        await requestDocument('${FirebaseAuth.instance.currentUser!.uid}_$id')
-            .set(Request(
-                sendId: FirebaseAuth.instance.currentUser!.uid,
-                sendName: sendName,
-                sendAvatar: sendAvatar.isNotNullAndNotEmpty ? sendAvatar : '',
-                recId: id,
-                permission: false,
-                rejection: false,
-                updateAt: DateTime.now()));
-        Fluttertoast.showToast(
-            msg: '$nameにフレンド申請しました',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.greenAccent,
-            textColor: Colors.white,
-            fontSize: 13.0);
+        if (friendLimitOver) {
+          Fluttertoast.showToast(
+              msg: 'フレンド枠がいっぱいです',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.TOP,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 13.0);
+        } else {
+          await requestDocument('${FirebaseAuth.instance.currentUser!.uid}_$id')
+              .set(Request(
+                  sendId: FirebaseAuth.instance.currentUser!.uid,
+                  sendName: sendName,
+                  sendAvatar: sendAvatar.isNotNullAndNotEmpty ? sendAvatar : '',
+                  recId: id,
+                  permission: false,
+                  rejection: false,
+                  updateAt: DateTime.now()));
+          Fluttertoast.showToast(
+              msg: '$nameにフレンド申請を送信しました',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.TOP,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.greenAccent,
+              textColor: Colors.white,
+              fontSize: 13.0);
+        }
       } catch (_) {
         Fluttertoast.showToast(
             msg: 'フレンド申請に失敗しました',
@@ -424,25 +485,27 @@ class UserProfileScreen extends HookConsumerWidget {
       }
     }
 
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return AlertDialog(
-            title: const Text('フレンド申請'),
-            content: Text("$nameにフレンド申請しますか？"),
-            actions: [
-              TextButton(
-                child: const Text("いいえ"),
-                onPressed: () => Navigator.pop(context),
-              ),
-              TextButton(
-                child: const Text("はい"),
-                onPressed: () => friendRequest(),
-              ),
-            ],
-          );
-        });
+    return Future.delayed(
+        const Duration(seconds: 0),
+        () => showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (dialogContext) {
+              return AlertDialog(
+                title: const Text('フレンド申請'),
+                content: Text("$nameにフレンド申請しますか？"),
+                actions: [
+                  TextButton(
+                    child: const Text("いいえ"),
+                    onPressed: () => Navigator.pop(dialogContext),
+                  ),
+                  TextButton(
+                    child: const Text("はい"),
+                    onPressed: () => friendRequest(dialogContext),
+                  ),
+                ],
+              );
+            }));
   }
 
   friendDocumentDelete(bool isFriend) async {
@@ -455,8 +518,8 @@ class UserProfileScreen extends HookConsumerWidget {
   }
 
   friendDeleteDialog(BuildContext context, String name, bool isFriend) {
-    friendDelete() async {
-      Navigator.pop(context);
+    friendDelete(dialogContext) async {
+      Navigator.pop(dialogContext);
       try {
         await friendDocumentDelete(isFriend);
         Fluttertoast.showToast(
@@ -484,18 +547,18 @@ class UserProfileScreen extends HookConsumerWidget {
         () => showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) {
+            builder: (dialogContext) {
               return AlertDialog(
                 title: const Text('フレンド削除'),
                 content: Text("$nameをフレンドから削除しますか？"),
                 actions: [
                   TextButton(
                     child: const Text("いいえ"),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => Navigator.pop(dialogContext),
                   ),
                   TextButton(
                     child: const Text("はい"),
-                    onPressed: () => friendDelete(),
+                    onPressed: () => friendDelete(dialogContext),
                   ),
                 ],
               );
@@ -503,8 +566,8 @@ class UserProfileScreen extends HookConsumerWidget {
   }
 
   userBlockDialog(BuildContext context, String name, bool isFriend) {
-    friendDelete() async {
-      Navigator.pop(context);
+    userBlock(dialogContext) async {
+      Navigator.pop(dialogContext);
       try {
         await friendDocumentDelete(isFriend);
         await userDocument(FirebaseAuth.instance.currentUser!.uid).update({
@@ -535,7 +598,7 @@ class UserProfileScreen extends HookConsumerWidget {
         () => showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) {
+            builder: (dialogContext) {
               return AlertDialog(
                 title: Text('$nameをブロック'),
                 content: const Text(
@@ -543,11 +606,11 @@ class UserProfileScreen extends HookConsumerWidget {
                 actions: [
                   TextButton(
                     child: const Text("いいえ"),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => Navigator.pop(dialogContext),
                   ),
                   TextButton(
                     child: const Text("はい"),
-                    onPressed: () => friendDelete(),
+                    onPressed: () => userBlock(dialogContext),
                   ),
                 ],
               );
@@ -557,7 +620,7 @@ class UserProfileScreen extends HookConsumerWidget {
   userReportDialog(
       BuildContext context, String reportName, String sendName, bool isFriend) {
     final _formKey = GlobalKey<FormBuilderState>();
-    userReport() async {
+    userReport(dialogContext) async {
       if (_formKey.currentState!.validate()) {
         try {
           _formKey.currentState!.save();
@@ -587,7 +650,7 @@ class UserProfileScreen extends HookConsumerWidget {
               textColor: Colors.white,
               fontSize: 13.0);
         } finally {
-          Navigator.pop(context);
+          Navigator.pop(dialogContext);
         }
       }
     }
@@ -596,13 +659,13 @@ class UserProfileScreen extends HookConsumerWidget {
         const Duration(seconds: 0),
         () => showDialog(
             context: context,
-            builder: (context) => SimpleDialog(
+            builder: (dialogContext) => SimpleDialog(
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text('ユーザを報告'),
                       IconButton(
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () => Navigator.pop(dialogContext),
                           icon: const Icon(Icons.close))
                     ],
                   ),
@@ -673,7 +736,7 @@ class UserProfileScreen extends HookConsumerWidget {
                                   height: 10.0,
                                 ),
                                 TextButton(
-                                  onPressed: () => userReport(),
+                                  onPressed: () => userReport(dialogContext),
                                   child: const Text('報告する'),
                                 )
                               ],

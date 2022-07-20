@@ -22,6 +22,7 @@ _$_Profile _$$_ProfileFromJson(Map<String, dynamic> json) => _$_Profile(
       age: json['age'] as String?,
       sex: json['sex'] as String?,
       remoteDuel: json['remoteDuel'] as bool?,
+      friendCount: json['friendCount'] as int,
       blockList: (json['blockList'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -50,6 +51,7 @@ Map<String, dynamic> _$$_ProfileToJson(_$_Profile instance) =>
       'age': instance.age,
       'sex': instance.sex,
       'remoteDuel': instance.remoteDuel,
+      'friendCount': instance.friendCount,
       'blockList': instance.blockList,
       'noticeToken': instance.noticeToken,
       'createdAt': const TimestampConverter().toJson(instance.createdAt),

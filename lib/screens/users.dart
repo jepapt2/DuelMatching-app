@@ -1,6 +1,7 @@
 import 'package:duel_matching/freezed/users_view.dart/users_view.dart';
 import 'package:duel_matching/input_options/adress.dart';
 import 'package:duel_matching/input_options/play_title.dart';
+import 'package:duel_matching/parts/adbanner.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/parts/primary_sliverappbar.dart';
 import 'package:duel_matching/parts/scroll_detector.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class UsersScreen extends HookConsumerWidget {
