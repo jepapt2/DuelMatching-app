@@ -27,13 +27,15 @@ class PrimaryButtomNavigationBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          SubscriberBannerWhenConsumer(child: (isSubscribed) {
-            if (!isSubscribed) {
-              return const AdBanner(size: AdSize.fullBanner);
-            } else {
-              return const SizedBox();
-            }
-          }),
+          SubscriberBannerWhenConsumer(
+              id: FirebaseAuth.instance.currentUser!.uid,
+              child: (isSubscribed) {
+                if (!isSubscribed) {
+                  return const AdBanner(size: AdSize.fullBanner);
+                } else {
+                  return const SizedBox();
+                }
+              }),
           BottomNavigationBar(
             currentIndex: pageIndex,
             onTap: (index) {

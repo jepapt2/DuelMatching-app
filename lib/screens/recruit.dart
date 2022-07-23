@@ -378,8 +378,8 @@ class RecruitScreen extends HookConsumerWidget {
   }
 
   memberExitDialog(BuildContext context) {
-    memberExit() async {
-      Navigator.pop(context);
+    memberExit(dialogContext) async {
+      Navigator.pop(dialogContext);
       try {
         await membersCollection(id)
             .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -409,18 +409,18 @@ class RecruitScreen extends HookConsumerWidget {
         () => showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) {
+            builder: (dialogContext) {
               return AlertDialog(
                 title: const Text('グループから抜ける'),
                 content: const Text("このグループから退出しますか？"),
                 actions: [
                   TextButton(
                     child: const Text("いいえ"),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => Navigator.pop(dialogContext),
                   ),
                   TextButton(
                     child: const Text("はい"),
-                    onPressed: () => memberExit(),
+                    onPressed: () => memberExit(dialogContext),
                   ),
                 ],
               );
@@ -428,8 +428,8 @@ class RecruitScreen extends HookConsumerWidget {
   }
 
   recruitCancelDialog(BuildContext context) {
-    recruitCancel() async {
-      Navigator.pop(context);
+    recruitCancel(dialogContext) async {
+      Navigator.pop(dialogContext);
       try {
         await recruitDocument(id).update({'cancel': true});
         Fluttertoast.showToast(
@@ -457,7 +457,7 @@ class RecruitScreen extends HookConsumerWidget {
         () => showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) {
+            builder: (dialogContext) {
               return AlertDialog(
                 title: const Text('募集のキャンセル'),
                 content:
@@ -465,11 +465,11 @@ class RecruitScreen extends HookConsumerWidget {
                 actions: [
                   TextButton(
                     child: const Text("いいえ"),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => Navigator.pop(dialogContext),
                   ),
                   TextButton(
                     child: const Text("はい"),
-                    onPressed: () => recruitCancel(),
+                    onPressed: () => recruitCancel(dialogContext),
                   ),
                 ],
               );
@@ -479,8 +479,8 @@ class RecruitScreen extends HookConsumerWidget {
   Widget joinButton(Profile myProfile, Recruit recruit, List<Member> members,
       List<FriendWithId> organizerFriends, BuildContext context) {
     joinDialog() {
-      joinMember() async {
-        Navigator.pop(context);
+      joinMember(dialogContext) async {
+        Navigator.pop(dialogContext);
         try {
           if (recruit.cancel ||
               (recruit.recruitNumber <= members.length - 1) ||
@@ -532,18 +532,18 @@ class RecruitScreen extends HookConsumerWidget {
           () => showDialog(
               context: context,
               barrierDismissible: false,
-              builder: (_) {
+              builder: (dialogContext) {
                 return AlertDialog(
                   title: const Text('参加'),
                   content: const Text("この対戦募集に参加しますか？"),
                   actions: [
                     TextButton(
                       child: const Text("いいえ"),
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => Navigator.pop(dialogContext),
                     ),
                     TextButton(
                       child: const Text("はい"),
-                      onPressed: () => joinMember(),
+                      onPressed: () => joinMember(dialogContext),
                     ),
                   ],
                 );

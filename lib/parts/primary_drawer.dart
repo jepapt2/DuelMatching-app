@@ -1,4 +1,5 @@
 import 'package:duel_matching/parts/image.dart';
+import 'package:duel_matching/viewmodel/subscriber_provider.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -111,19 +112,27 @@ class PrimaryDrawer extends StatelessWidget {
             title: const Text('サブスクリプション'),
             onTap: () => GoRouter.of(context).push('/store'),
           ),
-          ListTile(
-            minLeadingWidth: 0.0,
-            contentPadding: const EdgeInsets.only(left: 5.0, right: 0.0),
-            leading: Icon(
-              Icons.manage_accounts_rounded,
-              color: const Color(0xffff8e3c),
-            ),
-            title: Text('ログアウト'),
-            onTap: () async {
-              await FirebaseAuth.instance.signOut();
-              await Purchases.logOut();
-            },
-          )
+          Consumer(builder: (context, ref, _) {
+            return ListTile(
+              minLeadingWidth: 0.0,
+              contentPadding: const EdgeInsets.only(left: 5.0, right: 0.0),
+              leading: Icon(
+                Icons.manage_accounts_rounded,
+                color: const Color(0xffff8e3c),
+              ),
+              title: Text('ログアウト'),
+              onTap: () async {
+                GoRouter.of(context).go('/logout');
+                Future.delayed(
+                    const Duration(
+                      seconds: 1,
+                    ), () async {
+                  await Purchases.logOut();
+                  await FirebaseAuth.instance.signOut();
+                });
+              },
+            );
+          })
         ],
       ),
     );

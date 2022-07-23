@@ -1,6 +1,9 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:duel_matching/freezed/notice/notice.dart';
 import 'package:duel_matching/freezed/request/request.dart';
 import 'package:duel_matching/parts/image.dart';
+import 'package:duel_matching/viewmodel/subscriber_provider.dart';
+import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firestore_ref/firestore_ref.dart';
 import 'package:flutter/material.dart';
@@ -301,112 +304,167 @@ class FriendRequestNotice extends HookWidget {
             .update({'read': true});
       }, []);
     }
-    return Stack(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GestureDetector(
-              onTap: () => GoRouter.of(context).push('/user/$recId'),
-              child: Stack(children: [
-                AvatarImage(avatar: recAvatar, radius: 25),
-                const Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: FaIcon(
-                      FontAwesomeIcons.solidEnvelope,
-                      color: Color(0xffff8e3c),
-                      size: 18,
-                    ))
-              ]),
-            ),
-            const SizedBox(
-              width: 10.0,
-            ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return UserWhenConsumer(
+        id: FirebaseAuth.instance.currentUser!.uid,
+        child: (myProfile) {
+          return SubscriberBannerWhenConsumer(
+              id: FirebaseAuth.instance.currentUser!.uid,
+              child: (isSubscribed) {
+                int friendLimit = isSubscribed ? 30 : 10;
+                bool friendLimitOver = myProfile.friendCount >= friendLimit;
+                return Stack(
                   children: [
-                    RichText(
-                        text: TextSpan(
-                            style: const TextStyle(color: Color(0xff2a2a2a)),
-                            children: [
-                          TextSpan(
-                            text: recName,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          const TextSpan(text: 'からフレンド申請が届きました')
-                        ])),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ElevatedButton(
-                            onPressed: () => requestPermissionDialog(context),
-                            child: const Text('承認する')),
-                        const SizedBox(
-                          width: 20.0,
+                        GestureDetector(
+                          onTap: () =>
+                              GoRouter.of(context).push('/user/$recId'),
+                          child: Stack(children: [
+                            AvatarImage(avatar: recAvatar, radius: 25),
+                            const Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: FaIcon(
+                                  FontAwesomeIcons.solidEnvelope,
+                                  color: Color(0xffff8e3c),
+                                  size: 18,
+                                ))
+                          ]),
                         ),
-                        OutlinedButton(
-                            onPressed: () => requestRejectionDialog(context),
-                            child: Text('拒否する'))
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                    text: TextSpan(
+                                        style: const TextStyle(
+                                            color: Color(0xff2a2a2a)),
+                                        children: [
+                                      TextSpan(
+                                        text: recName,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const TextSpan(text: 'からフレンド申請が届きました')
+                                    ])),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    ElevatedButton(
+                                        onPressed: () =>
+                                            requestPermissionDialog(
+                                                context, friendLimitOver),
+                                        child: const Text('承認する')),
+                                    const SizedBox(
+                                      width: 20.0,
+                                    ),
+                                    OutlinedButton(
+                                        onPressed: () =>
+                                            requestRejectionDialog(context),
+                                        child: Text('拒否する'))
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Column(
+                          children: [
+                            if (DateTime(updateAt.year, updateAt.month,
+                                    updateAt.day, 0, 0, 0) ==
+                                DateTime(
+                                    DateTime.now().year,
+                                    DateTime.now().month,
+                                    DateTime.now().day,
+                                    0,
+                                    0,
+                                    0))
+                              Text(
+                                DateFormat('H:mm').format(updateAt),
+                                style: const TextStyle(color: Colors.black54),
+                              )
+                            else
+                              Text(
+                                DateFormat('M/d').format(updateAt),
+                                style: const TextStyle(color: Colors.black54),
+                              ),
+                          ],
+                        )
                       ],
                     )
                   ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 10.0,
-            ),
-            Column(
-              children: [
-                if (DateTime(
-                        updateAt.year, updateAt.month, updateAt.day, 0, 0, 0) ==
-                    DateTime(DateTime.now().year, DateTime.now().month,
-                        DateTime.now().day, 0, 0, 0))
-                  Text(
-                    DateFormat('H:mm').format(updateAt),
-                    style: const TextStyle(color: Colors.black54),
-                  )
-                else
-                  Text(
-                    DateFormat('M/d').format(updateAt),
-                    style: const TextStyle(color: Colors.black54),
-                  ),
-              ],
-            )
-          ],
-        )
-      ],
-    );
+                );
+              });
+        });
   }
 
-  requestPermissionDialog(BuildContext context) {
-    requestPermission() async {
-      Navigator.pop(context);
-      try {
-        await requestDocument(
-                '${recId}_${FirebaseAuth.instance.currentUser!.uid}')
-            .update({'permission': true});
+  requestPermissionDialog(BuildContext context, bool friendLimitOver) {
+    requestPermission(dialogContext) async {
+      Navigator.pop(dialogContext);
+      if (friendLimitOver) {
         Fluttertoast.showToast(
-            msg: '$recNameとフレンドになりました',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.greenAccent,
-            textColor: Colors.white,
-            fontSize: 13.0);
-      } catch (_) {
-        Fluttertoast.showToast(
-            msg: 'フレンド追加処理に失敗しました',
+            msg: 'フレンド枠がいっぱいです',
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.TOP,
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.red,
             textColor: Colors.white,
             fontSize: 13.0);
+      } else {
+        try {
+          final func = FirebaseFunctions.instanceFor(region: 'asia-northeast1')
+              .httpsCallable('friend-onRequestPermission');
+          final result = await func.call({
+            'recId': recId,
+            'sendId': FirebaseAuth.instance.currentUser!.uid
+          });
+          if (result.data == 'recFriendOver') {
+            Fluttertoast.showToast(
+                msg: '$recNameのフレンド枠がいっぱいなので登録に失敗しました',
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.TOP,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 13.0);
+          } else if (result.data == 'sendFriendOver') {
+            Fluttertoast.showToast(
+                msg: 'フレンド枠がいっぱいです',
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.TOP,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 13.0);
+          } else if (result.data == 'friendCreate') {
+            Fluttertoast.showToast(
+                msg: '$recNameとフレンドになりました',
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.TOP,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.greenAccent,
+                textColor: Colors.white,
+                fontSize: 13.0);
+          }
+        } catch (_) {
+          Fluttertoast.showToast(
+              msg: 'フレンド追加処理に失敗しました',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.TOP,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 13.0);
+        }
       }
     }
 
@@ -415,18 +473,18 @@ class FriendRequestNotice extends HookWidget {
         () => showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) {
+            builder: (dialogContext) {
               return AlertDialog(
                 title: const Text('フレンド承認'),
                 content: Text("$recNameをフレンド登録しますか？"),
                 actions: [
                   TextButton(
                     child: const Text("いいえ"),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => Navigator.pop(dialogContext),
                   ),
                   TextButton(
                     child: const Text("はい"),
-                    onPressed: () => requestPermission(),
+                    onPressed: () => requestPermission(dialogContext),
                   ),
                 ],
               );
@@ -434,12 +492,13 @@ class FriendRequestNotice extends HookWidget {
   }
 
   requestRejectionDialog(BuildContext context) {
-    requestRejection() async {
-      Navigator.pop(context);
+    requestRejection(dialogContext) async {
+      Navigator.pop(dialogContext);
       try {
-        await requestDocument(
-                '${recId}_${FirebaseAuth.instance.currentUser!.uid}')
-            .update({'rejection': true});
+        final func = FirebaseFunctions.instanceFor(region: 'asia-northeast1')
+            .httpsCallable('friend-onRequestRejection');
+        await func.call(
+            {'recId': recId, 'sendId': FirebaseAuth.instance.currentUser!.uid});
         Fluttertoast.showToast(
             msg: '$recNameのフレンド申請を拒否しました',
             toastLength: Toast.LENGTH_SHORT,
@@ -465,18 +524,18 @@ class FriendRequestNotice extends HookWidget {
         () => showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) {
+            builder: (dialogContext) {
               return AlertDialog(
                 title: const Text('フレンド申請拒否'),
                 content: const Text("フレンド申請を拒否すると通知から削除されます"),
                 actions: [
                   TextButton(
                     child: const Text("いいえ"),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => Navigator.pop(dialogContext),
                   ),
                   TextButton(
                     child: const Text("はい"),
-                    onPressed: () => requestRejection(),
+                    onPressed: () => requestRejection(dialogContext),
                   ),
                 ],
               );

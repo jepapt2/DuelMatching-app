@@ -5,6 +5,7 @@ import 'package:duel_matching/screens/friends.dart';
 import 'package:duel_matching/screens/group_chat.dart';
 import 'package:duel_matching/screens/joined_recruit.dart';
 import 'package:duel_matching/screens/login.dart';
+import 'package:duel_matching/screens/logout.dart';
 import 'package:duel_matching/screens/notice.dart';
 import 'package:duel_matching/screens/my_profile.dart';
 import 'package:duel_matching/screens/notice_redirect.dart';
@@ -106,6 +107,10 @@ final router = GoRouter(
       GoRoute(
         path: '/store',
         builder: (context, state) => const StoreScreen(),
+      ),
+      GoRoute(
+        path: '/logout',
+        builder: (context, state) => const LogoutScreen(),
       ),
     ],
     redirect: (state) {

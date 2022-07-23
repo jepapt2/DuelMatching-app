@@ -1,13 +1,12 @@
 import 'package:duel_matching/freezed/subscriber/subscriber.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final subscriberProvider =
-    StreamProvider.family<Subscriber?, String>((ref, id) {
+    StreamProvider.autoDispose.family<Subscriber?, String>((ref, id) {
   final document = subscriberDocument(id);
   final snapshot = document.snapshots();
-  final doc = snapshot.map((event) => event.data());
+  final doc = snapshot.map((doc) => doc.data());
   return doc;
 });
 
@@ -21,11 +20,11 @@ class SubscriberWhenConsumer extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final recruit = ref.watch(subscriberProvider(id));
-    final isSubscriber = !(recruit.value == null ||
-        recruit.value!.endAt!.isBefore(DateTime.now()));
+    final subscriber = ref.watch(subscriberProvider(id));
+    final isSubscriber = !(subscriber.value == null ||
+        subscriber.value!.endAt!.isBefore(DateTime.now()));
 
-    return recruit.when(
+    return subscriber.when(
         data: (recruit) => child(isSubscriber),
         error: (error, stack) => Scaffold(
               appBar: AppBar(),
@@ -57,15 +56,16 @@ class SubscriberWhenConsumer extends HookConsumerWidget {
 }
 
 class SubscriberBannerWhenConsumer extends HookConsumerWidget {
-  const SubscriberBannerWhenConsumer({Key? key, required this.child})
+  const SubscriberBannerWhenConsumer(
+      {Key? key, required this.child, required this.id})
       : super(key: key);
 
   final Widget Function(bool) child;
+  final String id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final recruit =
-        ref.watch(subscriberProvider(FirebaseAuth.instance.currentUser!.uid));
+    final recruit = ref.watch(subscriberProvider(id));
     final isSubscriber = !(recruit.value == null ||
         recruit.value!.endAt!.isBefore(DateTime.now()));
 

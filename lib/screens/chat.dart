@@ -46,8 +46,10 @@ class ChatScreen extends HookWidget {
             );
           }, []);
 
-          Partner partner = partners.singleWhere((element) =>
-              element.uid != FirebaseAuth.instance.currentUser!.uid);
+          Partner partner = partners.singleWhere(
+              (element) =>
+                  element.uid != FirebaseAuth.instance.currentUser!.uid,
+              orElse: () => Partner(uid: 'error', name: 'エラー'));
 
           return Consumer(builder: (context, ref, _) {
             ref.listen<AppLifecycleState>(appLifecycleProvider,
