@@ -55,6 +55,7 @@ class RecruitsScreen extends HookConsumerWidget {
                 slivers: [
                   PrimarySliverAppBar(
                     user: user,
+                    appBarText: '対戦募集',
                     appBarAction: [
                       IconButton(
                           iconSize: 33,

@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -70,7 +71,29 @@ class LoginScreen extends StatelessWidget {
               ),
               const SizedBox(
                 height: 50.0,
-              )
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                      onPressed: () =>
+                          launchUrl(Uri.parse('https://duelmatching.com/tos')),
+                      child: const Text(
+                        '利用規約',
+                        style: TextStyle(color: Colors.blueAccent),
+                      )),
+                  TextButton(
+                      onPressed: () => launchUrl(
+                          Uri.parse('https://duelmatching.com/policie')),
+                      child: const Text(
+                        'プライバシーポリシー',
+                        style: TextStyle(color: Colors.blueAccent),
+                      )),
+                ],
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
             ],
           ),
         ),

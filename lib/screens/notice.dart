@@ -41,7 +41,8 @@ class NoticeScreen extends HookConsumerWidget {
             slivers: [
               PrimarySliverAppBar(
                 user: user,
-                appBarAction: [],
+                appBarText: '通知',
+                appBarAction: const [],
               ),
               SliverList(
                   delegate: SliverChildListDelegate([

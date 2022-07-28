@@ -55,6 +55,7 @@ class UsersScreen extends HookConsumerWidget {
                 controller: controller,
                 slivers: [
                   PrimarySliverAppBar(
+                    appBarText: 'ユーザ一覧',
                     user: user,
                     appBarAction: [
                       IconButton(
