@@ -23,6 +23,9 @@ class UserProfileScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userProfile = ref.watch(disposeProfileProvider(id));
+    final double appbarSize = MediaQuery.of(context).size.height / 2.1 >= 310
+        ? MediaQuery.of(context).size.height / 2.1
+        : 310;
 
     return UserWhenConsumer(
       child: (myProfile) => FriendsWhenConsumer(
@@ -45,7 +48,7 @@ class UserProfileScreen extends HookConsumerWidget {
                           shape: Border.all(width: 0, style: BorderStyle.none),
                           centerTitle: true,
                           pinned: true,
-                          expandedHeight: 285.0,
+                          expandedHeight: appbarSize,
                           leading: Center(
                             child: GestureDetector(
                               onTap: () => GoRouter.of(context).pop(),

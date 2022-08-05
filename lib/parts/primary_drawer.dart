@@ -116,20 +116,21 @@ class PrimaryDrawer extends StatelessWidget {
             return ListTile(
               minLeadingWidth: 0.0,
               contentPadding: const EdgeInsets.only(left: 5.0, right: 0.0),
-              leading: Icon(
+              leading: const Icon(
                 Icons.manage_accounts_rounded,
-                color: const Color(0xffff8e3c),
+                color: Color(0xffff8e3c),
               ),
-              title: Text('ログアウト'),
-              onTap: () async {
-                GoRouter.of(context).go('/logout');
-                Future.delayed(
-                    const Duration(
-                      seconds: 1,
-                    ), () async {
-                  await Purchases.logOut();
-                  await FirebaseAuth.instance.signOut();
-                });
+              title: const Text('アカウント'),
+              onTap: () {
+                GoRouter.of(context).push('/account');
+                // GoRouter.of(context).go('/logout');
+                // Future.delayed(
+                //     const Duration(
+                //       seconds: 1,
+                //     ), () async {
+                //   await Purchases.logOut();
+                //   await FirebaseAuth.instance.signOut();
+                // });
               },
             );
           })

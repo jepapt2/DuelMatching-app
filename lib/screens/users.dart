@@ -138,37 +138,38 @@ class UsersScreen extends HookConsumerWidget {
                             ),
                           )
                         else
-                          GridView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 1,
-                                crossAxisSpacing: 5,
-                                childAspectRatio: 1,
-                              ),
-                              itemCount: usersController.list?.length != null
-                                  ? usersController.list!.length
-                                  : 0,
-                              itemBuilder: (context, int index) {
-                                return GestureDetector(
-                                  onTap: () => GoRouter.of(context).push(
-                                      '/user/${usersController.list![index].id}'),
-                                  child: UserCard(
-                                    name: usersController
-                                        .list![index].profile.name,
-                                    avatar: usersController
-                                        .list![index].profile.avatar,
-                                    adress: usersController
-                                        .list![index].profile.adress,
-                                    favorite: usersController
-                                        .list![index].profile.favorite,
-                                    comment: usersController
-                                        .list![index].profile.comment,
-                                  ),
-                                );
-                              }),
+                          const SizedBox(height: 30.0),
+                        GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 1,
+                              crossAxisSpacing: 5,
+                              childAspectRatio: 1,
+                            ),
+                            itemCount: usersController.list?.length != null
+                                ? usersController.list!.length
+                                : 0,
+                            itemBuilder: (context, int index) {
+                              return GestureDetector(
+                                onTap: () => GoRouter.of(context).push(
+                                    '/user/${usersController.list![index].id}'),
+                                child: UserCard(
+                                  name:
+                                      usersController.list![index].profile.name,
+                                  avatar: usersController
+                                      .list![index].profile.avatar,
+                                  adress: usersController
+                                      .list![index].profile.adress,
+                                  favorite: usersController
+                                      .list![index].profile.favorite,
+                                  comment: usersController
+                                      .list![index].profile.comment,
+                                ),
+                              );
+                            }),
                         const SizedBox(
                           height: 100.0,
                         ),

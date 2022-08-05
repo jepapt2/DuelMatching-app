@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:duel_matching/viewmodel/purchases_notifier.dart';
 import 'package:duel_matching/viewmodel/subscriber_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final purchasesStoreProvider = FutureProvider.autoDispose<Offerings>(
     (ref) async => await Purchases.getOfferings());
@@ -106,6 +110,34 @@ class StoreScreen extends HookConsumerWidget {
                     ),
                   ),
                 ),
+                Visibility(
+                  visible: Platform.isIOS,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextButton(
+                      onPressed: () => launchUrl(Uri.parse(
+                          'https://support.apple.com/ja-jp/HT202039')),
+                      child: const Text(
+                        '退会の手順はこちらをご覧ください',
+                        style: TextStyle(color: Colors.blueAccent),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: Platform.isAndroid,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextButton(
+                      onPressed: () => launchUrl(Uri.parse(
+                          'https://support.google.com/googleplay/answer/7018481')),
+                      child: const Text(
+                        '退会の手順はこちらをご覧ください',
+                        style: TextStyle(color: Colors.blueAccent),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -114,7 +146,26 @@ class StoreScreen extends HookConsumerWidget {
     }, error: (Object error, StackTrace? stackTrace) {
       return Scaffold(
         appBar: AppBar(),
-        body: Center(),
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('サブスクリプション情報の取得に失敗しました'),
+              ElevatedButton(
+                style: ButtonStyle(
+                    textStyle: MaterialStateProperty.all(
+                        const TextStyle(fontWeight: FontWeight.bold)),
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.redAccent)),
+                child: const Text('更新する'),
+                onPressed: () {
+                  GoRouter.of(context).pop();
+                  GoRouter.of(context).push('/store');
+                },
+              ),
+            ],
+          ),
+        ),
       );
     }, loading: () {
       return Scaffold(

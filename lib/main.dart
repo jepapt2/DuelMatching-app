@@ -72,31 +72,32 @@ class MyApp extends HookWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    useEffect(() {
-      // トークンの取得
+    // useEffect(() {
+    //   // トークンの取得
 
-      Future(() async {
-        if (FirebaseAuth.instance.currentUser != null) {
-          final token = await FirebaseMessaging.instance.getToken();
-          userDocument(FirebaseAuth.instance.currentUser!.uid).update({
-            'activeAt': DateTime.now().toUtc(),
-            'noticeToken': FieldValue.arrayUnion([token])
-          });
-        }
-      });
-    }, const []);
+    //   Future(() async {
+    //     if (FirebaseAuth.instance.currentUser != null) {
+    //       final token = await FirebaseMessaging.instance.getToken();
+    //       userDocument(FirebaseAuth.instance.currentUser!.uid).update({
+    //         'activeAt': DateTime.now().toUtc(),
+    //         'noticeToken': FieldValue.arrayUnion([token])
+    //       });
+    //     }
+    //   });
+    // }, const []);
 
-    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-      if (user != null) {
-        final token = await FirebaseMessaging.instance.getToken();
+    // FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+    //   if (user != null) {
+    //     final token = await FirebaseMessaging.instance.getToken();
 
-        userDocument(user.uid).update({
-          'activeAt': DateTime.now(),
-          'noticeToken': FieldValue.arrayUnion([token])
-        });
-        await Purchases.logIn(user.uid);
-      }
-    });
+    //     FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+    //       'activeAt': DateTime.now(),
+    //       'noticeToken': FieldValue.arrayUnion([token])
+    //     });
+
+    //     await Purchases.logIn(user.uid);
+    //   }
+    // });
 
     return MaterialApp.router(
       localizationsDelegates: [

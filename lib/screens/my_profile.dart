@@ -15,6 +15,9 @@ class MyProfileScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final double appbarSize = MediaQuery.of(context).size.height / 2.1 >= 310
+        ? MediaQuery.of(context).size.height / 2.1
+        : 310;
     return UserWhenConsumer(
       child: (user) => Scaffold(
         body: CustomScrollView(
@@ -24,7 +27,7 @@ class MyProfileScreen extends HookConsumerWidget {
               shape: Border.all(width: 0, style: BorderStyle.none),
               centerTitle: true,
               pinned: true,
-              expandedHeight: 285.0,
+              expandedHeight: appbarSize,
               leading: Center(
                 child: GestureDetector(
                   onTap: () => GoRouter.of(context).pop(),

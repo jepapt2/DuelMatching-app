@@ -1,4 +1,5 @@
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
+import 'package:duel_matching/screens/account.dart';
 import 'package:duel_matching/screens/block_list.dart';
 import 'package:duel_matching/screens/chat.dart';
 import 'package:duel_matching/screens/friends.dart';
@@ -111,6 +112,10 @@ final router = GoRouter(
       GoRoute(
         path: '/logout',
         builder: (context, state) => const LogoutScreen(),
+      ),
+      GoRoute(
+        path: '/account',
+        builder: (context, state) => AccountScreen(),
       ),
     ],
     redirect: (state) {

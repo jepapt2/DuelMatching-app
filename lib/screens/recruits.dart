@@ -72,6 +72,9 @@ class RecruitsScreen extends HookConsumerWidget {
                   SliverList(
                     delegate: SliverChildListDelegate(
                       [
+                        const SizedBox(
+                          height: 20.0,
+                        ),
                         if (recruitsController.list == null &&
                             recruitsController.loading)
                           Center(

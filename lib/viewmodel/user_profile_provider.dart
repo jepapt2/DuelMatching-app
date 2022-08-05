@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 final profileProvider = StreamProvider.family<Profile, String>((ref, id) {
   final document = userDocument(id);
@@ -57,31 +61,64 @@ class UserWhenConsumer extends HookConsumerWidget {
         userProfileProvider(id ?? FirebaseAuth.instance.currentUser!.uid));
     final profile = userProfile.profile;
 
+    ref.listen<UserProfile>(
+        userProfileProvider(id ?? FirebaseAuth.instance.currentUser!.uid),
+        (previous, next) async {
+      print('✋');
+      print(previous);
+      print(next);
+      if ((previous?.profile is AsyncLoading<Profile> ||
+              previous?.profile is AsyncError<Profile>) &&
+          next.profile is AsyncData<Profile>) {
+        print('✊');
+        final token = await FirebaseMessaging.instance.getToken();
+
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(id ?? FirebaseAuth.instance.currentUser!.uid)
+            .update({
+          'activeAt': DateTime.now(),
+          'noticeToken': FieldValue.arrayUnion([token])
+        });
+
+        await Purchases.logIn(id ?? FirebaseAuth.instance.currentUser!.uid);
+      }
+    });
+
     return profile!.when(
-        data: (user) => child(user),
-        error: (error, stack) => Scaffold(
-              appBar: AppBar(),
-              body: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text('アカウント情報の取得に失敗しました'),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                          textStyle: MaterialStateProperty.all(
-                              const TextStyle(fontWeight: FontWeight.bold)),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.redAccent)),
-                      child: const Text('更新する'),
-                      onPressed: () {
-                        ref.refresh(userProfileProvider(
-                            FirebaseAuth.instance.currentUser!.uid));
-                      },
-                    ),
-                  ],
+        data: (user) {
+          return child(user);
+        },
+        error: (error, stack) => DateTime.now().isAfter(FirebaseAuth
+                .instance.currentUser!.metadata.creationTime!
+                .add(const Duration(minutes: 1)))
+            ? Scaffold(
+                appBar: AppBar(),
+                body: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('アカウント情報の取得に失敗しました'),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                            textStyle: MaterialStateProperty.all(
+                                const TextStyle(fontWeight: FontWeight.bold)),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.redAccent)),
+                        child: const Text('更新する'),
+                        onPressed: () {
+                          ref.refresh(userProfileProvider(
+                              FirebaseAuth.instance.currentUser!.uid));
+                        },
+                      ),
+                    ],
+                  ),
                 ),
+              )
+            : Scaffold(
+                appBar: AppBar(),
+                body: const Center(child: CircularProgressIndicator()),
               ),
-            ),
         loading: () => Scaffold(
               appBar: AppBar(),
               body: const Center(child: CircularProgressIndicator()),
