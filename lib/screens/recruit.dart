@@ -185,6 +185,17 @@ class RecruitScreen extends HookConsumerWidget {
                                               )
                                             ]),
                                             TableRow(children: [
+                                              const Text('募集人数'),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 8.0,
+                                                        horizontal: 20.0),
+                                                child: Text(
+                                                    '${recruit.recruitNumber.toString()}人'),
+                                              )
+                                            ]),
+                                            TableRow(children: [
                                               const Text('開始時間'),
                                               Padding(
                                                 padding:

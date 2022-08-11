@@ -289,7 +289,7 @@ class ProfileEditScreen extends HookConsumerWidget {
 
   Widget headerInput(
       context, ValueNotifier<XFile?> inputHeaderImage, String? initialHeader) {
-    Future getImageFromCamera() async {
+    Future getImageFromCamera(childContext) async {
       final pickedFile = await picker.pickImage(
           source: ImageSource.camera,
           maxHeight: 400,
@@ -297,12 +297,12 @@ class ProfileEditScreen extends HookConsumerWidget {
           imageQuality: 100);
 
       if (pickedFile != null) {
-        Navigator.pop(context);
+        Navigator.pop(childContext);
         inputHeaderImage.value = XFile(pickedFile.path);
       }
     }
 
-    Future getImageFromGallery() async {
+    Future getImageFromGallery(childContext) async {
       final pickedFile = await picker.pickImage(
           source: ImageSource.gallery,
           maxHeight: 400,
@@ -310,7 +310,7 @@ class ProfileEditScreen extends HookConsumerWidget {
           imageQuality: 100);
 
       if (pickedFile != null) {
-        Navigator.pop(context);
+        Navigator.pop(childContext);
         inputHeaderImage.value = XFile(pickedFile.path);
       }
     }
@@ -347,11 +347,11 @@ class ProfileEditScreen extends HookConsumerWidget {
               children: [
                 SimpleDialogOption(
                   child: const Text('ギャラリーから選ぶ'),
-                  onPressed: () => getImageFromGallery(),
+                  onPressed: () => getImageFromGallery(childContext),
                 ),
                 SimpleDialogOption(
                   child: const Text('カメラから選ぶ'),
-                  onPressed: () => getImageFromCamera(),
+                  onPressed: () => getImageFromCamera(childContext),
                 )
               ],
             );
@@ -380,7 +380,7 @@ class ProfileEditScreen extends HookConsumerWidget {
 
   Widget avatarInput(
       context, ValueNotifier<XFile?> inputAvatarImage, String? initialAvatar) {
-    Future getImageFromCamera() async {
+    Future getImageFromCamera(childContext) async {
       final pickedFile = await picker.pickImage(
           source: ImageSource.camera,
           maxHeight: 500,
@@ -388,12 +388,12 @@ class ProfileEditScreen extends HookConsumerWidget {
           imageQuality: 85);
 
       if (pickedFile != null) {
-        Navigator.pop(context);
+        Navigator.pop(childContext);
         inputAvatarImage.value = XFile(pickedFile.path);
       }
     }
 
-    Future getImageFromGallery() async {
+    Future getImageFromGallery(childContext) async {
       final pickedFile = await picker.pickImage(
           source: ImageSource.gallery,
           maxHeight: 500,
@@ -401,7 +401,7 @@ class ProfileEditScreen extends HookConsumerWidget {
           imageQuality: 85);
 
       if (pickedFile != null) {
-        Navigator.pop(context);
+        Navigator.pop(childContext);
         inputAvatarImage.value = XFile(pickedFile.path);
       }
     }
@@ -424,11 +424,11 @@ class ProfileEditScreen extends HookConsumerWidget {
               children: [
                 SimpleDialogOption(
                   child: const Text('ギャラリーから選ぶ'),
-                  onPressed: () => getImageFromGallery(),
+                  onPressed: () => getImageFromGallery(childContext),
                 ),
                 SimpleDialogOption(
                   child: const Text('カメラから選ぶ'),
-                  onPressed: () => getImageFromCamera(),
+                  onPressed: () => getImageFromCamera(childContext),
                 )
               ],
             );

@@ -15,8 +15,8 @@ class MyProfileScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final double appbarSize = MediaQuery.of(context).size.height / 2.1 >= 310
-        ? MediaQuery.of(context).size.height / 2.1
+    final double appbarSize = MediaQuery.of(context).size.height / 2.7 >= 310
+        ? MediaQuery.of(context).size.height / 2.7
         : 310;
     return UserWhenConsumer(
       child: (user) => Scaffold(

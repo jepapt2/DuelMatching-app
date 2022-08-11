@@ -227,7 +227,7 @@ class RecruitNewScreen extends HookConsumerWidget {
   }
 
   recruitAddDialog(Profile user, BuildContext context) async {
-    recruitAdd() {
+    recruitAdd(dialogContext) {
       _formKey.currentState!.save();
 
       String? recruitId;
@@ -257,18 +257,23 @@ class RecruitNewScreen extends HookConsumerWidget {
               .then((docRef) async {
             recruitId = docRef.id;
             if (recruitId != null) {
-              GoRouter.of(context).pop();
+              Navigator.pop(dialogContext);
+              Navigator.pop(context);
               GoRouter.of(context).push('/recruit/$recruitId');
             }
             return await membersCollection(docRef.id)
                 .doc(FirebaseAuth.instance.currentUser!.uid)
-                .set(Member(
-                    uid: FirebaseAuth.instance.currentUser!.uid,
-                    name: user.name,
-                    avatar: user.avatar,
-                    organizer: true,
-                    noticeTitle: '${_formKey.currentState!.value['title']} (1)',
-                    createdAt: DateTime.now()));
+                .set(
+                  Member(
+                      uid: FirebaseAuth.instance.currentUser!.uid,
+                      name: user.name,
+                      avatar: user.avatar,
+                      organizer: true,
+                      noticeTitle:
+                          '${_formKey.currentState!.value['title']} (1)',
+                      createdAt: DateTime.now(),
+                      noticeToken: user.noticeToken),
+                );
           });
         } catch (e) {
           Fluttertoast.showToast(
@@ -288,18 +293,18 @@ class RecruitNewScreen extends HookConsumerWidget {
         () => showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) {
+            builder: (dialogContext) {
               return AlertDialog(
                 title: const Text('対戦募集の開始'),
                 content: const Text("一度作成した募集は変更できません。\nこの内容で作成しますか？"),
                 actions: [
                   TextButton(
                     child: const Text("いいえ"),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => Navigator.pop(dialogContext),
                   ),
                   TextButton(
                     child: const Text("はい"),
-                    onPressed: () => recruitAdd(),
+                    onPressed: () => recruitAdd(dialogContext),
                   ),
                 ],
               );

@@ -2,6 +2,7 @@ import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:duel_matching/freezed/member/member.dart';
 import 'package:duel_matching/freezed/notice/notice.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
+import 'package:duel_matching/parts/image.dart';
 import 'package:duel_matching/parts/scroll_detector.dart';
 import 'package:duel_matching/viewmodel/applifecycle_provider.dart';
 import 'package:duel_matching/viewmodel/recruit_provider.dart';
@@ -33,12 +34,25 @@ class GroupChatScreen extends HookWidget {
                     child: (members) {
                       List<String> membersId =
                           members.map((p) => p.uid).toList();
+                      String systemAvatar() {
+                        const flavor = String.fromEnvironment('FLAVOR');
+                        switch (flavor) {
+                          case 'development':
+                            return 'https://firebasestorage.googleapis.com/v0/b/duelmatching.appspot.com/o/asset%2F%E6%83%85%E5%A0%B1%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3.png?alt=media&token=0c1f2669-9bc9-4867-afd3-b0db50a93b66';
+                          case 'production':
+                            return 'https://firebasestorage.googleapis.com/v0/b/duelmatching-5562b.appspot.com/o/asset%2F%E6%83%85%E5%A0%B1%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3.png?alt=media&token=c29c45a2-5214-411a-a358-16b6d80b121f';
+                          default:
+                            return 'https://firebasestorage.googleapis.com/v0/b/duelmatching-5562b.appspot.com/o/asset%2F%E6%83%85%E5%A0%B1%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3.png?alt=media&token=c29c45a2-5214-411a-a358-16b6d80b121f';
+                        }
+                      }
+
                       List<Member> membersWithSystem = [
                         ...members,
                         Member(
                             uid: 'systemMessage',
                             name: 'システムメッセージ',
                             organizer: false,
+                            avatar: systemAvatar(),
                             noticeTitle: '')
                       ];
 
@@ -153,6 +167,20 @@ class GroupChatScreen extends HookWidget {
                                                           0xffeff0f3)),
                                             ),
                                             messageOptions: MessageOptions(
+                                                avatarBuilder: (user, _, __) {
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 4.0,
+                                                            bottom: 4.0,
+                                                            right: 4.0,
+                                                            left: 8.0),
+                                                    child: AvatarImage(
+                                                      avatar: user.profileImage,
+                                                      radius: 18.0,
+                                                    ),
+                                                  );
+                                                },
                                                 containerColor:
                                                     const Color(0xffeff0f3),
                                                 currentUserContainerColor:

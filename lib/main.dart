@@ -100,6 +100,7 @@ class MyApp extends HookWidget {
     // });
 
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: [
         FlutterFireUILocalizations.withDefaultOverrides(const LabelOverrides()),
         GlobalMaterialLocalizations.delegate,
