@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/image.dart';
-import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -109,8 +108,8 @@ class BlockListScreen extends HookConsumerWidget {
             }),
         style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all(Colors.redAccent),
-            side:
-                MaterialStateProperty.all(BorderSide(color: Colors.redAccent))),
+            side: MaterialStateProperty.all(
+                const BorderSide(color: Colors.redAccent))),
         child: const Text('解除'));
   }
 }

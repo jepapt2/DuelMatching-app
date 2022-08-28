@@ -2,10 +2,10 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AccountScreen extends StatelessWidget {
   AccountScreen({Key? key}) : super(key: key);
@@ -29,6 +29,16 @@ class AccountScreen extends StatelessWidget {
           onTap: () => deleteDialog(context),
         ),
         const Divider(),
+        ListTile(
+          title: const Text('利用規約'),
+          onTap: () => launchUrl(Uri.parse('https://duelmatching.com/tos')),
+        ),
+        const Divider(),
+        ListTile(
+          title: const Text('プライバシーポリシー'),
+          onTap: () => launchUrl(Uri.parse('https://duelmatching.com/policie')),
+        ),
+        const Divider(),
       ]),
     );
   }
@@ -36,6 +46,7 @@ class AccountScreen extends StatelessWidget {
   logoutDialog(BuildContext context) {
     logout(dialogContext) async {
       Navigator.pop(dialogContext);
+      //providerをdisposeするために一旦ログアウトスクリーンへ遷移
       GoRouter.of(context).go('/logout');
       Future.delayed(
           const Duration(
@@ -75,6 +86,7 @@ class AccountScreen extends StatelessWidget {
       _formKey.currentState!.save();
       if (_formKey.currentState!.validate()) {
         Navigator.pop(dialogContext);
+        //providerをdisposeするために一旦ログアウトスクリーンへ遷移
         GoRouter.of(context).go('/logout');
         Future.delayed(
             const Duration(

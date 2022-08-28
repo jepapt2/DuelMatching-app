@@ -45,7 +45,7 @@ class NoticeScreen extends HookConsumerWidget {
               SliverList(
                   delegate: SliverChildListDelegate([
                 const SizedBox(
-                  height: 20.0,
+                  height: 4.0,
                 ),
                 FirestoreQueryBuilder(
                     query:

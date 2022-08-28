@@ -14,7 +14,7 @@ class AvatarImage extends StatelessWidget {
 
   ImageProvider selectProvider(avatar) {
     try {
-      return CachedNetworkImageProvider(
+      return NetworkImage(
         avatar!,
       );
     } catch (_) {

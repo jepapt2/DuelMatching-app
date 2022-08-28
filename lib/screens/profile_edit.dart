@@ -294,7 +294,7 @@ class ProfileEditScreen extends HookConsumerWidget {
           source: ImageSource.camera,
           maxHeight: 400,
           maxWidth: 1200,
-          imageQuality: 100);
+          imageQuality: 90);
 
       if (pickedFile != null) {
         Navigator.pop(childContext);
@@ -307,7 +307,7 @@ class ProfileEditScreen extends HookConsumerWidget {
           source: ImageSource.gallery,
           maxHeight: 400,
           maxWidth: 1200,
-          imageQuality: 100);
+          imageQuality: 90);
 
       if (pickedFile != null) {
         Navigator.pop(childContext);
@@ -383,9 +383,9 @@ class ProfileEditScreen extends HookConsumerWidget {
     Future getImageFromCamera(childContext) async {
       final pickedFile = await picker.pickImage(
           source: ImageSource.camera,
-          maxHeight: 500,
-          maxWidth: 500,
-          imageQuality: 85);
+          maxHeight: 300,
+          maxWidth: 300,
+          imageQuality: 90);
 
       if (pickedFile != null) {
         Navigator.pop(childContext);
@@ -396,9 +396,9 @@ class ProfileEditScreen extends HookConsumerWidget {
     Future getImageFromGallery(childContext) async {
       final pickedFile = await picker.pickImage(
           source: ImageSource.gallery,
-          maxHeight: 500,
-          maxWidth: 500,
-          imageQuality: 85);
+          maxHeight: 300,
+          maxWidth: 300,
+          imageQuality: 90);
 
       if (pickedFile != null) {
         Navigator.pop(childContext);

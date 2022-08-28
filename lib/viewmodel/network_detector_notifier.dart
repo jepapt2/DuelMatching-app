@@ -18,6 +18,8 @@ class NetworkDetectorNotifier extends StateNotifier<NetworkStatus> {
       NetworkStatus newState;
       switch (result) {
         case ConnectivityResult.mobile:
+          newState = NetworkStatus.On;
+          break;
         case ConnectivityResult.wifi:
           newState = NetworkStatus.On;
           break;

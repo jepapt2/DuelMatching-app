@@ -138,7 +138,7 @@ class UsersScreen extends HookConsumerWidget {
                             ),
                           )
                         else
-                          const SizedBox(height: 30.0),
+                          const SizedBox(height: 20.0),
                         GridView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),

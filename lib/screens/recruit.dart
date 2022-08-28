@@ -290,8 +290,9 @@ class RecruitScreen extends HookConsumerWidget {
                                             child: Row(
                                               children: [
                                                 AvatarImage(
-                                                    avatar:
-                                                        members.first.avatar),
+                                                  avatar: members.first.avatar,
+                                                  radius: 25,
+                                                ),
                                                 const SizedBox(
                                                   width: 5.0,
                                                 ),
@@ -327,6 +328,8 @@ class RecruitScreen extends HookConsumerWidget {
                                                                           .push(
                                                                               '/user/${m.uid}'),
                                                                   child: AvatarImage(
+                                                                      radius:
+                                                                          25,
                                                                       avatar: m
                                                                           .avatar),
                                                                 ),

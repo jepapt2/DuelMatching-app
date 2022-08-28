@@ -31,8 +31,8 @@ class UserCard extends StatelessWidget {
               avatar: avatar,
               radius: 50,
             ),
-            ...adress.isNotNullAndNotEmpty &&
-                    favorite.isNotNullAndNotEmpty &&
+            ...adress.isNotNullAndNotEmpty ||
+                    favorite.isNotNullAndNotEmpty ||
                     comment.isNotNullAndNotEmpty
                 ? [
                     Visibility(

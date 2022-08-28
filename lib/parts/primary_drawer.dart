@@ -120,7 +120,7 @@ class PrimaryDrawer extends StatelessWidget {
                 Icons.manage_accounts_rounded,
                 color: Color(0xffff8e3c),
               ),
-              title: const Text('アカウント'),
+              title: const Text('アカウント・その他'),
               onTap: () {
                 GoRouter.of(context).push('/account');
                 // GoRouter.of(context).go('/logout');

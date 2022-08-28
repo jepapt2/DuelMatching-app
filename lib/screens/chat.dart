@@ -15,7 +15,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
 class ChatScreen extends HookWidget {
-  ChatScreen({required this.roomId, Key? key}) : super(key: key);
+  const ChatScreen({required this.roomId, Key? key}) : super(key: key);
 
   final String roomId;
 
@@ -29,6 +29,7 @@ class ChatScreen extends HookWidget {
             Future.delayed(
               Duration.zero,
               () {
+                //パートナーリストが空、または
                 if (partners.isEmpty ||
                     !partnersId
                         .contains(FirebaseAuth.instance.currentUser!.uid)) {
@@ -44,6 +45,7 @@ class ChatScreen extends HookWidget {
                 }
               },
             );
+            return null;
           }, []);
 
           Partner partner = partners.singleWhere(

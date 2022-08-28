@@ -43,19 +43,27 @@ class PurchasesNotifier extends StateNotifier<bool> {
 // 課金ユーザーになったらtrueを返す
   Future<bool> syncSubscription(PurchaserInfo info, {String? productID}) async {
     state = true;
-    final func = FirebaseFunctions.instanceFor(region: 'asia-northeast1')
-        .httpsCallable('purchase-syncInAppPurchase');
-    final result = await func.call();
-    var isSubscribed = false;
-    if (productID != null) {
-      isSubscribed = result.data[productID];
+    if (const String.fromEnvironment('FLAVOR') == 'production') {
+      final func = FirebaseFunctions.instanceFor(region: 'asia-northeast1')
+          .httpsCallable('purchase-syncInAppPurchase');
+      final result = await func.call();
+      var isSubscribed = false;
+      if (productID != null) {
+        isSubscribed = result.data[productID];
+      } else {
+        final Map<String, dynamic> map = Map<String, bool>.from(result.data);
+        isSubscribed =
+            (map).values.firstWhere((element) => element, orElse: () => false);
+      }
+      state = false;
+
+      return isSubscribed;
     } else {
-      final Map<String, dynamic> map = Map<String, bool>.from(result.data);
-      isSubscribed =
-          (map).values.firstWhere((element) => element, orElse: () => false);
+      var isSubscribed = true;
+      state = false;
+
+      return isSubscribed;
     }
-    state = false;
-    return isSubscribed;
   }
 }
 

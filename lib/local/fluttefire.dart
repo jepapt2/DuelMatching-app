@@ -4,11 +4,11 @@ class LabelOverrides extends DefaultLocalizations {
   const LabelOverrides();
 
   @override
-  String get signInWithTwitterButtonText => 'Twitterアカウントでログイン';
+  String get signInWithTwitterButtonText => 'Twitterでサインイン';
   @override
-  String get signInWithGoogleButtonText => 'Googleアカウントでログイン';
+  String get signInWithGoogleButtonText => 'Googleでサインイン';
   @override
-  String get signInWithAppleButtonText => 'Appleアカウントでログイン';
+  String get signInWithAppleButtonText => 'Appleでサインイン';
   @override
   String get unknownError => 'ログインはキャンセルされました';
 }
