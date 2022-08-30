@@ -1,10 +1,14 @@
+import 'package:duel_matching/freezed/user_profile/user_profile.dart';
+import 'package:duel_matching/input_options/dynamicLinks.dart';
 import 'package:duel_matching/parts/image.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:duel_matching/extension/string.dart';
+import 'package:share_plus/share_plus.dart';
 
 class MyProfileScreen extends HookConsumerWidget {
   const MyProfileScreen({Key? key, required this.myProfile, required this.id})
@@ -51,6 +55,40 @@ class MyProfileScreen extends HookConsumerWidget {
               actions: [
                 Center(
                   child: Padding(
+                    padding: const EdgeInsets.only(right: 4.0),
+                    child: GestureDetector(
+                      onTap: () async {
+                        Uri uri =
+                            await userShareDynamicLinks(id: id, profile: user);
+                        Share.share(
+                            'DuelMatchingで${user.name}と対戦しよう！ ${uri.toString()} #DuelMatching');
+                      },
+                      child: Stack(
+                          alignment: AlignmentDirectional.center,
+                          children: [
+                            Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white.withOpacity(0.5),
+                              ),
+                            ),
+                            const Positioned(
+                                right: 5.0,
+                                child: Icon(
+                                  Icons.share,
+                                  size: 22,
+                                )),
+                          ]),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 8.0,
+                ),
+                Center(
+                  child: Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: GestureDetector(
                       onTap: () {
@@ -68,9 +106,12 @@ class MyProfileScreen extends HookConsumerWidget {
                                 color: Colors.white.withOpacity(0.5),
                               ),
                             ),
-                            const FaIcon(
-                              FontAwesomeIcons.userEdit,
-                              size: 16,
+                            const Positioned(
+                              left: 7.0,
+                              child: FaIcon(
+                                FontAwesomeIcons.userPen,
+                                size: 16,
+                              ),
                             )
                           ]),
                     ),
@@ -200,7 +241,7 @@ class MyProfileScreen extends HookConsumerWidget {
                                     ]),
                                   if (user.activityDay.isNotNullAndNotEmpty)
                                     TableRow(children: [
-                                      Text('活動日'),
+                                      const Text('活動日'),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(user.activityDay!),
@@ -247,7 +288,7 @@ class MyProfileScreen extends HookConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text('自己紹介'),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20.0,
                                   ),
                                   Text(user.introduction!)

@@ -11,6 +11,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:duel_matching/extension/string.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
+
+import '../input_options/dynamicLinks.dart';
 
 class RecruitScreen extends HookConsumerWidget {
   const RecruitScreen({Key? key, required this.id}) : super(key: key);
@@ -37,6 +40,14 @@ class RecruitScreen extends HookConsumerWidget {
                             appBar: AppBar(
                               title: Text(recruit.title),
                               actions: [
+                                IconButton(
+                                    onPressed: () async {
+                                      Uri uri = await recruitShareDynamicLinks(
+                                          id: id, recruit: recruit);
+                                      Share.share(
+                                          '${recruit.title} | DuelMatchingで対戦募集に参加しよう ${uri.toString()} #DuelMatching');
+                                    },
+                                    icon: const Icon(Icons.share)),
                                 PopupMenuButton(
                                     itemBuilder: (BuildContext context) => [
                                           PopupMenuItem(
@@ -61,7 +72,7 @@ class RecruitScreen extends HookConsumerWidget {
                                               enabled: FirebaseAuth.instance
                                                       .currentUser!.uid ==
                                                   recruit.organizerId),
-                                        ])
+                                        ]),
                               ],
                             ),
                             body: SingleChildScrollView(
