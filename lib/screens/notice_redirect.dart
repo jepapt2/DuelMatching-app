@@ -34,21 +34,29 @@ class NoticeRedirect extends ConsumerWidget {
     var purchases = ref.watch(purchasesNotifierProvider.notifier);
     Purchases.addPurchaserInfoUpdateListener(purchases.purchaserInfoUpdated);
 
-    FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+//ディープリンク遷移
+    FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
       if (dynamicLinkData.link.queryParameters['user'] != null) {
-        GoRouter.of(context).go('/users');
-        if (dynamicLinkData.link.queryParameters['user'] ==
-            FirebaseAuth.instance.currentUser?.uid) {
-          GoRouter.of(context).push('/profile');
-        } else {
-          GoRouter.of(context)
-              .push('/user/${dynamicLinkData.link.queryParameters['user']}');
-        }
+        await Future.delayed(
+            const Duration(
+              seconds: 3,
+            ), () async {
+          GoRouter.of(context).go('/users');
+          if (dynamicLinkData.link.queryParameters['user'] ==
+              FirebaseAuth.instance.currentUser?.uid) {
+            GoRouter.of(context).push('/profile');
+          } else {
+            GoRouter.of(context)
+                .push('/user/${dynamicLinkData.link.queryParameters['user']}');
+          }
+        });
       }
+      if (dynamicLinkData.link.queryParameters['recruit'] != null) {
+        GoRouter.of(context).go('/recruits');
 
-      print(dynamicLinkData.link.path);
-      print(dynamicLinkData.link.queryParameters);
-      print('💦');
+        GoRouter.of(context).push(
+            '/recruit/${dynamicLinkData.link.queryParameters['recruit']}');
+      }
     }).onError((error) {
       // Handle errors
     });

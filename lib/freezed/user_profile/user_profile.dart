@@ -45,6 +45,7 @@ class Profile with _$Profile {
     List<String>? noticeToken,
     @TimestampConverter() DateTime? createdAt,
     @TimestampConverter() DateTime? activeAt,
+    required final bool initialSetting,
     required final int order,
   }) = _Profile;
 

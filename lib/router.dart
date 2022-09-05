@@ -15,6 +15,7 @@ import 'package:duel_matching/screens/recruit.dart';
 import 'package:duel_matching/screens/recruit_new.dart';
 import 'package:duel_matching/screens/recruits.dart';
 import 'package:duel_matching/screens/store.dart';
+import 'package:duel_matching/screens/initial_edit.dart';
 import 'package:duel_matching/screens/user_profile.dart';
 import 'package:duel_matching/screens/users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -117,6 +118,18 @@ final router = GoRouter(
         path: '/account',
         builder: (context, state) => AccountScreen(),
       ),
+      GoRoute(
+          path: '/initial_edit',
+          builder: (context, state) {
+            final query = state.queryParams['query'];
+            return InitialEditScreen(query: query);
+          }),
+      // GoRoute(
+      //     path: '/initial_profile',
+      //     builder: (context, state) {
+      //       final query = state.queryParams['query'];
+      //       return InitialEditScreen(query: query);
+      //     }),
     ],
     redirect: (state) {
       final bool loggedIn = FirebaseAuth.instance.currentUser != null;

@@ -3,6 +3,7 @@ import 'package:duel_matching/gen/revenuecat_options.dart';
 import 'package:duel_matching/router.dart';
 import 'package:duel_matching/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firestore_ref/firestore_ref.dart';
 import 'package:flutter/material.dart';
@@ -72,33 +73,6 @@ class MyApp extends HookWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // useEffect(() {
-    //   // トークンの取得
-
-    //   Future(() async {
-    //     if (FirebaseAuth.instance.currentUser != null) {
-    //       final token = await FirebaseMessaging.instance.getToken();
-    //       userDocument(FirebaseAuth.instance.currentUser!.uid).update({
-    //         'activeAt': DateTime.now().toUtc(),
-    //         'noticeToken': FieldValue.arrayUnion([token])
-    //       });
-    //     }
-    //   });
-    // }, const []);
-
-    // FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-    //   if (user != null) {
-    //     final token = await FirebaseMessaging.instance.getToken();
-
-    //     FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-    //       'activeAt': DateTime.now(),
-    //       'noticeToken': FieldValue.arrayUnion([token])
-    //     });
-
-    //     await Purchases.logIn(user.uid);
-    //   }
-    // });
-
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       localizationsDelegates: [

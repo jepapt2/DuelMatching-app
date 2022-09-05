@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/viewmodel/purchases_notifier.dart';
 import 'package:duel_matching/viewmodel/subscriber_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';

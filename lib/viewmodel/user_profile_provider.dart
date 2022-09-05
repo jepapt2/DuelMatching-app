@@ -99,7 +99,6 @@ class UserWhenConsumer extends HookConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Text('アカウント情報の取得に失敗しました'),
-                      Text(error.toString()),
                       ElevatedButton(
                         style: ButtonStyle(
                             textStyle: MaterialStateProperty.all(
@@ -200,7 +199,6 @@ class FriendsWhenConsumer extends HookConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Text('アカウント情報の取得に失敗しました'),
-                          Text(error.toString()),
                           ElevatedButton(
                             style: ButtonStyle(
                                 textStyle: MaterialStateProperty.all(

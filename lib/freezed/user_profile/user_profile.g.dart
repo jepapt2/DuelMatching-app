@@ -33,6 +33,7 @@ _$_Profile _$$_ProfileFromJson(Map<String, dynamic> json) => _$_Profile(
           const TimestampConverter().fromJson(json['createdAt'] as Timestamp?),
       activeAt:
           const TimestampConverter().fromJson(json['activeAt'] as Timestamp?),
+      initialSetting: json['initialSetting'] as bool,
       order: json['order'] as int,
     );
 
@@ -56,6 +57,7 @@ Map<String, dynamic> _$$_ProfileToJson(_$_Profile instance) =>
       'noticeToken': instance.noticeToken,
       'createdAt': const TimestampConverter().toJson(instance.createdAt),
       'activeAt': const TimestampConverter().toJson(instance.activeAt),
+      'initialSetting': instance.initialSetting,
       'order': instance.order,
     };
 

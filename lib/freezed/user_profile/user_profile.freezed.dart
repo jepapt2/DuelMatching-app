@@ -384,6 +384,7 @@ class _$ProfileTearOff {
       List<String>? noticeToken,
       @TimestampConverter() DateTime? createdAt,
       @TimestampConverter() DateTime? activeAt,
+      required bool initialSetting,
       required int order}) {
     return _Profile(
       name: name,
@@ -404,6 +405,7 @@ class _$ProfileTearOff {
       noticeToken: noticeToken,
       createdAt: createdAt,
       activeAt: activeAt,
+      initialSetting: initialSetting,
       order: order,
     );
   }
@@ -438,6 +440,7 @@ mixin _$Profile {
   DateTime? get createdAt => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime? get activeAt => throw _privateConstructorUsedError;
+  bool get initialSetting => throw _privateConstructorUsedError;
   int get order => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -468,6 +471,7 @@ abstract class $ProfileCopyWith<$Res> {
       List<String>? noticeToken,
       @TimestampConverter() DateTime? createdAt,
       @TimestampConverter() DateTime? activeAt,
+      bool initialSetting,
       int order});
 }
 
@@ -499,6 +503,7 @@ class _$ProfileCopyWithImpl<$Res> implements $ProfileCopyWith<$Res> {
     Object? noticeToken = freezed,
     Object? createdAt = freezed,
     Object? activeAt = freezed,
+    Object? initialSetting = freezed,
     Object? order = freezed,
   }) {
     return _then(_value.copyWith(
@@ -574,6 +579,10 @@ class _$ProfileCopyWithImpl<$Res> implements $ProfileCopyWith<$Res> {
           ? _value.activeAt
           : activeAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      initialSetting: initialSetting == freezed
+          ? _value.initialSetting
+          : initialSetting // ignore: cast_nullable_to_non_nullable
+              as bool,
       order: order == freezed
           ? _value.order
           : order // ignore: cast_nullable_to_non_nullable
@@ -606,6 +615,7 @@ abstract class _$ProfileCopyWith<$Res> implements $ProfileCopyWith<$Res> {
       List<String>? noticeToken,
       @TimestampConverter() DateTime? createdAt,
       @TimestampConverter() DateTime? activeAt,
+      bool initialSetting,
       int order});
 }
 
@@ -638,6 +648,7 @@ class __$ProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
     Object? noticeToken = freezed,
     Object? createdAt = freezed,
     Object? activeAt = freezed,
+    Object? initialSetting = freezed,
     Object? order = freezed,
   }) {
     return _then(_Profile(
@@ -713,6 +724,10 @@ class __$ProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
           ? _value.activeAt
           : activeAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      initialSetting: initialSetting == freezed
+          ? _value.initialSetting
+          : initialSetting // ignore: cast_nullable_to_non_nullable
+              as bool,
       order: order == freezed
           ? _value.order
           : order // ignore: cast_nullable_to_non_nullable
@@ -743,6 +758,7 @@ class _$_Profile extends _Profile {
       this.noticeToken,
       @TimestampConverter() this.createdAt,
       @TimestampConverter() this.activeAt,
+      required this.initialSetting,
       required this.order})
       : super._();
 
@@ -788,11 +804,13 @@ class _$_Profile extends _Profile {
   @TimestampConverter()
   final DateTime? activeAt;
   @override
+  final bool initialSetting;
+  @override
   final int order;
 
   @override
   String toString() {
-    return 'Profile(name: $name, avatar: $avatar, header: $header, comment: $comment, introduction: $introduction, favorite: $favorite, playTitle: $playTitle, adress: $adress, activityDay: $activityDay, activityTime: $activityTime, age: $age, sex: $sex, remoteDuel: $remoteDuel, friendCount: $friendCount, blockList: $blockList, noticeToken: $noticeToken, createdAt: $createdAt, activeAt: $activeAt, order: $order)';
+    return 'Profile(name: $name, avatar: $avatar, header: $header, comment: $comment, introduction: $introduction, favorite: $favorite, playTitle: $playTitle, adress: $adress, activityDay: $activityDay, activityTime: $activityTime, age: $age, sex: $sex, remoteDuel: $remoteDuel, friendCount: $friendCount, blockList: $blockList, noticeToken: $noticeToken, createdAt: $createdAt, activeAt: $activeAt, initialSetting: $initialSetting, order: $order)';
   }
 
   @override
@@ -824,6 +842,8 @@ class _$_Profile extends _Profile {
                 .equals(other.noticeToken, noticeToken) &&
             const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
             const DeepCollectionEquality().equals(other.activeAt, activeAt) &&
+            const DeepCollectionEquality()
+                .equals(other.initialSetting, initialSetting) &&
             const DeepCollectionEquality().equals(other.order, order));
   }
 
@@ -848,6 +868,7 @@ class _$_Profile extends _Profile {
         const DeepCollectionEquality().hash(noticeToken),
         const DeepCollectionEquality().hash(createdAt),
         const DeepCollectionEquality().hash(activeAt),
+        const DeepCollectionEquality().hash(initialSetting),
         const DeepCollectionEquality().hash(order)
       ]);
 
@@ -882,6 +903,7 @@ abstract class _Profile extends Profile {
       List<String>? noticeToken,
       @TimestampConverter() DateTime? createdAt,
       @TimestampConverter() DateTime? activeAt,
+      required bool initialSetting,
       required int order}) = _$_Profile;
   _Profile._() : super._();
 
@@ -925,6 +947,8 @@ abstract class _Profile extends Profile {
   @override
   @TimestampConverter()
   DateTime? get activeAt;
+  @override
+  bool get initialSetting;
   @override
   int get order;
   @override

@@ -9,11 +9,16 @@ import 'package:duel_matching/parts/user_card.dart';
 import 'package:duel_matching/viewmodel/users_future_scroll.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/link.dart';
+
+import '../freezed/user_profile/user_profile.dart';
 
 class UsersScreen extends HookConsumerWidget {
   UsersScreen({Key? key}) : super(key: key);
@@ -28,6 +33,9 @@ class UsersScreen extends HookConsumerWidget {
 
     return UserWhenConsumer(
       child: (user) => FriendsWhenConsumer(child: (friends) {
+        WidgetsBinding.instance.addPostFrameCallback(
+            (_) => _showTutorial(context: context, profile: user));
+
         final hideIds = [
           FirebaseAuth.instance.currentUser!.uid,
           ...friends.map((f) => f.uid).toList(),
@@ -295,5 +303,42 @@ class UsersScreen extends HookConsumerWidget {
         );
       },
     );
+  }
+
+  _showTutorial(
+      {required BuildContext context, required Profile profile}) async {
+    final dynamicLinkData =
+        await FirebaseDynamicLinks.instance.getInitialLink();
+    // プロフィールの初期設定を完了していないアカウントは初期設定ページへ
+    if (!profile.initialSetting) {
+      if (dynamicLinkData != null) {
+        GoRouter.of(context).go('/initial_edit?${dynamicLinkData?.link.query}');
+      } else {
+        GoRouter.of(context).go('/initial_edit?}');
+      }
+    } else {
+      if (dynamicLinkData?.link.queryParameters['user'] != null) {
+        await Future.delayed(
+            const Duration(
+              seconds: 3,
+            ), () async {
+          if (dynamicLinkData?.link.queryParameters['user'] ==
+              FirebaseAuth.instance.currentUser?.uid) {
+            GoRouter.of(context).push('/profile');
+          } else {
+            GoRouter.of(context)
+                .push('/user/${dynamicLinkData!.link.queryParameters['user']}');
+          }
+        });
+      }
+      if (dynamicLinkData?.link.queryParameters['recruit'] != null) {
+        GoRouter.of(context).go('/recruits');
+
+        GoRouter.of(context).push(
+            '/recruit/${dynamicLinkData!.link.queryParameters['recruit']}');
+      }
+    }
+
+    // 最初の起動ならチュートリアル表示
   }
 }
