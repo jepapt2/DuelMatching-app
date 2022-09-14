@@ -314,13 +314,13 @@ class UsersScreen extends HookConsumerWidget {
       if (dynamicLinkData != null) {
         GoRouter.of(context).go('/initial_edit?${dynamicLinkData?.link.query}');
       } else {
-        GoRouter.of(context).go('/initial_edit?}');
+        GoRouter.of(context).go('/initial_edit?');
       }
     } else {
       if (dynamicLinkData?.link.queryParameters['user'] != null) {
         await Future.delayed(
             const Duration(
-              seconds: 3,
+              seconds: 2,
             ), () async {
           if (dynamicLinkData?.link.queryParameters['user'] ==
               FirebaseAuth.instance.currentUser?.uid) {
@@ -338,7 +338,5 @@ class UsersScreen extends HookConsumerWidget {
             '/recruit/${dynamicLinkData!.link.queryParameters['recruit']}');
       }
     }
-
-    // 最初の起動ならチュートリアル表示
   }
 }

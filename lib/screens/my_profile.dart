@@ -8,20 +8,28 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:duel_matching/extension/string.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:share_plus/share_plus.dart';
 
+final myprofileTooltipProvider = StateProvider.autoDispose((ref) {
+  final tooltipController = JustTheController();
+  return tooltipController;
+});
+
 class MyProfileScreen extends HookConsumerWidget {
-  const MyProfileScreen({Key? key, required this.myProfile, required this.id})
+  const MyProfileScreen({Key? key, required this.id, required this.initialEdit})
       : super(key: key);
 
-  final bool myProfile;
   final String id;
+  final bool initialEdit;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final double appbarSize = MediaQuery.of(context).size.height / 2.7 >= 310
         ? MediaQuery.of(context).size.height / 2.7
         : 310;
+    final tooltipController = ref.watch(myprofileTooltipProvider);
+
     return UserWhenConsumer(
       child: (user) => Scaffold(
         body: CustomScrollView(
@@ -32,88 +40,105 @@ class MyProfileScreen extends HookConsumerWidget {
               centerTitle: true,
               pinned: true,
               expandedHeight: appbarSize,
-              leading: Center(
-                child: GestureDetector(
-                  onTap: () => GoRouter.of(context).pop(),
-                  child:
-                      Stack(alignment: AlignmentDirectional.center, children: [
-                    Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white.withOpacity(0.5),
-                      ),
-                    ),
-                    const Icon(
-                      Icons.arrow_back,
-                      size: 26,
-                    )
-                  ]),
+              leading: Visibility(
+                visible: !initialEdit,
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () => GoRouter.of(context).pop(),
+                    child: Stack(
+                        alignment: AlignmentDirectional.center,
+                        children: [
+                          Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white.withOpacity(0.5),
+                            ),
+                          ),
+                          const Icon(
+                            Icons.arrow_back,
+                            size: 26,
+                          )
+                        ]),
+                  ),
                 ),
               ),
               actions: [
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.only(right: 4.0),
-                    child: GestureDetector(
-                      onTap: () async {
-                        Uri uri =
-                            await userShareDynamicLinks(id: id, profile: user);
-                        Share.share(
-                            'DuelMatchingで${user.name}と対戦しよう！ ${uri.toString()} #DuelMatching');
-                      },
-                      child: Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: [
-                            Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white.withOpacity(0.5),
+                    child: JustTheTooltip(
+                      controller: tooltipController,
+                      triggerMode: TooltipTriggerMode.manual,
+                      showDuration: const Duration(seconds: 10),
+                      content: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            '更新したプロフィールをSNSで共有してみましょう！',
+                          )),
+                      child: GestureDetector(
+                        onTap: () async {
+                          Uri uri = await userShareDynamicLinks(
+                              id: id, profile: user);
+                          Share.share(
+                              'DuelMatchingで${user.name}と対戦しよう！ ${uri.toString()} #DuelMatching');
+                        },
+                        child: Stack(
+                            alignment: AlignmentDirectional.center,
+                            children: [
+                              Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white.withOpacity(0.5),
+                                ),
                               ),
-                            ),
-                            const Positioned(
-                                right: 5.0,
-                                child: Icon(
-                                  Icons.share,
-                                  size: 22,
-                                )),
-                          ]),
+                              const Positioned(
+                                  right: 5.0,
+                                  child: Icon(
+                                    Icons.share,
+                                    size: 22,
+                                  )),
+                            ]),
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(
                   width: 8.0,
                 ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        GoRouter.of(context).pop();
-                        GoRouter.of(context).push('/profile_edit');
-                      },
-                      child: Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: [
-                            Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white.withOpacity(0.5),
+                Visibility(
+                  visible: !initialEdit,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          GoRouter.of(context).pop();
+                          GoRouter.of(context).push('/profile_edit');
+                        },
+                        child: Stack(
+                            alignment: AlignmentDirectional.center,
+                            children: [
+                              Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white.withOpacity(0.5),
+                                ),
                               ),
-                            ),
-                            const Positioned(
-                              left: 7.0,
-                              child: FaIcon(
-                                FontAwesomeIcons.userPen,
-                                size: 16,
-                              ),
-                            )
-                          ]),
+                              const Positioned(
+                                left: 7.0,
+                                child: FaIcon(
+                                  FontAwesomeIcons.userPen,
+                                  size: 16,
+                                ),
+                              )
+                            ]),
+                      ),
                     ),
                   ),
                 ),
@@ -300,6 +325,11 @@ class MyProfileScreen extends HookConsumerWidget {
                             ),
                           ),
                         ),
+                      Visibility(
+                          visible: initialEdit,
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.3,
+                          ))
                     ],
                   )
                 ],

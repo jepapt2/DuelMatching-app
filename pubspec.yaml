@@ -43,7 +43,7 @@ dependencies:
   flutterfire_ui: ^0.4.1
   sign_in_with_apple: ^3.3.0
   twitter_login: ^4.0.1
-  cloud_firestore: ^3.1.6
+  cloud_firestore: ^3.4.7
   crypto: ^3.0.1
   flutter_hooks: ^0.18.2
   hooks_riverpod: ^1.0.3
@@ -69,6 +69,7 @@ dependencies:
   firebase_dynamic_links: ^4.3.6
   share_plus: ^4.0.10+1
   shared_preferences: ^2.0.15
+  just_the_tooltip: ^0.0.12
 
 dev_dependencies:
   flutter_test:

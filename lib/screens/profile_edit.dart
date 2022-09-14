@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:duel_matching/input_options/adress.dart';
 import 'package:duel_matching/input_options/play_title.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
+import 'package:duel_matching/screens/my_profile.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -27,6 +28,8 @@ class ProfileEditScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final inputHeaderImage = useState<XFile?>(null);
     final inputAvatarImage = useState<XFile?>(null);
+    final tooltipControllerNotifier =
+        ref.watch(myprofileTooltipProvider.notifier);
 
     final ScrollController _playTitleController = ScrollController();
 
@@ -41,13 +44,19 @@ class ProfileEditScreen extends HookConsumerWidget {
             title: const Text('プロフィール編集'),
             actions: [
               TextButton(
-                  onPressed: () => profileUpdate(
-                      FirebaseAuth.instance.currentUser!.uid,
-                      user,
-                      inputHeaderImage.value,
-                      inputAvatarImage.value,
-                      inputPlayTitle.value,
-                      context),
+                  onPressed: () {
+                    profileUpdate(
+                        FirebaseAuth.instance.currentUser!.uid,
+                        user,
+                        inputHeaderImage.value,
+                        inputAvatarImage.value,
+                        inputPlayTitle.value,
+                        context);
+                    Future.delayed(
+                        const Duration(seconds: 1),
+                        () => tooltipControllerNotifier.state
+                            .showTooltip(autoClose: true, immediately: false));
+                  },
                   child: const Text('保存')),
             ],
           ),
@@ -76,13 +85,15 @@ class ProfileEditScreen extends HookConsumerWidget {
                         FormBuilderTextField(
                           name: 'name',
                           initialValue: user.name,
-                          decoration: const InputDecoration(labelText: '名前'),
+                          decoration:
+                              const InputDecoration(labelText: 'ニックネーム'),
                           autovalidateMode: AutovalidateMode.always,
+                          maxLength: 15,
                           validator: FormBuilderValidators.compose([
                             FormBuilderValidators.required(context,
-                                errorText: '名前を入力してください'),
+                                errorText: 'ニックネームを入力してください'),
                             FormBuilderValidators.maxLength(context, 15,
-                                errorText: '名前は15文字以下です'),
+                                errorText: 'ニックネームは15文字以下です'),
                           ]),
                         ),
                         const SizedBox(
@@ -93,6 +104,7 @@ class ProfileEditScreen extends HookConsumerWidget {
                           initialValue: user.comment,
                           decoration: const InputDecoration(labelText: 'ひとこと'),
                           autovalidateMode: AutovalidateMode.always,
+                          maxLength: 30,
                           validator: FormBuilderValidators.compose([
                             FormBuilderValidators.maxLength(context, 30,
                                 errorText: 'ひとことは30文字以下です'),
@@ -104,6 +116,7 @@ class ProfileEditScreen extends HookConsumerWidget {
                         FormBuilderTextField(
                             name: 'introduction',
                             initialValue: user.introduction,
+                            maxLength: 1000,
                             decoration:
                                 const InputDecoration(labelText: '自己紹介'),
                             autovalidateMode: AutovalidateMode.always,
@@ -122,6 +135,7 @@ class ProfileEditScreen extends HookConsumerWidget {
                             labelText: '好きなカード',
                           ),
                           autovalidateMode: AutovalidateMode.always,
+                          maxLength: 141,
                           validator: FormBuilderValidators.compose([
                             FormBuilderValidators.maxLength(context, 141,
                                 errorText: '好きなカードは141文字以下です'),
@@ -150,7 +164,7 @@ class ProfileEditScreen extends HookConsumerWidget {
                               height: 100.0,
                               child: Scrollbar(
                                 controller: _playTitleController,
-                                isAlwaysShown: true,
+                                thumbVisibility: true,
                                 child: ListView(
                                     padding:
                                         const EdgeInsets.only(bottom: 30.0),
@@ -224,6 +238,7 @@ class ProfileEditScreen extends HookConsumerWidget {
                           decoration: const InputDecoration(
                             labelText: '活動日',
                           ),
+                          maxLength: 10,
                           autovalidateMode: AutovalidateMode.always,
                           validator: FormBuilderValidators.compose([
                             FormBuilderValidators.maxLength(context, 10,
@@ -239,6 +254,7 @@ class ProfileEditScreen extends HookConsumerWidget {
                           decoration: const InputDecoration(
                             labelText: '活動時間',
                           ),
+                          maxLength: 10,
                           autovalidateMode: AutovalidateMode.always,
                           validator: FormBuilderValidators.compose([
                             FormBuilderValidators.maxLength(context, 10,
@@ -254,6 +270,7 @@ class ProfileEditScreen extends HookConsumerWidget {
                           decoration: const InputDecoration(
                             labelText: '年齢',
                           ),
+                          maxLength: 5,
                           autovalidateMode: AutovalidateMode.always,
                           validator: FormBuilderValidators.compose([
                             FormBuilderValidators.maxLength(context, 5,
@@ -269,6 +286,7 @@ class ProfileEditScreen extends HookConsumerWidget {
                           decoration: const InputDecoration(
                             labelText: '性別',
                           ),
+                          maxLength: 10,
                           autovalidateMode: AutovalidateMode.always,
                           validator: FormBuilderValidators.compose([
                             FormBuilderValidators.maxLength(context, 10,

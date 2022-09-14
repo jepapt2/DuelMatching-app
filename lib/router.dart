@@ -92,7 +92,9 @@ final router = GoRouter(
       GoRoute(
         path: '/profile',
         builder: (context, state) => MyProfileScreen(
-            myProfile: true, id: FirebaseAuth.instance.currentUser!.uid),
+          id: FirebaseAuth.instance.currentUser!.uid,
+          initialEdit: false,
+        ),
       ),
       GoRoute(
         path: '/block',
@@ -121,8 +123,10 @@ final router = GoRouter(
       GoRoute(
           path: '/initial_edit',
           builder: (context, state) {
-            final query = state.queryParams['query'];
-            return InitialEditScreen(query: query);
+            final userQuery = state.queryParams['user'];
+            final recruitQuery = state.queryParams['recruit'];
+            return InitialEditScreen(
+                userQuery: userQuery, recruitQuery: recruitQuery);
           }),
       // GoRoute(
       //     path: '/initial_profile',
