@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:app_links/app_links.dart';
 import 'package:duel_matching/freezed/users_view.dart/users_view.dart';
 import 'package:duel_matching/input_options/adress.dart';
 import 'package:duel_matching/input_options/play_title.dart';
+import 'package:duel_matching/main.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/parts/primary_sliverappbar.dart';
 import 'package:duel_matching/parts/scroll_detector.dart';
@@ -33,9 +37,6 @@ class UsersScreen extends HookConsumerWidget {
 
     return UserWhenConsumer(
       child: (user) => FriendsWhenConsumer(child: (friends) {
-        WidgetsBinding.instance.addPostFrameCallback(
-            (_) => _showTutorial(context: context, profile: user));
-
         final hideIds = [
           FirebaseAuth.instance.currentUser!.uid,
           ...friends.map((f) => f.uid).toList(),
@@ -45,9 +46,40 @@ class UsersScreen extends HookConsumerWidget {
         useEffect(() {
           Future.delayed(
             Duration.zero,
-            () => usersControllerNotifier.loadUsers(hideIds),
+            () {
+              usersControllerNotifier.loadUsers(hideIds);
+              _showTutorial(context: context, profile: user);
+            },
           );
         }, []);
+
+        WidgetsBinding.instance.addPostFrameCallback((_) => null);
+        //ディープリンク遷移
+        FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
+          if (dynamicLinkData.link.queryParameters['user'] != null) {
+            await Future.delayed(
+                const Duration(
+                  seconds: 1,
+                ), () async {
+              GoRouter.of(context).go('/users');
+              if (dynamicLinkData.link.queryParameters['user'] ==
+                  FirebaseAuth.instance.currentUser?.uid) {
+                GoRouter.of(context).push('/profile');
+              } else {
+                GoRouter.of(context).push(
+                    '/user/${dynamicLinkData.link.queryParameters['user']}');
+              }
+            });
+          }
+          if (dynamicLinkData.link.queryParameters['recruit'] != null) {
+            GoRouter.of(context).go('/recruits');
+
+            GoRouter.of(context).push(
+                '/recruit/${dynamicLinkData.link.queryParameters['recruit']}');
+          }
+        }).onError((error) {
+          // Handle errors
+        });
 
         return PrimaryScaffold(
           pageIndex: 0,
@@ -61,6 +93,7 @@ class UsersScreen extends HookConsumerWidget {
                 controller: controller,
                 slivers: [
                   PrimarySliverAppBar(
+                    // appBarText: 'ユーザ一覧',
                     appBarText: 'ユーザ一覧',
                     user: user,
                     appBarAction: [
@@ -144,7 +177,7 @@ class UsersScreen extends HookConsumerWidget {
                             ),
                           )
                         else
-                          const SizedBox(height: 20.0),
+                          const SizedBox(height: 10.0),
                         GridView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -307,29 +340,33 @@ class UsersScreen extends HookConsumerWidget {
 
   _showTutorial(
       {required BuildContext context, required Profile profile}) async {
-    final dynamicLinkData =
-        await FirebaseDynamicLinks.instance.getInitialLink();
+    PendingDynamicLinkData? dynamicLinkData;
+    final applinks = AppLinks();
+    final Uri? getAppLinks = await applinks.getInitialAppLink();
+
+    if (Platform.isIOS) {
+      dynamicLinkData = getAppLinks != null
+          ? await FirebaseDynamicLinks.instance.getDynamicLink(getAppLinks)
+          : null;
+    } else {
+      dynamicLinkData = await FirebaseDynamicLinks.instance.getInitialLink();
+    }
     // プロフィールの初期設定を完了していないアカウントは初期設定ページへ
     if (!profile.initialSetting) {
       if (dynamicLinkData != null) {
-        GoRouter.of(context).go('/initial_edit?${dynamicLinkData?.link.query}');
+        GoRouter.of(context).go('/initial_edit?${dynamicLinkData.link.query}');
       } else {
         GoRouter.of(context).go('/initial_edit?');
       }
     } else {
       if (dynamicLinkData?.link.queryParameters['user'] != null) {
-        await Future.delayed(
-            const Duration(
-              seconds: 2,
-            ), () async {
-          if (dynamicLinkData?.link.queryParameters['user'] ==
-              FirebaseAuth.instance.currentUser?.uid) {
-            GoRouter.of(context).push('/profile');
-          } else {
-            GoRouter.of(context)
-                .push('/user/${dynamicLinkData!.link.queryParameters['user']}');
-          }
-        });
+        if (dynamicLinkData?.link.queryParameters['user'] ==
+            FirebaseAuth.instance.currentUser?.uid) {
+          GoRouter.of(context).push('/profile');
+        } else {
+          GoRouter.of(context)
+              .push('/user/${dynamicLinkData!.link.queryParameters['user']}');
+        }
       }
       if (dynamicLinkData?.link.queryParameters['recruit'] != null) {
         GoRouter.of(context).go('/recruits');

@@ -1,3 +1,4 @@
+import 'package:app_links/app_links.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/gen/revenuecat_options.dart';
 import 'package:duel_matching/router.dart';
@@ -67,12 +68,12 @@ class LoginNotifier extends ChangeNotifier {
   User? user = FirebaseAuth.instance.currentUser;
 }
 
-class MyApp extends HookWidget {
+class MyApp extends HookConsumerWidget {
   MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       localizationsDelegates: [

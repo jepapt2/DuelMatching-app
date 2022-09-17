@@ -12,6 +12,7 @@
 	<array>
 		<string>applinks:dairi.page.link</string>
 		<string>applinks:duelmatching.page.link</string>
+		<string>applinks:example.page.link</string>
 	</array>
 </dict>
 </plist>

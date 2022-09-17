@@ -15,20 +15,22 @@ String getUriPrefix() {
 Future<Uri> userShareDynamicLinks(
     {required String id, required Profile profile}) async {
   DynamicLinkParameters link = DynamicLinkParameters(
-      link: Uri.parse("https://duelmatching.com/?user=$id"),
-      uriPrefix: getUriPrefix(),
-      androidParameters: const AndroidParameters(
-          packageName: 'com.dairi.duelmatching', minimumVersion: 1),
-      iosParameters: const IOSParameters(
-          bundleId: 'com.dairi.duelmatching',
-          appStoreId: '1630632585',
-          minimumVersion: '1'),
-      socialMetaTagParameters: SocialMetaTagParameters(
-        imageUrl: Uri.parse(
-            'https://duelmatching.com/static/media/TopLogo.f4ad8682.png'),
-        title: '${profile.name}のプロフィール',
-        description: profile.comment,
-      ));
+    link: Uri.parse("https://duelmatching.com/?user=$id"),
+    uriPrefix: getUriPrefix(),
+    androidParameters: const AndroidParameters(
+        packageName: 'com.dairi.duelmatching', minimumVersion: 1),
+    iosParameters: const IOSParameters(
+      bundleId: 'com.dairi.duelmatching',
+      appStoreId: '1630632585',
+      minimumVersion: '1',
+    ),
+    socialMetaTagParameters: SocialMetaTagParameters(
+      imageUrl: Uri.parse(
+          'https://duelmatching.com/static/media/TopLogo.f4ad8682.png'),
+      title: '${profile.name}のプロフィール',
+      description: profile.comment,
+    ),
+  );
 
   final ShortDynamicLink shortLink =
       await FirebaseDynamicLinks.instance.buildShortLink(link);
@@ -39,20 +41,21 @@ Future<Uri> userShareDynamicLinks(
 Future<Uri> recruitShareDynamicLinks(
     {required String id, required Recruit recruit}) async {
   DynamicLinkParameters link = DynamicLinkParameters(
-      link: Uri.parse("https://duelmatching.com/?recruit=$id"),
-      uriPrefix: getUriPrefix(),
-      androidParameters: const AndroidParameters(
-          packageName: 'com.dairi.duelmatching', minimumVersion: 1),
-      iosParameters: const IOSParameters(
-          bundleId: 'com.dairi.duelmatching',
-          appStoreId: '1630632585',
-          minimumVersion: '1'),
-      socialMetaTagParameters: SocialMetaTagParameters(
-        imageUrl: Uri.parse(
-            'https://duelmatching.com/static/media/TopLogo.f4ad8682.png'),
-        title: recruit.title,
-        description: recruit.overview,
-      ));
+    link: Uri.parse("https://duelmatching.com/?recruit=$id"),
+    uriPrefix: getUriPrefix(),
+    androidParameters: const AndroidParameters(
+        packageName: 'com.dairi.duelmatching', minimumVersion: 1),
+    iosParameters: const IOSParameters(
+      bundleId: 'com.dairi.duelmatching',
+      appStoreId: '1630632585',
+    ),
+    socialMetaTagParameters: SocialMetaTagParameters(
+      imageUrl: Uri.parse(
+          'https://duelmatching.com/static/media/TopLogo.f4ad8682.png'),
+      title: recruit.title,
+      description: recruit.overview,
+    ),
+  );
 
   final ShortDynamicLink shortLink =
       await FirebaseDynamicLinks.instance.buildShortLink(link);
