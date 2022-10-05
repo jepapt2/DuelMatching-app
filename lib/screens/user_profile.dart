@@ -221,7 +221,11 @@ class UserProfileScreen extends HookConsumerWidget {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .all(8.0),
+                                                                      .only(
+                                                                  top: 8.0,
+                                                                  bottom: 8.0,
+                                                                  left: 20.0,
+                                                                  right: 8.0),
                                                           child: Wrap(
                                                               spacing: 2.0,
                                                               runSpacing: 5.0,
@@ -243,7 +247,11 @@ class UserProfileScreen extends HookConsumerWidget {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .all(8.0),
+                                                                      .only(
+                                                                  top: 8.0,
+                                                                  bottom: 8.0,
+                                                                  left: 20.0,
+                                                                  right: 8.0),
                                                           child: Text(
                                                               user.favorite!),
                                                         )
@@ -255,7 +263,11 @@ class UserProfileScreen extends HookConsumerWidget {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .all(8.0),
+                                                                      .only(
+                                                                  top: 8.0,
+                                                                  bottom: 8.0,
+                                                                  left: 20.0,
+                                                                  right: 8.0),
                                                           child: Text(
                                                               user.adress!),
                                                         )
@@ -266,7 +278,11 @@ class UserProfileScreen extends HookConsumerWidget {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .all(8.0),
+                                                                      .only(
+                                                                  top: 8.0,
+                                                                  bottom: 8.0,
+                                                                  left: 20.0,
+                                                                  right: 8.0),
                                                           child: Text(
                                                               user.remoteDuel!
                                                                   ? 'あり'
@@ -280,7 +296,11 @@ class UserProfileScreen extends HookConsumerWidget {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .all(8.0),
+                                                                      .only(
+                                                                  top: 8.0,
+                                                                  bottom: 8.0,
+                                                                  left: 20.0,
+                                                                  right: 8.0),
                                                           child: Text(user
                                                               .activityDay!),
                                                         )
@@ -292,7 +312,11 @@ class UserProfileScreen extends HookConsumerWidget {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .all(8.0),
+                                                                      .only(
+                                                                  top: 8.0,
+                                                                  bottom: 8.0,
+                                                                  left: 20.0,
+                                                                  right: 8.0),
                                                           child: Text(user
                                                               .activityTime!),
                                                         )
@@ -304,7 +328,11 @@ class UserProfileScreen extends HookConsumerWidget {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .all(8.0),
+                                                                      .only(
+                                                                  top: 8.0,
+                                                                  bottom: 8.0,
+                                                                  left: 20.0,
+                                                                  right: 8.0),
                                                           child:
                                                               Text(user.age!),
                                                         )
@@ -316,7 +344,11 @@ class UserProfileScreen extends HookConsumerWidget {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .all(8.0),
+                                                                      .only(
+                                                                  top: 8.0,
+                                                                  bottom: 8.0,
+                                                                  left: 20.0,
+                                                                  right: 8.0),
                                                           child:
                                                               Text(user.sex!),
                                                         )

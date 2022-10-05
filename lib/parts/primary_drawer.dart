@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:launch_review/launch_review.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../freezed/user_profile/user_profile.dart';
@@ -123,17 +124,23 @@ class PrimaryDrawer extends StatelessWidget {
               title: const Text('アカウント・その他'),
               onTap: () {
                 GoRouter.of(context).push('/account');
-                // GoRouter.of(context).go('/logout');
-                // Future.delayed(
-                //     const Duration(
-                //       seconds: 1,
-                //     ), () async {
-                //   await Purchases.logOut();
-                //   await FirebaseAuth.instance.signOut();
-                // });
               },
             );
-          })
+          }),
+          ListTile(
+            minLeadingWidth: 0.0,
+            contentPadding: const EdgeInsets.only(left: 5.0, right: 0.0),
+            leading: const Icon(
+              Icons.reviews,
+              color: Color(0xffff8e3c),
+            ),
+            title: const Text('このアプリをレビューする'),
+            onTap: () {
+              LaunchReview.launch(
+                  androidAppId: "com.dairi.duelmatching",
+                  iOSAppId: "1630632585");
+            },
+          ),
         ],
       ),
     );

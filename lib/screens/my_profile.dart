@@ -226,7 +226,11 @@ class MyProfileScreen extends HookConsumerWidget {
                                     TableRow(children: [
                                       const Text('プレイタイトル'),
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.only(
+                                            top: 8.0,
+                                            bottom: 8.0,
+                                            left: 20.0,
+                                            right: 8.0),
                                         child: Wrap(
                                             spacing: 2.0,
                                             runSpacing: 5.0,
@@ -243,7 +247,11 @@ class MyProfileScreen extends HookConsumerWidget {
                                     TableRow(children: [
                                       const Text('好きなカード'),
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.only(
+                                            top: 8.0,
+                                            bottom: 8.0,
+                                            left: 20.0,
+                                            right: 8.0),
                                         child: Text(user.favorite!),
                                       )
                                     ]),
@@ -251,7 +259,11 @@ class MyProfileScreen extends HookConsumerWidget {
                                     TableRow(children: [
                                       const Text('居住地'),
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.only(
+                                            top: 8.0,
+                                            bottom: 8.0,
+                                            left: 20.0,
+                                            right: 8.0),
                                         child: Text(user.adress!),
                                       )
                                     ]),
@@ -259,7 +271,11 @@ class MyProfileScreen extends HookConsumerWidget {
                                     TableRow(children: [
                                       const Text('リモート対戦環境'),
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.only(
+                                            top: 8.0,
+                                            bottom: 8.0,
+                                            left: 20.0,
+                                            right: 8.0),
                                         child: Text(
                                             user.remoteDuel! ? 'あり' : 'なし'),
                                       )
@@ -268,7 +284,11 @@ class MyProfileScreen extends HookConsumerWidget {
                                     TableRow(children: [
                                       const Text('活動日'),
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.only(
+                                            top: 8.0,
+                                            bottom: 8.0,
+                                            left: 20.0,
+                                            right: 8.0),
                                         child: Text(user.activityDay!),
                                       )
                                     ]),
@@ -276,7 +296,11 @@ class MyProfileScreen extends HookConsumerWidget {
                                     TableRow(children: [
                                       const Text('活動時間'),
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.only(
+                                            top: 8.0,
+                                            bottom: 8.0,
+                                            left: 20.0,
+                                            right: 8.0),
                                         child: Text(user.activityTime!),
                                       )
                                     ]),
@@ -284,7 +308,11 @@ class MyProfileScreen extends HookConsumerWidget {
                                     TableRow(children: [
                                       const Text('年齢'),
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.only(
+                                            top: 8.0,
+                                            bottom: 8.0,
+                                            left: 20.0,
+                                            right: 8.0),
                                         child: Text(user.age!),
                                       )
                                     ]),
@@ -292,7 +320,11 @@ class MyProfileScreen extends HookConsumerWidget {
                                     TableRow(children: [
                                       const Text('性別'),
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.only(
+                                            top: 8.0,
+                                            bottom: 8.0,
+                                            left: 20.0,
+                                            right: 8.0),
                                         child: Text(user.sex!),
                                       )
                                     ]),

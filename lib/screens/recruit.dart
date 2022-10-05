@@ -78,25 +78,6 @@ class RecruitScreen extends HookConsumerWidget {
                             body: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  Container(
-                                    color: const Color(0xfffffffe),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0, horizontal: 5.0),
-                                    child: Center(
-                                      child: Text(
-                                        recruit.title,
-                                        style: const TextStyle(
-                                          color: Color(0xff2a2a2a),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25,
-                                          backgroundColor: Color(0xfffffffe),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 30.0,
-                                  ),
                                   Visibility(
                                       visible: recruit.cancel,
                                       child: Padding(

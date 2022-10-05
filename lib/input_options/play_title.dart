@@ -9,5 +9,7 @@ const List<String> playTitleOption = [
   'Z/X',
   'Lycee',
   'バディファイト',
-  '遊戯王ラッシュ'
+  '遊戯王ラッシュ',
+  'ワンピース',
+  'デジモン'
 ];
