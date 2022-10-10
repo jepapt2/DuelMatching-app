@@ -4,6 +4,14 @@ part 'notice.freezed.dart';
 part 'notice.g.dart';
 
 @freezed
+class NoticeWithId with _$NoticeWithId {
+  factory NoticeWithId(
+      {required final String id, required final Notice notice}) = _NoticeWithId;
+
+  const NoticeWithId._();
+}
+
+@freezed
 class Notice with _$Notice {
   factory Notice(
       {required final String type,

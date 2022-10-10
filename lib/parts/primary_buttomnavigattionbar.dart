@@ -10,7 +10,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final navigationIndexProvider =
     StateProvider<IndexName>((ref) => IndexName.users);
 
-enum IndexName { users, recruits, notice }
+enum IndexName { users, recruits, messages, notice }
 
 class PrimaryButtomNavigationBar extends StatelessWidget {
   const PrimaryButtomNavigationBar({
@@ -37,6 +37,9 @@ class PrimaryButtomNavigationBar extends StatelessWidget {
                 }
               }),
           BottomNavigationBar(
+            showUnselectedLabels: true,
+            enableFeedback: true,
+            type: BottomNavigationBarType.fixed,
             currentIndex: pageIndex,
             onTap: (index) {
               GoRouter.of(context)
@@ -50,6 +53,10 @@ class PrimaryButtomNavigationBar extends StatelessWidget {
               BottomNavigationBarItem(
                 icon: FaIcon(FontAwesomeIcons.solidFileLines),
                 label: '募集',
+              ),
+              BottomNavigationBarItem(
+                icon: FaIcon(FontAwesomeIcons.solidMessage),
+                label: 'メッセージ',
               ),
               BottomNavigationBarItem(
                   icon: Icon(Icons.notifications), label: '通知'),

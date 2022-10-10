@@ -14,6 +14,166 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+/// @nodoc
+class _$NoticeWithIdTearOff {
+  const _$NoticeWithIdTearOff();
+
+  _NoticeWithId call({required String id, required Notice notice}) {
+    return _NoticeWithId(
+      id: id,
+      notice: notice,
+    );
+  }
+}
+
+/// @nodoc
+const $NoticeWithId = _$NoticeWithIdTearOff();
+
+/// @nodoc
+mixin _$NoticeWithId {
+  String get id => throw _privateConstructorUsedError;
+  Notice get notice => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $NoticeWithIdCopyWith<NoticeWithId> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $NoticeWithIdCopyWith<$Res> {
+  factory $NoticeWithIdCopyWith(
+          NoticeWithId value, $Res Function(NoticeWithId) then) =
+      _$NoticeWithIdCopyWithImpl<$Res>;
+  $Res call({String id, Notice notice});
+
+  $NoticeCopyWith<$Res> get notice;
+}
+
+/// @nodoc
+class _$NoticeWithIdCopyWithImpl<$Res> implements $NoticeWithIdCopyWith<$Res> {
+  _$NoticeWithIdCopyWithImpl(this._value, this._then);
+
+  final NoticeWithId _value;
+  // ignore: unused_field
+  final $Res Function(NoticeWithId) _then;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? notice = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      notice: notice == freezed
+          ? _value.notice
+          : notice // ignore: cast_nullable_to_non_nullable
+              as Notice,
+    ));
+  }
+
+  @override
+  $NoticeCopyWith<$Res> get notice {
+    return $NoticeCopyWith<$Res>(_value.notice, (value) {
+      return _then(_value.copyWith(notice: value));
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$NoticeWithIdCopyWith<$Res>
+    implements $NoticeWithIdCopyWith<$Res> {
+  factory _$NoticeWithIdCopyWith(
+          _NoticeWithId value, $Res Function(_NoticeWithId) then) =
+      __$NoticeWithIdCopyWithImpl<$Res>;
+  @override
+  $Res call({String id, Notice notice});
+
+  @override
+  $NoticeCopyWith<$Res> get notice;
+}
+
+/// @nodoc
+class __$NoticeWithIdCopyWithImpl<$Res> extends _$NoticeWithIdCopyWithImpl<$Res>
+    implements _$NoticeWithIdCopyWith<$Res> {
+  __$NoticeWithIdCopyWithImpl(
+      _NoticeWithId _value, $Res Function(_NoticeWithId) _then)
+      : super(_value, (v) => _then(v as _NoticeWithId));
+
+  @override
+  _NoticeWithId get _value => super._value as _NoticeWithId;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? notice = freezed,
+  }) {
+    return _then(_NoticeWithId(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      notice: notice == freezed
+          ? _value.notice
+          : notice // ignore: cast_nullable_to_non_nullable
+              as Notice,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_NoticeWithId extends _NoticeWithId {
+  _$_NoticeWithId({required this.id, required this.notice}) : super._();
+
+  @override
+  final String id;
+  @override
+  final Notice notice;
+
+  @override
+  String toString() {
+    return 'NoticeWithId(id: $id, notice: $notice)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _NoticeWithId &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.notice, notice));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(notice));
+
+  @JsonKey(ignore: true)
+  @override
+  _$NoticeWithIdCopyWith<_NoticeWithId> get copyWith =>
+      __$NoticeWithIdCopyWithImpl<_NoticeWithId>(this, _$identity);
+}
+
+abstract class _NoticeWithId extends NoticeWithId {
+  factory _NoticeWithId({required String id, required Notice notice}) =
+      _$_NoticeWithId;
+  _NoticeWithId._() : super._();
+
+  @override
+  String get id;
+  @override
+  Notice get notice;
+  @override
+  @JsonKey(ignore: true)
+  _$NoticeWithIdCopyWith<_NoticeWithId> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 Notice _$NoticeFromJson(Map<String, dynamic> json) {
   return _Notice.fromJson(json);
 }

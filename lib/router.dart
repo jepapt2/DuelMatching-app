@@ -7,6 +7,7 @@ import 'package:duel_matching/screens/group_chat.dart';
 import 'package:duel_matching/screens/joined_recruit.dart';
 import 'package:duel_matching/screens/login.dart';
 import 'package:duel_matching/screens/logout.dart';
+import 'package:duel_matching/screens/messages.dart';
 import 'package:duel_matching/screens/notice.dart';
 import 'package:duel_matching/screens/my_profile.dart';
 import 'package:duel_matching/screens/notice_redirect.dart';
@@ -42,6 +43,15 @@ final router = GoRouter(
         pageBuilder: (context, state) => NoTransitionPage<void>(
           key: state.pageKey,
           child: RecruitsScreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/messages',
+        pageBuilder: (context, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: MessagesScreen(
+            noticeData: state.extra as Map<String, dynamic>?,
+          ),
         ),
       ),
       GoRoute(
