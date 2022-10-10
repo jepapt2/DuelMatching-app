@@ -141,6 +141,7 @@ class NewMessageNotice extends StatelessWidget {
             width: 10.0,
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               if (DateTime(
                       updateAt.year, updateAt.month, updateAt.day, 0, 0, 0) ==
@@ -243,6 +244,7 @@ class NewGroupMessageNotice extends StatelessWidget {
                 width: 10.0,
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   if (DateTime(updateAt.year, updateAt.month, updateAt.day, 0,
                           0, 0) ==
@@ -258,13 +260,17 @@ class NewGroupMessageNotice extends StatelessWidget {
                       style: const TextStyle(color: Colors.black54),
                     ),
                   Visibility(
-                    visible: unReadCount > 0,
-                    child: const Icon(
-                      Icons.circle,
-                      size: 18,
-                      color: Color(0xffff8e3c),
-                    ),
-                  )
+                      visible: unReadCount > 0,
+                      child: Chip(
+                        label: Text(
+                          unReadCount > 99 ? '99+' : unReadCount.toString(),
+                          style: const TextStyle(fontSize: 15),
+                        ),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        labelPadding: const EdgeInsets.symmetric(horizontal: 5),
+                        visualDensity:
+                            const VisualDensity(horizontal: 0.0, vertical: -4),
+                      )),
                 ],
               )
             ],
@@ -367,7 +373,7 @@ class FriendRequestNotice extends HookWidget {
                                     OutlinedButton(
                                         onPressed: () =>
                                             requestRejectionDialog(context),
-                                        child: Text('拒否する'))
+                                        child: const Text('拒否する'))
                                   ],
                                 )
                               ],

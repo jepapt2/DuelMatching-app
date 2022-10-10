@@ -22,67 +22,77 @@ class NoticeScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var nowTime = useMemoized(DateTime.now);
 
-    useEffect(() {
-      Future.delayed(Duration.zero, () {
-        userDocument(FirebaseAuth.instance.currentUser!.uid)
-            .update({'readNoticeAt': DateTime.now()});
-        var batch = FirebaseFirestore.instance.batch();
-        // batch.update(document, data)
-      });
-      return null;
-    }, []);
-
     var noticesRef = ref.watch(noticesProvider);
     return UserWhenConsumer(child: (user) {
       return noticesRef.when(
-          data: (notices) => PrimaryScaffold(
-              pageIndex: 3,
-              child: CustomScrollView(
-                slivers: [
-                  PrimarySliverAppBar(
-                    user: user,
-                    appBarText: '通知',
-                    appBarAction: const [],
-                  ),
-                  SliverList(
-                      delegate: SliverChildListDelegate([
-                    const SizedBox(
-                      height: 4.0,
+          data: (notices) {
+            //通知の既読処理
+            useEffect(() {
+              Future.delayed(Duration.zero, () {
+                var batch = FirebaseFirestore.instance.batch();
+                //未読の通知だけ抽出
+                List<NoticeWithId> unReadNotices =
+                    notices.where((n) => n.notice.unReadCount <= 1).toList();
+                //すべて既読に
+                for (var notice in unReadNotices) {
+                  batch.update(
+                      noticeCollection(FirebaseAuth.instance.currentUser!.uid)
+                          .doc(notice.id),
+                      {'unReadCount': 0});
+                }
+                batch.commit();
+              });
+              return null;
+            }, []);
+            return PrimaryScaffold(
+                pageIndex: 3,
+                child: CustomScrollView(
+                  slivers: [
+                    PrimarySliverAppBar(
+                      user: user,
+                      appBarText: '通知',
+                      appBarAction: const [],
                     ),
-                    if (notices.isEmpty)
-                      Center(
-                          child: Column(
-                        children: const [
-                          SizedBox(
-                            height: 100.0,
-                          ),
-                          Text('まだ通知はありません'),
-                        ],
-                      ))
-                    else
-                      ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: notices.length,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5.0, vertical: 2.0),
-                                    child: NoticeCard(
-                                      id: notices[index].id,
-                                      notice: notices[index].notice,
-                                      nowTime: nowTime,
-                                    )),
-                                const Divider()
-                              ],
-                            );
-                          }),
-                  ]))
-                ],
-              ),
-              user: user),
+                    SliverList(
+                        delegate: SliverChildListDelegate([
+                      const SizedBox(
+                        height: 4.0,
+                      ),
+                      if (notices.isEmpty)
+                        Center(
+                            child: Column(
+                          children: const [
+                            SizedBox(
+                              height: 100.0,
+                            ),
+                            Text('まだ通知はありません'),
+                          ],
+                        ))
+                      else
+                        ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: notices.length,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5.0, vertical: 2.0),
+                                      child: NoticeCard(
+                                        id: notices[index].id,
+                                        notice: notices[index].notice,
+                                        nowTime: nowTime,
+                                      )),
+                                  const Divider()
+                                ],
+                              );
+                            }),
+                    ]))
+                  ],
+                ),
+                user: user);
+          },
           error: (error, _) {
             print(error.toString());
             return Scaffold(
