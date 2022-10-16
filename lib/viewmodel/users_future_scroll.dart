@@ -54,7 +54,7 @@ class UsersFutureScrollNotifier extends StateNotifier<UsersFutureScroll> {
         }
 
         state = state.copyWith(
-            list: [...?state.list, ...organizedList],
+            list: [...?state.list, ...organizedList].toSet().toList(),
             lastDocument: organizedList.isNotEmpty
                 ? organizedList.last
                 : state.list!.last,
@@ -70,7 +70,7 @@ class UsersFutureScrollNotifier extends StateNotifier<UsersFutureScroll> {
       }
     } else {
       try {
-        QuerySnapshot<Profile> document = await state.query.limit(10).get();
+        QuerySnapshot<Profile> document = await state.query.limit(11).get();
         List<ProfileWithId> getList = document.docs
             .map((e) => ProfileWithId(id: e.id, profile: e.data()))
             .toList();
@@ -83,8 +83,8 @@ class UsersFutureScrollNotifier extends StateNotifier<UsersFutureScroll> {
           organizedList = getList;
         }
         state = state.copyWith(
-            list: [...organizedList],
-            lastDocument: organizedList.isNotEmpty ? organizedList.last : null,
+            list: [...organizedList].toSet().toList(),
+            lastDocument: getList.isNotEmpty ? getList.last : null,
             hitBottom: getList.length < 10,
             loading: false);
       } catch (_) {

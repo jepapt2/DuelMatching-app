@@ -25,6 +25,7 @@ import 'local/fluttefire.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: getFirebaseOptions());
+
   final messaging = FirebaseMessaging.instance;
   await messaging.requestPermission(
     alert: true,

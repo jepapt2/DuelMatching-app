@@ -49,18 +49,16 @@ final router = GoRouter(
         path: '/messages',
         pageBuilder: (context, state) => NoTransitionPage<void>(
           key: state.pageKey,
-          child: MessagesScreen(
-            noticeData: state.extra as Map<String, dynamic>?,
-          ),
+          child: const MessagesScreen(
+              // noticeData: state.extra as Map<String, dynamic>?,
+              ),
         ),
       ),
       GoRoute(
         path: '/notice',
         pageBuilder: (context, state) => NoTransitionPage<void>(
           key: state.pageKey,
-          child: NoticeScreen(
-            noticeData: state.extra as Map<String, dynamic>?,
-          ),
+          child: const NoticeScreen(),
         ),
       ),
       GoRoute(

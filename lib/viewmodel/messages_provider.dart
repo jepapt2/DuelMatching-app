@@ -2,8 +2,9 @@ import 'package:duel_matching/freezed/notice/notice.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final messagesProvider = StreamProvider.autoDispose<List<NoticeWithId>>((ref) {
-  final document = noticeCollection(FirebaseAuth.instance.currentUser!.uid)
+final messagesProvider =
+    StreamProvider.family.autoDispose<List<NoticeWithId>, String>((ref, id) {
+  final document = noticeCollection(id)
       .where('type', whereIn: ['newMessage', 'newGroupMessage'])
       .orderBy('updateAt', descending: true)
       .limit(100);

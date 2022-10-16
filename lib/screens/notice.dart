@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duel_matching/freezed/notice/notice.dart';
-import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/notice_cards.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/parts/primary_sliverappbar.dart';
@@ -9,20 +8,18 @@ import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutterfire_ui/firestore.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class NoticeScreen extends HookConsumerWidget {
-  NoticeScreen({Key? key, this.noticeData}) : super(key: key);
-
-  final Map<String, dynamic>? noticeData;
+  const NoticeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var nowTime = useMemoized(DateTime.now);
 
-    var noticesRef = ref.watch(noticesProvider);
+    final noticesRef =
+        ref.watch(noticesProvider(FirebaseAuth.instance.currentUser!.uid));
     return UserWhenConsumer(child: (user) {
       return noticesRef.when(
           data: (notices) {
@@ -55,9 +52,6 @@ class NoticeScreen extends HookConsumerWidget {
                     ),
                     SliverList(
                         delegate: SliverChildListDelegate([
-                      const SizedBox(
-                        height: 4.0,
-                      ),
                       if (notices.isEmpty)
                         Center(
                             child: Column(
@@ -69,25 +63,28 @@ class NoticeScreen extends HookConsumerWidget {
                           ],
                         ))
                       else
-                        ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: notices.length,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 5.0, vertical: 2.0),
-                                      child: NoticeCard(
-                                        id: notices[index].id,
-                                        notice: notices[index].notice,
-                                        nowTime: nowTime,
-                                      )),
-                                  const Divider()
-                                ],
-                              );
-                            }),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: notices.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5.0, vertical: 2.0),
+                                        child: NoticeCard(
+                                          id: notices[index].id,
+                                          notice: notices[index].notice,
+                                          nowTime: nowTime,
+                                        )),
+                                    const Divider()
+                                  ],
+                                );
+                              }),
+                        ),
                     ]))
                   ],
                 ),
