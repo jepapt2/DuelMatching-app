@@ -64,13 +64,9 @@ class UserWhenConsumer extends HookConsumerWidget {
     ref.listen<UserProfile>(
         userProfileProvider(id ?? FirebaseAuth.instance.currentUser!.uid),
         (previous, next) async {
-      print('✋');
-      print(previous);
-      print(next);
       if ((previous?.profile is AsyncLoading<Profile> ||
               previous?.profile is AsyncError<Profile>) &&
           next.profile is AsyncData<Profile>) {
-        print('✊');
         final token = await FirebaseMessaging.instance.getToken();
 
         FirebaseFirestore.instance

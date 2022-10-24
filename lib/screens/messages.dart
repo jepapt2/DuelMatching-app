@@ -1,3 +1,4 @@
+import 'package:duel_matching/parts/message_cards.dart';
 import 'package:duel_matching/parts/notice_cards.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/parts/primary_sliverappbar.dart';
@@ -43,7 +44,7 @@ class MessagesScreen extends HookConsumerWidget {
                       ))
                     else
                       Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
+                        padding: const EdgeInsets.only(top: 2.0),
                         child: ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -54,7 +55,7 @@ class MessagesScreen extends HookConsumerWidget {
                                   Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 5.0, vertical: 2.0),
-                                      child: NoticeCard(
+                                      child: MessageCard(
                                         id: messages[index].id,
                                         notice: messages[index].notice,
                                         nowTime: nowTime,

@@ -28,7 +28,7 @@ ThemeData appTheme() {
           shape: Border(bottom: BorderSide(color: Colors.black38)),
           toolbarTextStyle: TextStyle(color: Color(0xff2a2a2a)),
           centerTitle: true,
-          elevation: 5.0),
+          elevation: 2.0),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Color(0xffeff0f3),
           unselectedItemColor: Color(0xff2a2a2a),

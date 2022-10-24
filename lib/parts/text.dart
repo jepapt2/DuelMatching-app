@@ -6,7 +6,7 @@ RichText getRequiredLabel(String fieldName) {
           style: const TextStyle(color: Color(0xff2a2a2a)),
           text: fieldName,
           children: const [
-        TextSpan(text: '*', style: TextStyle(color: Colors.red, fontSize: 30.0))
+        TextSpan(text: '*', style: TextStyle(color: Colors.red, fontSize: 15.0))
       ]));
 }
 

@@ -53,6 +53,11 @@ class UsersFutureScrollNotifier extends StateNotifier<UsersFutureScroll> {
           organizedList = getList;
         }
 
+        organizedList = organizedList
+            .where((u) =>
+                u.profile.playTitle != null && u.profile.playTitle!.isNotEmpty)
+            .toList();
+
         state = state.copyWith(
             list: [...?state.list, ...organizedList].toSet().toList(),
             lastDocument: organizedList.isNotEmpty
@@ -70,7 +75,7 @@ class UsersFutureScrollNotifier extends StateNotifier<UsersFutureScroll> {
       }
     } else {
       try {
-        QuerySnapshot<Profile> document = await state.query.limit(11).get();
+        QuerySnapshot<Profile> document = await state.query.limit(21).get();
         List<ProfileWithId> getList = document.docs
             .map((e) => ProfileWithId(id: e.id, profile: e.data()))
             .toList();
@@ -82,6 +87,10 @@ class UsersFutureScrollNotifier extends StateNotifier<UsersFutureScroll> {
         } else {
           organizedList = getList;
         }
+        organizedList = organizedList
+            .where((u) =>
+                u.profile.playTitle != null && u.profile.playTitle!.isNotEmpty)
+            .toList();
         state = state.copyWith(
             list: [...organizedList].toSet().toList(),
             lastDocument: getList.isNotEmpty ? getList.last : null,

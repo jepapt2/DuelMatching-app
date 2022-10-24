@@ -64,7 +64,7 @@ class NoticeScreen extends HookConsumerWidget {
                         ))
                       else
                         Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
+                          padding: const EdgeInsets.only(top: 2.0),
                           child: ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
@@ -91,7 +91,6 @@ class NoticeScreen extends HookConsumerWidget {
                 user: user);
           },
           error: (error, _) {
-            print(error.toString());
             return Scaffold(
               body: Center(
                 child: Column(

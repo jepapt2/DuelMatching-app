@@ -1,6 +1,4 @@
 import 'package:duel_matching/viewmodel/purchases_notifier.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -37,9 +35,16 @@ class NoticeRedirect extends ConsumerWidget {
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       GoRouter.of(context).go('/notice');
       if (message.data['chatRoomId'] != null) {
+        GoRouter.of(context).go('/messages');
         GoRouter.of(context).push('/chatRoom/${message.data['chatRoomId']}');
       } else if (message.data['groupId'] != null) {
+        GoRouter.of(context).go('/messages');
         GoRouter.of(context).push('/group/${message.data['groupId']}');
+      } else if (message.data['recruitId'] != null) {
+        GoRouter.of(context).go('/notice');
+        GoRouter.of(context).push('/recruit/${message.data['recruitId']}');
+      } else {
+        GoRouter.of(context).go('/notice');
       }
     });
     return Builder(builder: (context) {
