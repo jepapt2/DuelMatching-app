@@ -17,29 +17,31 @@ class AccountScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('アカウント'),
       ),
-      body:
-          ListView(padding: EdgeInsets.only(top: 10.0, left: 10.0), children: [
-        ListTile(
-          title: const Text('ログアウト'),
-          onTap: () => logoutDialog(context),
-        ),
-        const Divider(),
-        ListTile(
-          title: const Text('アカウント削除'),
-          onTap: () => deleteDialog(context),
-        ),
-        const Divider(),
-        ListTile(
-          title: const Text('利用規約'),
-          onTap: () => launchUrl(Uri.parse('https://duelmatching.com/tos')),
-        ),
-        const Divider(),
-        ListTile(
-          title: const Text('プライバシーポリシー'),
-          onTap: () => launchUrl(Uri.parse('https://duelmatching.com/policie')),
-        ),
-        const Divider(),
-      ]),
+      body: ListView(
+          padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+          children: [
+            ListTile(
+              title: const Text('ログアウト'),
+              onTap: () => logoutDialog(context),
+            ),
+            const Divider(),
+            ListTile(
+              title: const Text('アカウント削除'),
+              onTap: () => deleteDialog(context),
+            ),
+            const Divider(),
+            ListTile(
+              title: const Text('利用規約'),
+              onTap: () => launchUrl(Uri.parse('https://duelmatching.com/tos')),
+            ),
+            const Divider(),
+            ListTile(
+              title: const Text('プライバシーポリシー'),
+              onTap: () =>
+                  launchUrl(Uri.parse('https://duelmatching.com/policie')),
+            ),
+            const Divider(),
+          ]),
     );
   }
 

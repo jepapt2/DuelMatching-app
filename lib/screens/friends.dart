@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/image.dart';
-import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/viewmodel/subscriber_provider.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +21,7 @@ class FriendsScreen extends HookConsumerWidget {
         return SubscriberWhenConsumer(
             id: FirebaseAuth.instance.currentUser!.uid,
             child: (isSubscribed) {
+              //有料会員と無料会員のフレンド制限
               int friendLimit = isSubscribed ? 30 : 10;
               return Scaffold(
                 appBar: AppBar(

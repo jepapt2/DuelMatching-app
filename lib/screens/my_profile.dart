@@ -1,9 +1,8 @@
-import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/input_options/dynamicLinks.dart';
 import 'package:duel_matching/parts/image.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -17,8 +16,11 @@ final myprofileTooltipProvider = StateProvider.autoDispose((ref) {
 });
 
 class MyProfileScreen extends HookConsumerWidget {
-  const MyProfileScreen({Key? key, required this.id, required this.initialEdit})
-      : super(key: key);
+  MyProfileScreen({
+    Key? key,
+    required this.id,
+    required this.initialEdit,
+  }) : super(key: key);
 
   final String id;
   final bool initialEdit;

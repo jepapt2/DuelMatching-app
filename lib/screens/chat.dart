@@ -29,7 +29,7 @@ class ChatScreen extends HookWidget {
             Future.delayed(
               Duration.zero,
               () {
-                //パートナーリストが空、または
+                //パートナーリストが空、またはパートナ内に自分のIDが存在しない場合は退出
                 if (partners.isEmpty ||
                     !partnersId
                         .contains(FirebaseAuth.instance.currentUser!.uid)) {
@@ -47,7 +47,7 @@ class ChatScreen extends HookWidget {
             );
             return null;
           }, []);
-
+          //チャット相手の情報を取得
           Partner partner = partners.singleWhere(
               (element) =>
                   element.uid != FirebaseAuth.instance.currentUser!.uid,
@@ -56,16 +56,17 @@ class ChatScreen extends HookWidget {
           return Consumer(builder: (context, ref, _) {
             ref.listen<AppLifecycleState>(appLifecycleProvider,
                 (previous, next) async {
-              if (previous == AppLifecycleState.resumed && previous != next) {
-                if (partnersId
-                    .contains(FirebaseAuth.instance.currentUser!.uid)) {
-                  await noticeCollection(FirebaseAuth.instance.currentUser!.uid)
-                      .doc('${roomId}_newMessage')
-                      .update({'unReadCount': 0}).then((doc) =>
-                          partnerCollection(roomId)
-                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                              .update({'lastReadAt': DateTime.now()}));
-                }
+              //アプリが休止状態から再開、かつ自分が部屋に存在している時に実行
+              if (previous == AppLifecycleState.resumed &&
+                  previous != next &&
+                  partnersId.contains(FirebaseAuth.instance.currentUser!.uid)) {
+                //通知を既読にし、thenで最後に見た時間を保存
+                await noticeCollection(FirebaseAuth.instance.currentUser!.uid)
+                    .doc('${roomId}_newMessage')
+                    .update({'unReadCount': 0}).then((doc) =>
+                        partnerCollection(roomId)
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .update({'lastReadAt': DateTime.now()}));
               }
             });
             return WillPopScope(
@@ -166,6 +167,7 @@ class ChatScreen extends HookWidget {
 
   onSendMessage(ChatMessage message, String roomId) {
     try {
+      //チャット送信
       chatCollection(roomId).add(FirestoreChatMessage(
           text: message.text, userId: FirebaseAuth.instance.currentUser!.uid));
     } catch (e) {
@@ -180,33 +182,15 @@ class ChatScreen extends HookWidget {
     }
   }
 
-  // onSendMessage(types.PartialText partialText, String roomId) {
-  //   try {
-  //     chatCollection(roomId).add(FirestoreChatMessage(
-  //         text: partialText.text,
-  //         userId: FirebaseAuth.instance.currentUser!.uid,
-  //         createdAt: DateTime.now()));
-  //   } catch (e) {
-  //     Fluttertoast.showToast(
-  //         msg: 'メッセージの送信に失敗しました',
-  //         toastLength: Toast.LENGTH_SHORT,
-  //         gravity: ToastGravity.TOP,
-  //         timeInSecForIosWeb: 1,
-  //         backgroundColor: Colors.red,
-  //         textColor: Colors.white,
-  //         fontSize: 13.0);
-  //   }
-  // }
-
   Future<bool> _willPopCallback(String roomId, List<String> partnersId) async {
+    //部屋を退出た時かつチャットメンバーの場合実行
     if (partnersId.contains(FirebaseAuth.instance.currentUser!.uid)) {
-      try {
-        await noticeCollection(FirebaseAuth.instance.currentUser!.uid)
-            .doc('${roomId}_newMessage')
-            .update({'unReadCount': 0}).then((doc) => partnerCollection(roomId)
-                .doc(FirebaseAuth.instance.currentUser!.uid)
-                .update({'lastReadAt': DateTime.now()}));
-      } catch (_) {}
+      //通知を既読にし、thenで最後に見た時間を保存
+      await noticeCollection(FirebaseAuth.instance.currentUser!.uid)
+          .doc('${roomId}_newMessage')
+          .update({'unReadCount': 0}).then((doc) => partnerCollection(roomId)
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .update({'lastReadAt': DateTime.now()}));
     }
     return true;
   }

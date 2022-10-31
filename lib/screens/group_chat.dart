@@ -4,6 +4,7 @@ import 'package:duel_matching/freezed/notice/notice.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/image.dart';
 import 'package:duel_matching/parts/scroll_detector.dart';
+import 'package:duel_matching/parts/systemAvatar.dart';
 import 'package:duel_matching/viewmodel/applifecycle_provider.dart';
 import 'package:duel_matching/viewmodel/recruit_provider.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
@@ -34,18 +35,7 @@ class GroupChatScreen extends HookWidget {
                     child: (members) {
                       List<String> membersId =
                           members.map((p) => p.uid).toList();
-                      String systemAvatar() {
-                        const flavor = String.fromEnvironment('FLAVOR');
-                        switch (flavor) {
-                          case 'development':
-                            return 'https://firebasestorage.googleapis.com/v0/b/duelmatching.appspot.com/o/asset%2F%E6%83%85%E5%A0%B1%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3.png?alt=media&token=0c1f2669-9bc9-4867-afd3-b0db50a93b66';
-                          case 'production':
-                            return 'https://firebasestorage.googleapis.com/v0/b/duelmatching-5562b.appspot.com/o/asset%2F%E6%83%85%E5%A0%B1%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3.png?alt=media&token=c29c45a2-5214-411a-a358-16b6d80b121f';
-                          default:
-                            return 'https://firebasestorage.googleapis.com/v0/b/duelmatching-5562b.appspot.com/o/asset%2F%E6%83%85%E5%A0%B1%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3.png?alt=media&token=c29c45a2-5214-411a-a358-16b6d80b121f';
-                        }
-                      }
-
+                      //システムメッセージ用のユーザを作成
                       List<Member> membersWithSystem = [
                         ...members,
                         Member(
@@ -60,6 +50,7 @@ class GroupChatScreen extends HookWidget {
                         Future.delayed(
                           Duration.zero,
                           () {
+                            //グループメンバーではない場合は退出
                             if (!membersId.contains(
                                 FirebaseAuth.instance.currentUser!.uid)) {
                               GoRouter.of(context).pop();
@@ -75,25 +66,26 @@ class GroupChatScreen extends HookWidget {
                             }
                           },
                         );
+                        return null;
                       }, []);
 
                       return Consumer(builder: (context, ref, _) {
                         ref.listen<AppLifecycleState>(appLifecycleProvider,
                             (previous, next) async {
+                          //アプリが休止状態から再開、かつ自分が部屋に存在している時に実行
                           if (previous == AppLifecycleState.resumed &&
-                              previous != next) {
-                            if (membersId.contains(
-                                FirebaseAuth.instance.currentUser!.uid)) {
-                              await noticeCollection(
-                                      FirebaseAuth.instance.currentUser!.uid)
-                                  .doc('${roomId}_newGroupMessage')
-                                  .update({'unReadCount': 0}).then((doc) =>
-                                      membersCollection(roomId)
-                                          .doc(FirebaseAuth
-                                              .instance.currentUser!.uid)
-                                          .update(
-                                              {'lastReadAt': DateTime.now()}));
-                            }
+                              previous != next &&
+                              membersId.contains(
+                                  FirebaseAuth.instance.currentUser!.uid)) {
+                            //通知を既読にし、thenで最後に見た時間を保存
+                            await noticeCollection(
+                                    FirebaseAuth.instance.currentUser!.uid)
+                                .doc('${roomId}_newGroupMessage')
+                                .update({
+                              'unReadCount': 0
+                            }).then((doc) => membersCollection(roomId)
+                                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                                    .update({'lastReadAt': DateTime.now()}));
                           }
                         });
                         return WillPopScope(
@@ -237,6 +229,7 @@ class GroupChatScreen extends HookWidget {
 
   onSendMessage(ChatMessage message, Profile myProfile, String roomId) {
     try {
+      //チャット送信
       groupChatCollection(roomId).add(FirestoreGroupChatMessage(
           text: message.text,
           userId: FirebaseAuth.instance.currentUser!.uid,
@@ -253,26 +246,10 @@ class GroupChatScreen extends HookWidget {
     }
   }
 
-  // onSendMessage(types.PartialText partialText, String roomId) {
-  //   try {
-  //     chatCollection(roomId).add(FirestoreChatMessage(
-  //         text: partialText.text,
-  //         userId: FirebaseAuth.instance.currentUser!.uid,
-  //         createdAt: DateTime.now()));
-  //   } catch (e) {
-  //     Fluttertoast.showToast(
-  //         msg: 'メッセージの送信に失敗しました',
-  //         toastLength: Toast.LENGTH_SHORT,
-  //         gravity: ToastGravity.TOP,
-  //         timeInSecForIosWeb: 1,
-  //         backgroundColor: Colors.red,
-  //         textColor: Colors.white,
-  //         fontSize: 13.0);
-  //   }
-  // }
-
   Future<bool> _willPopCallback(String roomId, List<String> membersId) async {
+    //部屋を退出た時かつチャットメンバーの場合実行
     if (membersId.contains(FirebaseAuth.instance.currentUser!.uid)) {
+      //通知を既読にし、thenで最後に見た時間を保存
       await noticeCollection(FirebaseAuth.instance.currentUser!.uid)
           .doc('${roomId}_newGroupMessage')
           .update({'unReadCount': 0}).then((doc) => membersCollection(roomId)

@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:duel_matching/extension/string.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
+import 'package:duel_matching/parts/headerInput.dart';
 import 'package:duel_matching/screens/my_profile.dart';
-import 'package:duel_matching/screens/user_profile.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -15,10 +15,10 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 import '../input_options/adress.dart';
 import '../input_options/play_title.dart';
+import '../parts/avatarInput.dart';
 import '../parts/text.dart';
 
 class InitialEditScreen extends HookConsumerWidget {
@@ -31,7 +31,6 @@ class InitialEditScreen extends HookConsumerWidget {
   final ScrollController _playTitleController = ScrollController();
 
   final picker = ImagePicker();
-  final showTooltipKey = GlobalKey();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -498,193 +497,19 @@ class InitialEditScreen extends HookConsumerWidget {
                       ),
                     ),
                     //5ページ目
-                    MyProfileScreen(
-                      key: showTooltipKey,
-                      id: FirebaseAuth.instance.currentUser!.uid,
-                      initialEdit: true,
-                    )
+                    if (pageState.value == 4)
+                      MyProfileScreen(
+                        id: FirebaseAuth.instance.currentUser!.uid,
+                        initialEdit: true,
+                      )
+                    else
+                      Container()
                   ],
                 ),
               ),
             ),
           );
         });
-  }
-
-  Widget headerInput(
-      context, ValueNotifier<XFile?> inputHeaderImage, String? initialHeader) {
-    Future getImageFromCamera(childContext) async {
-      final pickedFile = await picker.pickImage(
-          source: ImageSource.camera,
-          maxHeight: 400,
-          maxWidth: 1200,
-          imageQuality: 90);
-
-      if (pickedFile != null) {
-        Navigator.pop(childContext);
-        inputHeaderImage.value = XFile(pickedFile.path);
-      }
-    }
-
-    Future getImageFromGallery(childContext) async {
-      final pickedFile = await picker.pickImage(
-          source: ImageSource.gallery,
-          maxHeight: 400,
-          maxWidth: 1200,
-          imageQuality: 90);
-
-      if (pickedFile != null) {
-        Navigator.pop(childContext);
-        inputHeaderImage.value = XFile(pickedFile.path);
-      }
-    }
-
-    Widget headerImageWidget() {
-      if (inputHeaderImage.value != null) {
-        return Image.file(
-          File(inputHeaderImage.value!.path),
-          width: double.infinity,
-          height: 200.0,
-          fit: BoxFit.cover,
-        );
-      } else if (initialHeader.isNotNullAndNotEmpty) {
-        return Image.network(
-          initialHeader!,
-          width: double.infinity,
-          height: 200.0,
-          fit: BoxFit.cover,
-        );
-      } else {
-        return Container(
-          color: Colors.black54,
-          width: double.infinity,
-          height: 200.0,
-        );
-      }
-    }
-
-    imageShowDialog() {
-      return showDialog(
-          context: context,
-          builder: (childContext) {
-            return SimpleDialog(
-              children: [
-                SimpleDialogOption(
-                  child: const Text('ギャラリーから選ぶ'),
-                  onPressed: () => getImageFromGallery(childContext),
-                ),
-                SimpleDialogOption(
-                  child: const Text('カメラから選ぶ'),
-                  onPressed: () => getImageFromCamera(childContext),
-                )
-              ],
-            );
-          });
-    }
-
-    return GestureDetector(
-      onTap: () => imageShowDialog(),
-      child: Stack(
-        alignment: AlignmentDirectional.center,
-        children: [
-          ColorFiltered(
-            colorFilter:
-                const ColorFilter.mode(Colors.black54, BlendMode.darken),
-            child: headerImageWidget(),
-          ),
-          const Icon(
-            Icons.add_a_photo_outlined,
-            color: Colors.white,
-            size: 30.0,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget avatarInput(
-      context, ValueNotifier<XFile?> inputAvatarImage, String? initialAvatar) {
-    Future getImageFromCamera(childContext) async {
-      final pickedFile = await picker.pickImage(
-          source: ImageSource.camera,
-          maxHeight: 300,
-          maxWidth: 300,
-          imageQuality: 90);
-
-      if (pickedFile != null) {
-        Navigator.pop(childContext);
-        inputAvatarImage.value = XFile(pickedFile.path);
-      }
-    }
-
-    Future getImageFromGallery(childContext) async {
-      final pickedFile = await picker.pickImage(
-          source: ImageSource.gallery,
-          maxHeight: 300,
-          maxWidth: 300,
-          imageQuality: 90);
-
-      if (pickedFile != null) {
-        Navigator.pop(childContext);
-        inputAvatarImage.value = XFile(pickedFile.path);
-      }
-    }
-
-    ImageProvider<Object> avatarImageWidget() {
-      if (inputAvatarImage.value != null) {
-        return FileImage(File(inputAvatarImage.value!.path));
-      } else if (initialAvatar.isNotNullAndNotEmpty) {
-        return NetworkImage(initialAvatar!);
-      } else {
-        return const AssetImage('assets/images/initial_avatar.png');
-      }
-    }
-
-    imageShowDialog() {
-      return showDialog(
-          context: context,
-          builder: (childContext) {
-            return SimpleDialog(
-              children: [
-                SimpleDialogOption(
-                  child: const Text('ギャラリーから選ぶ'),
-                  onPressed: () => getImageFromGallery(childContext),
-                ),
-                SimpleDialogOption(
-                  child: const Text('カメラから選ぶ'),
-                  onPressed: () => getImageFromCamera(childContext),
-                )
-              ],
-            );
-          });
-    }
-
-    return GestureDetector(
-      onTap: () => imageShowDialog(),
-      child: Stack(
-        alignment: AlignmentDirectional.center,
-        children: [
-          CircleAvatar(
-            backgroundColor: Colors.white,
-            radius: 50,
-            backgroundImage: avatarImageWidget(),
-          ),
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.black.withOpacity(0.5),
-            ),
-          ),
-          const Icon(
-            Icons.add_a_photo_outlined,
-            color: Colors.white,
-            size: 30.0,
-          ),
-        ],
-      ),
-    );
   }
 
   Future<void> profileUpdate(
@@ -758,9 +583,8 @@ class InitialEditScreen extends HookConsumerWidget {
           'initialSetting': true,
         });
       } catch (e) {
-        print(e.toString());
         Fluttertoast.showToast(
-            msg: e.toString(),
+            msg: 'プロフィールの更新に失敗しました',
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.TOP,
             timeInSecForIosWeb: 1,
