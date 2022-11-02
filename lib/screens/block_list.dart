@@ -102,8 +102,7 @@ class BlockListScreen extends HookConsumerWidget {
 
   Widget blockButton(String id, List<String> blockList) {
     return OutlinedButton(
-        onPressed: () =>
-            userDocument(FirebaseAuth.instance.currentUser!.uid).update({
+        onPressed: () => userDocument(firebaseCurrentUserId).update({
               'blockList': FieldValue.arrayRemove([id])
             }),
         style: ButtonStyle(

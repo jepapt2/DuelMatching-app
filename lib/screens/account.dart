@@ -100,7 +100,7 @@ class AccountScreen extends StatelessWidget {
           final func = FirebaseFunctions.instanceFor(region: 'asia-northeast1')
               .httpsCallable('user-deleteUser');
           await func.call({
-            'id': FirebaseAuth.instance.currentUser!.uid,
+            'id': firebaseCurrentUserId,
           });
           await FirebaseAuth.instance.signOut();
         });

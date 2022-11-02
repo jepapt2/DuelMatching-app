@@ -23,8 +23,8 @@ class PrimaryDrawer extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.only(bottom: 5.0),
               child: Consumer(builder: (context, ref, _) {
-                UserProfile user = ref.read(userProfileProvider(
-                    FirebaseAuth.instance.currentUser!.uid));
+                UserProfile user =
+                    ref.read(userProfileProvider(firebaseCurrentUserId));
                 return user.profile!.when(
                   data: (profile) => Padding(
                     padding: const EdgeInsets.symmetric(

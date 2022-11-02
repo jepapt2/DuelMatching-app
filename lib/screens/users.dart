@@ -34,7 +34,7 @@ class UsersScreen extends HookConsumerWidget {
     return UserWhenConsumer(
       child: (user) => FriendsWhenConsumer(child: (friends) {
         final hideIds = [
-          FirebaseAuth.instance.currentUser!.uid,
+          firebaseCurrentUserId,
           ...friends.map((f) => f.uid).toList(),
           ...?user.blockList
         ];

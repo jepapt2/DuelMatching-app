@@ -1,5 +1,4 @@
 import 'package:duel_matching/parts/message_cards.dart';
-import 'package:duel_matching/parts/notice_cards.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/parts/primary_sliverappbar.dart';
 import 'package:duel_matching/viewmodel/messages_provider.dart';
@@ -16,8 +15,7 @@ class MessagesScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var nowTime = useMemoized(DateTime.now);
-    final messagesRef =
-        ref.watch(messagesProvider(FirebaseAuth.instance.currentUser!.uid));
+    final messagesRef = ref.watch(messagesProvider(firebaseCurrentUserId));
 
     return UserWhenConsumer(child: (user) {
       return messagesRef.when(

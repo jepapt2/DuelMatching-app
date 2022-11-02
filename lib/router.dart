@@ -19,6 +19,7 @@ import 'package:duel_matching/screens/store.dart';
 import 'package:duel_matching/screens/initial_edit.dart';
 import 'package:duel_matching/screens/user_profile.dart';
 import 'package:duel_matching/screens/users.dart';
+import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -100,7 +101,7 @@ final router = GoRouter(
       GoRoute(
         path: '/profile',
         builder: (context, state) => MyProfileScreen(
-          id: FirebaseAuth.instance.currentUser!.uid,
+          id: firebaseCurrentUserId,
           initialEdit: false,
         ),
       ),

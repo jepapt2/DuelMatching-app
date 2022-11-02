@@ -23,7 +23,7 @@ class StoreScreen extends HookConsumerWidget {
     return purchases.when(data: (snapshot) {
       final product = snapshot.current?.monthly?.product;
       return SubscriberWhenConsumer(
-        id: FirebaseAuth.instance.currentUser!.uid,
+        id: firebaseCurrentUserId,
         child: (isSubscriber) => Scaffold(
           appBar: AppBar(title: const Text('サブスクリプション')),
           body: Center(

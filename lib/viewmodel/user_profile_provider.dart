@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-final String firebaseUserId = FirebaseAuth.instance.currentUser!.uid;
+final String firebaseCurrentUserId = FirebaseAuth.instance.currentUser!.uid;
 
 final profileProvider = StreamProvider.family<Profile, String>((ref, id) {
   final document = userDocument(id);
@@ -58,12 +58,11 @@ class UserWhenConsumer extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userProfile = ref.watch(
-        userProfileProvider(id ?? FirebaseAuth.instance.currentUser!.uid));
+    final userProfile =
+        ref.watch(userProfileProvider(id ?? firebaseCurrentUserId));
     final profile = userProfile.profile;
 
-    ref.listen<UserProfile>(
-        userProfileProvider(id ?? FirebaseAuth.instance.currentUser!.uid),
+    ref.listen<UserProfile>(userProfileProvider(id ?? firebaseCurrentUserId),
         (previous, next) async {
       if ((previous?.profile is AsyncLoading<Profile> ||
               previous?.profile is AsyncError<Profile>) &&
@@ -72,13 +71,13 @@ class UserWhenConsumer extends HookConsumerWidget {
 
         FirebaseFirestore.instance
             .collection('users')
-            .doc(id ?? FirebaseAuth.instance.currentUser!.uid)
+            .doc(id ?? firebaseCurrentUserId)
             .update({
           'activeAt': DateTime.now(),
           'noticeToken': FieldValue.arrayUnion([token])
         });
 
-        await Purchases.logIn(id ?? FirebaseAuth.instance.currentUser!.uid);
+        await Purchases.logIn(id ?? firebaseCurrentUserId);
       }
     });
 
@@ -104,8 +103,8 @@ class UserWhenConsumer extends HookConsumerWidget {
                                 MaterialStateProperty.all(Colors.redAccent)),
                         child: const Text('更新する'),
                         onPressed: () {
-                          ref.refresh(userProfileProvider(
-                              FirebaseAuth.instance.currentUser!.uid));
+                          ref.refresh(
+                              userProfileProvider(firebaseCurrentUserId));
                         },
                       ),
                     ],
@@ -135,8 +134,8 @@ class UserDisposeWhenConsumer extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userProfile = ref.watch(disposeUserProfileProvider(
-        id ?? FirebaseAuth.instance.currentUser!.uid));
+    final userProfile =
+        ref.watch(disposeUserProfileProvider(id ?? firebaseCurrentUserId));
     final profile = userProfile.profile;
 
     return profile!.when(
@@ -156,8 +155,7 @@ class UserDisposeWhenConsumer extends HookConsumerWidget {
                               MaterialStateProperty.all(Colors.redAccent)),
                       child: const Text('更新する'),
                       onPressed: () {
-                        ref.refresh(userProfileProvider(
-                            FirebaseAuth.instance.currentUser!.uid));
+                        ref.refresh(userProfileProvider(firebaseCurrentUserId));
                       },
                     ),
                   ],
@@ -180,8 +178,8 @@ class FriendsWhenConsumer extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userProfile = ref.watch(
-        userProfileProvider(id ?? FirebaseAuth.instance.currentUser!.uid));
+    final userProfile =
+        ref.watch(userProfileProvider(id ?? firebaseCurrentUserId));
     final friends = userProfile.friends;
 
     return friends!.when(
@@ -205,8 +203,8 @@ class FriendsWhenConsumer extends HookConsumerWidget {
                                     Colors.redAccent)),
                             child: const Text('更新する'),
                             onPressed: () {
-                              ref.refresh(userProfileProvider(
-                                  FirebaseAuth.instance.currentUser!.uid));
+                              ref.refresh(
+                                  userProfileProvider(firebaseCurrentUserId));
                             },
                           ),
                         ],

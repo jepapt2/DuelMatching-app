@@ -33,8 +33,8 @@ class RecruitScreen extends HookConsumerWidget {
                     id: recruit.organizerId,
                     child: (organizerFriends) => organizer.blockList == null ||
                             organizer.blockList!.isEmpty ||
-                            !organizer.blockList!.contains(
-                                FirebaseAuth.instance.currentUser!.uid)
+                            !organizer.blockList!
+                                .contains(firebaseCurrentUserId)
                         ? Scaffold(
                             backgroundColor: const Color(0xffeff0f3),
                             appBar: AppBar(
@@ -387,9 +387,7 @@ class RecruitScreen extends HookConsumerWidget {
     memberExit(dialogContext) async {
       Navigator.pop(dialogContext);
       try {
-        await membersCollection(id)
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .delete();
+        await membersCollection(id).doc(firebaseCurrentUserId).delete();
         Fluttertoast.showToast(
             msg: 'グループから退出しました',
             toastLength: Toast.LENGTH_SHORT,
@@ -495,23 +493,21 @@ class RecruitScreen extends HookConsumerWidget {
                   !organizerFriends
                       .map((f) => f.uid)
                       .toList()
-                      .contains(FirebaseAuth.instance.currentUser!.uid)) ||
+                      .contains(firebaseCurrentUserId)) ||
               (members
                   .map((m) => m.uid)
                   .toList()
-                  .contains(FirebaseAuth.instance.currentUser!.uid))) {
+                  .contains(firebaseCurrentUserId))) {
             throw Exception();
           }
-          await membersCollection(id)
-              .doc(FirebaseAuth.instance.currentUser!.uid)
-              .set(Member(
-                  uid: FirebaseAuth.instance.currentUser!.uid,
-                  name: myProfile.name,
-                  avatar: myProfile.avatar ?? '',
-                  organizer: false,
-                  noticeToken: myProfile.noticeToken ?? [],
-                  noticeTitle: '${recruit.title} (${members.length + 1})',
-                  createdAt: DateTime.now()));
+          await membersCollection(id).doc(firebaseCurrentUserId).set(Member(
+              uid: firebaseCurrentUserId,
+              name: myProfile.name,
+              avatar: myProfile.avatar ?? '',
+              organizer: false,
+              noticeToken: myProfile.noticeToken ?? [],
+              noticeTitle: '${recruit.title} (${members.length + 1})',
+              createdAt: DateTime.now()));
           GoRouter.of(context).push('/group/$id');
           Fluttertoast.showToast(
               msg: '募集に参加しました',
@@ -556,10 +552,7 @@ class RecruitScreen extends HookConsumerWidget {
               }));
     }
 
-    if (members
-        .map((m) => m.uid)
-        .toList()
-        .contains(FirebaseAuth.instance.currentUser!.uid)) {
+    if (members.map((m) => m.uid).toList().contains(firebaseCurrentUserId)) {
       return ElevatedButton(
         onPressed: () => GoRouter.of(context).push('/group/$id'),
         child: const Text('参加済み'),
@@ -588,7 +581,7 @@ class RecruitScreen extends HookConsumerWidget {
         !organizerFriends
             .map((f) => f.uid)
             .toList()
-            .contains(FirebaseAuth.instance.currentUser!.uid)) {
+            .contains(firebaseCurrentUserId)) {
       return const ElevatedButton(
         onPressed: null,
         child: Text('主催者とフレンドではありません'),

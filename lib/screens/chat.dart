@@ -31,8 +31,7 @@ class ChatScreen extends HookWidget {
               () {
                 //パートナーリストが空、またはパートナ内に自分のIDが存在しない場合は退出
                 if (partners.isEmpty ||
-                    !partnersId
-                        .contains(FirebaseAuth.instance.currentUser!.uid)) {
+                    !partnersId.contains(firebaseCurrentUserId)) {
                   GoRouter.of(context).pop();
                   Fluttertoast.showToast(
                       msg: 'チャットルームのメンバーではない、\nまたはルームが削除されている可能性があります',
@@ -49,8 +48,7 @@ class ChatScreen extends HookWidget {
           }, []);
           //チャット相手の情報を取得
           Partner partner = partners.singleWhere(
-              (element) =>
-                  element.uid != FirebaseAuth.instance.currentUser!.uid,
+              (element) => element.uid != firebaseCurrentUserId,
               orElse: () => Partner(uid: 'error', name: 'エラー'));
 
           return Consumer(builder: (context, ref, _) {
@@ -59,13 +57,13 @@ class ChatScreen extends HookWidget {
               //アプリが休止状態から再開、かつ自分が部屋に存在している時に実行
               if (previous == AppLifecycleState.resumed &&
                   previous != next &&
-                  partnersId.contains(FirebaseAuth.instance.currentUser!.uid)) {
+                  partnersId.contains(firebaseCurrentUserId)) {
                 //通知を既読にし、thenで最後に見た時間を保存
-                await noticeCollection(FirebaseAuth.instance.currentUser!.uid)
+                await noticeCollection(firebaseCurrentUserId)
                     .doc('${roomId}_newMessage')
                     .update({'unReadCount': 0}).then((doc) =>
                         partnerCollection(roomId)
-                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .doc(firebaseCurrentUserId)
                             .update({'lastReadAt': DateTime.now()}));
               }
             });
@@ -136,7 +134,7 @@ class ChatScreen extends HookWidget {
                                     const Color(0xffff8e3c),
                                 messageDecorationBuilder: (message, _, __) {
                                   if (message.user.id ==
-                                      FirebaseAuth.instance.currentUser!.uid) {
+                                      firebaseCurrentUserId) {
                                     return const BoxDecoration(
                                         color: Color(0xffff8e3c),
                                         borderRadius: BorderRadius.all(
@@ -151,7 +149,7 @@ class ChatScreen extends HookWidget {
                                 showOtherUsersAvatar: false,
                               ),
                               currentUser: ChatUser(
-                                id: FirebaseAuth.instance.currentUser!.uid,
+                                id: firebaseCurrentUserId,
                               ),
                               onSend: (message) =>
                                   onSendMessage(message, roomId),
@@ -169,7 +167,7 @@ class ChatScreen extends HookWidget {
     try {
       //チャット送信
       chatCollection(roomId).add(FirestoreChatMessage(
-          text: message.text, userId: FirebaseAuth.instance.currentUser!.uid));
+          text: message.text, userId: firebaseCurrentUserId));
     } catch (e) {
       Fluttertoast.showToast(
           msg: 'メッセージの送信に失敗しました',
@@ -184,12 +182,12 @@ class ChatScreen extends HookWidget {
 
   Future<bool> _willPopCallback(String roomId, List<String> partnersId) async {
     //部屋を退出た時かつチャットメンバーの場合実行
-    if (partnersId.contains(FirebaseAuth.instance.currentUser!.uid)) {
+    if (partnersId.contains(firebaseCurrentUserId)) {
       //通知を既読にし、thenで最後に見た時間を保存
-      await noticeCollection(FirebaseAuth.instance.currentUser!.uid)
+      await noticeCollection(firebaseCurrentUserId)
           .doc('${roomId}_newMessage')
           .update({'unReadCount': 0}).then((doc) => partnerCollection(roomId)
-              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .doc(firebaseCurrentUserId)
               .update({'lastReadAt': DateTime.now()}));
     }
     return true;

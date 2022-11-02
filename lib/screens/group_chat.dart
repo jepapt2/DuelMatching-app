@@ -25,7 +25,7 @@ class GroupChatScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return UserWhenConsumer(
-        id: FirebaseAuth.instance.currentUser!.uid,
+        id: firebaseCurrentUserId,
         child: (myProfile) {
           return RecruitWhenConsumer(
               id: roomId,
@@ -51,8 +51,7 @@ class GroupChatScreen extends HookWidget {
                           Duration.zero,
                           () {
                             //グループメンバーではない場合は退出
-                            if (!membersId.contains(
-                                FirebaseAuth.instance.currentUser!.uid)) {
+                            if (!membersId.contains(firebaseCurrentUserId)) {
                               GoRouter.of(context).pop();
                               Fluttertoast.showToast(
                                   msg:
@@ -75,17 +74,15 @@ class GroupChatScreen extends HookWidget {
                           //アプリが休止状態から再開、かつ自分が部屋に存在している時に実行
                           if (previous == AppLifecycleState.resumed &&
                               previous != next &&
-                              membersId.contains(
-                                  FirebaseAuth.instance.currentUser!.uid)) {
+                              membersId.contains(firebaseCurrentUserId)) {
                             //通知を既読にし、thenで最後に見た時間を保存
-                            await noticeCollection(
-                                    FirebaseAuth.instance.currentUser!.uid)
+                            await noticeCollection(firebaseCurrentUserId)
                                 .doc('${roomId}_newGroupMessage')
-                                .update({
-                              'unReadCount': 0
-                            }).then((doc) => membersCollection(roomId)
-                                    .doc(FirebaseAuth.instance.currentUser!.uid)
-                                    .update({'lastReadAt': DateTime.now()}));
+                                .update({'unReadCount': 0}).then((doc) =>
+                                    membersCollection(roomId)
+                                        .doc(firebaseCurrentUserId)
+                                        .update(
+                                            {'lastReadAt': DateTime.now()}));
                           }
                         });
                         return WillPopScope(
@@ -232,7 +229,7 @@ class GroupChatScreen extends HookWidget {
       //チャット送信
       groupChatCollection(roomId).add(FirestoreGroupChatMessage(
           text: message.text,
-          userId: FirebaseAuth.instance.currentUser!.uid,
+          userId: firebaseCurrentUserId,
           noticeName: myProfile.name));
     } catch (e) {
       Fluttertoast.showToast(
@@ -248,12 +245,12 @@ class GroupChatScreen extends HookWidget {
 
   Future<bool> _willPopCallback(String roomId, List<String> membersId) async {
     //部屋を退出た時かつチャットメンバーの場合実行
-    if (membersId.contains(FirebaseAuth.instance.currentUser!.uid)) {
+    if (membersId.contains(firebaseCurrentUserId)) {
       //通知を既読にし、thenで最後に見た時間を保存
-      await noticeCollection(FirebaseAuth.instance.currentUser!.uid)
+      await noticeCollection(firebaseCurrentUserId)
           .doc('${roomId}_newGroupMessage')
           .update({'unReadCount': 0}).then((doc) => membersCollection(roomId)
-              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .doc(firebaseCurrentUserId)
               .update({'lastReadAt': DateTime.now()}));
     }
     return true;

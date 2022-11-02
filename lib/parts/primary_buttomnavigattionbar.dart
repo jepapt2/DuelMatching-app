@@ -23,10 +23,8 @@ class PrimaryButtomNavigationBar extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final messagesRef =
-        ref.watch(messagesProvider(FirebaseAuth.instance.currentUser!.uid));
-    final noticeRef =
-        ref.watch(noticesProvider(FirebaseAuth.instance.currentUser!.uid));
+    final messagesRef = ref.watch(messagesProvider(firebaseCurrentUserId));
+    final noticeRef = ref.watch(noticesProvider(firebaseCurrentUserId));
 
     //メッセージと通知用の未読数合計
     int getUnreadTotalCount(List<NoticeWithId>? noticeList) {
@@ -47,7 +45,7 @@ class PrimaryButtomNavigationBar extends HookConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         SubscriberBannerWhenConsumer(
-            id: FirebaseAuth.instance.currentUser!.uid,
+            id: firebaseCurrentUserId,
             child: (isSubscribed) {
               if (!isSubscribed) {
                 return const AdBanner(size: AdSize.fullBanner);

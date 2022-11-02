@@ -22,8 +22,7 @@ class JoinedRecruitScreen extends HookConsumerWidget {
               child: FirestoreQueryBuilder(
                   //参加しているグループをスタートが近い順で表示
                   query: recruitsCollection()
-                      .where('membersId',
-                          arrayContains: FirebaseAuth.instance.currentUser!.uid)
+                      .where('membersId', arrayContains: firebaseCurrentUserId)
                       .orderBy('start', descending: true),
                   builder: (context,
                       FirestoreQueryBuilderSnapshot<Recruit> snapshot, _) {

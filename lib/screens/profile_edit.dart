@@ -52,7 +52,7 @@ class ProfileEditScreen extends HookConsumerWidget {
                     //プロフィールを保存した後SNSシェア案内のツールチップ表示
                     await profileUpdate(
                             formKey: _formKey,
-                            uid: FirebaseAuth.instance.currentUser!.uid,
+                            uid: firebaseCurrentUserId,
                             user: user,
                             headerImage: inputHeaderImage.value,
                             avatarImage: inputAvatarImage.value,

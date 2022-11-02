@@ -19,7 +19,7 @@ class FriendsScreen extends HookConsumerWidget {
       child: (user) => FriendsWhenConsumer(child: (friends) {
         List<String> friendsId = friends.map((f) => f.uid).toList();
         return SubscriberWhenConsumer(
-            id: FirebaseAuth.instance.currentUser!.uid,
+            id: firebaseCurrentUserId,
             child: (isSubscribed) {
               //有料会員と無料会員のフレンド制限
               int friendLimit = isSubscribed ? 30 : 10;

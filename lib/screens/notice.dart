@@ -18,8 +18,7 @@ class NoticeScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var nowTime = useMemoized(DateTime.now);
 
-    final noticesRef =
-        ref.watch(noticesProvider(FirebaseAuth.instance.currentUser!.uid));
+    final noticesRef = ref.watch(noticesProvider(firebaseCurrentUserId));
     return UserWhenConsumer(child: (user) {
       return noticesRef.when(
           data: (notices) {
@@ -33,8 +32,7 @@ class NoticeScreen extends HookConsumerWidget {
                 //すべて既読に
                 for (var notice in unReadNotices) {
                   batch.update(
-                      noticeCollection(FirebaseAuth.instance.currentUser!.uid)
-                          .doc(notice.id),
+                      noticeCollection(firebaseCurrentUserId).doc(notice.id),
                       {'unReadCount': 0});
                 }
                 batch.commit();

@@ -32,11 +32,10 @@ class UserProfileScreen extends HookConsumerWidget {
         child: (friends) => userProfile.when(
           data: (user) {
             bool isBlocked = user.blockList == null ||
-                !user.blockList!
-                    .contains(FirebaseAuth.instance.currentUser!.uid);
+                !user.blockList!.contains(firebaseCurrentUserId);
             bool isFriend = friends.map((f) => f.uid).toList().contains(id);
             return SubscriberWhenConsumer(
-                id: FirebaseAuth.instance.currentUser!.uid,
+                id: firebaseCurrentUserId,
                 child: (isSubscribed) {
                   int friendLimit = isSubscribed ? 30 : 10;
                   return Scaffold(
@@ -490,15 +489,14 @@ class UserProfileScreen extends HookConsumerWidget {
               textColor: Colors.white,
               fontSize: 13.0);
         } else {
-          await requestDocument('${FirebaseAuth.instance.currentUser!.uid}_$id')
-              .set(Request(
-                  sendId: FirebaseAuth.instance.currentUser!.uid,
-                  sendName: sendName,
-                  sendAvatar: sendAvatar.isNotNullAndNotEmpty ? sendAvatar : '',
-                  recId: id,
-                  permission: false,
-                  rejection: false,
-                  updateAt: DateTime.now()));
+          await requestDocument('${firebaseCurrentUserId}_$id').set(Request(
+              sendId: firebaseCurrentUserId,
+              sendName: sendName,
+              sendAvatar: sendAvatar.isNotNullAndNotEmpty ? sendAvatar : '',
+              recId: id,
+              permission: false,
+              rejection: false,
+              updateAt: DateTime.now()));
           Fluttertoast.showToast(
               msg: '$nameにフレンド申請を送信しました',
               toastLength: Toast.LENGTH_SHORT,
@@ -545,7 +543,7 @@ class UserProfileScreen extends HookConsumerWidget {
 
   friendDocumentDelete(bool isFriend) async {
     if (isFriend) {
-      await userDocument(FirebaseAuth.instance.currentUser!.uid)
+      await userDocument(firebaseCurrentUserId)
           .collection('friends')
           .doc(id)
           .delete();
@@ -605,7 +603,7 @@ class UserProfileScreen extends HookConsumerWidget {
       Navigator.pop(dialogContext);
       try {
         await friendDocumentDelete(isFriend);
-        await userDocument(FirebaseAuth.instance.currentUser!.uid).update({
+        await userDocument(firebaseCurrentUserId).update({
           'blockList': FieldValue.arrayUnion([id])
         });
         Fluttertoast.showToast(
@@ -661,7 +659,7 @@ class UserProfileScreen extends HookConsumerWidget {
           _formKey.currentState!.save();
           await friendDocumentDelete(isFriend);
           await reportsCollection().add(Report(
-              sendId: FirebaseAuth.instance.currentUser!.uid,
+              sendId: firebaseCurrentUserId,
               sendName: sendName,
               reportId: id,
               reason: _formKey.currentState?.value['reason'] ?? '',

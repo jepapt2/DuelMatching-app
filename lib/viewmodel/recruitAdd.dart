@@ -34,8 +34,8 @@ recruitAdd(
               full: false,
               cancel: false,
               close: false,
-              organizerId: FirebaseAuth.instance.currentUser!.uid,
-              membersId: [FirebaseAuth.instance.currentUser!.uid],
+              organizerId: firebaseCurrentUserId,
+              membersId: [firebaseCurrentUserId],
               createdAt: DateTime.now()))
           .then((docRef) async {
         recruitId = docRef.id;
@@ -44,11 +44,9 @@ recruitAdd(
           createAfter(recruitId);
         }
 //作成者をメンバーに追加
-        membersCollection(docRef.id)
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .set(
+        membersCollection(docRef.id).doc(firebaseCurrentUserId).set(
               Member(
-                  uid: FirebaseAuth.instance.currentUser!.uid,
+                  uid: firebaseCurrentUserId,
                   name: user.name,
                   avatar: user.avatar,
                   organizer: true,

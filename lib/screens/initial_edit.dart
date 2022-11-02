@@ -45,7 +45,7 @@ class InitialEditScreen extends HookConsumerWidget {
         ref.watch(myprofileTooltipProvider.notifier);
 
     return UserWhenConsumer(
-        id: FirebaseAuth.instance.currentUser!.uid,
+        id: firebaseCurrentUserId,
         child: (user) {
           final inputPlayTitle = useState<List<String>>([]);
           useEffect(() {
@@ -115,7 +115,7 @@ class InitialEditScreen extends HookConsumerWidget {
                                             immediately: false));
                                 await profileUpdate(
                                     formKey: _formKey,
-                                    uid: FirebaseAuth.instance.currentUser!.uid,
+                                    uid: firebaseCurrentUserId,
                                     user: user,
                                     headerImage: inputHeaderImage.value,
                                     avatarImage: inputAvatarImage.value,
@@ -125,8 +125,7 @@ class InitialEditScreen extends HookConsumerWidget {
                             } else if (pageState.value == 4) {
                               if (userQuery != null) {
                                 GoRouter.of(context).go('/users');
-                                if (userQuery !=
-                                    FirebaseAuth.instance.currentUser!.uid) {
+                                if (userQuery != firebaseCurrentUserId) {
                                   GoRouter.of(context).push('/user/$userQuery');
                                 }
                               } else if (recruitQuery != null) {
@@ -500,7 +499,7 @@ class InitialEditScreen extends HookConsumerWidget {
                     //5ページ目
 
                     MyProfileScreen(
-                      id: FirebaseAuth.instance.currentUser!.uid,
+                      id: firebaseCurrentUserId,
                       initialEdit: true,
                     ),
                   ],

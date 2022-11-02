@@ -99,16 +99,16 @@ class FriendRequestNotice extends HookWidget {
     //未読かつスクリーン表示中の新規通知を既読に
     if (unReadCount == 1 && nowTime.isBefore(updateAt)) {
       useEffect(() {
-        noticeCollection(FirebaseAuth.instance.currentUser!.uid)
+        noticeCollection(firebaseCurrentUserId)
             .doc(id)
             .update({'unReadCount': 0});
       }, []);
     }
     return UserWhenConsumer(
-        id: FirebaseAuth.instance.currentUser!.uid,
+        id: firebaseCurrentUserId,
         child: (myProfile) {
           return SubscriberBannerWhenConsumer(
-              id: FirebaseAuth.instance.currentUser!.uid,
+              id: firebaseCurrentUserId,
               child: (isSubscribed) {
                 int friendLimit = isSubscribed ? 30 : 10;
                 bool friendLimitOver = myProfile.friendCount >= friendLimit;
@@ -223,10 +223,8 @@ class FriendRequestNotice extends HookWidget {
         try {
           final func = FirebaseFunctions.instanceFor(region: 'asia-northeast1')
               .httpsCallable('friend-onRequestPermission');
-          final result = await func.call({
-            'recId': recId,
-            'sendId': FirebaseAuth.instance.currentUser!.uid
-          });
+          final result = await func
+              .call({'recId': recId, 'sendId': firebaseCurrentUserId});
           if (result.data == 'recFriendOver') {
             Fluttertoast.showToast(
                 msg: '$recNameのフレンド枠がいっぱいなので登録に失敗しました',
@@ -297,8 +295,7 @@ class FriendRequestNotice extends HookWidget {
       try {
         final func = FirebaseFunctions.instanceFor(region: 'asia-northeast1')
             .httpsCallable('friend-onRequestRejection');
-        await func.call(
-            {'recId': recId, 'sendId': FirebaseAuth.instance.currentUser!.uid});
+        await func.call({'recId': recId, 'sendId': firebaseCurrentUserId});
         Fluttertoast.showToast(
             msg: '$recNameのフレンド申請を拒否しました',
             toastLength: Toast.LENGTH_SHORT,
@@ -369,7 +366,7 @@ class NewFriendNotice extends HookWidget {
   Widget build(BuildContext context) {
     if (unReadCount == 1 && nowTime.isBefore(updateAt)) {
       useEffect(() {
-        noticeCollection(FirebaseAuth.instance.currentUser!.uid)
+        noticeCollection(firebaseCurrentUserId)
             .doc(id)
             .update({'unReadCount': 0});
       }, []);
@@ -484,7 +481,7 @@ class CreateRecruitNotice extends HookWidget {
   Widget build(BuildContext context) {
     if (unReadCount == 1 && nowTime.isBefore(updateAt)) {
       useEffect(() {
-        noticeCollection(FirebaseAuth.instance.currentUser!.uid)
+        noticeCollection(firebaseCurrentUserId)
             .doc(id)
             .update({'unReadCount': 0});
       }, []);
@@ -585,7 +582,7 @@ class RecruitCancelNotice extends StatelessWidget {
   Widget build(BuildContext context) {
     if (unReadCount == 1 && nowTime.isBefore(updateAt)) {
       useEffect(() {
-        noticeCollection(FirebaseAuth.instance.currentUser!.uid)
+        noticeCollection(firebaseCurrentUserId)
             .doc(id)
             .update({'unReadCount': 0});
       }, []);
