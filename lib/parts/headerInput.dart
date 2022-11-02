@@ -7,6 +7,7 @@ import 'package:duel_matching/extension/string.dart';
 Widget headerInput(
     context, ValueNotifier<XFile?> inputHeaderImage, String? initialHeader) {
   final picker = ImagePicker();
+  //カメラからインポート
   Future getImageFromCamera(childContext) async {
     final pickedFile = await picker.pickImage(
         source: ImageSource.camera,
@@ -20,6 +21,7 @@ Widget headerInput(
     }
   }
 
+//ギャラリーからインポート
   Future getImageFromGallery(childContext) async {
     final pickedFile = await picker.pickImage(
         source: ImageSource.gallery,
@@ -34,6 +36,7 @@ Widget headerInput(
   }
 
   Widget headerImageWidget() {
+    //選択順の画像→設定済みの画像→初期アバターの優先順位で表示
     if (inputHeaderImage.value != null) {
       return Image.file(
         File(inputHeaderImage.value!.path),

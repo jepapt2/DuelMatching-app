@@ -2,10 +2,8 @@ import 'dart:io';
 
 import 'package:duel_matching/gen/google_options.dart';
 import 'package:duel_matching/gen/twitter_options.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
-import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -65,8 +63,6 @@ class LoginScreen extends StatelessWidget {
                   apiKey: getOption()['twitterApiKey']!,
                   apiSecretKey: getOption()['twitterApiSecret']!,
                   redirectUri: getOption()['twitterCallBack']!,
-                  // action: AuthAction.signIn,
-                  // onTap: () => signInWithTwitter(),
                 ),
               ),
               const SizedBox(

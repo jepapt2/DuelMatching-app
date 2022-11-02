@@ -7,7 +7,7 @@ import 'package:duel_matching/extension/string.dart';
 Widget avatarInput(
     context, ValueNotifier<XFile?> inputAvatarImage, String? initialAvatar) {
   final picker = ImagePicker();
-
+  //カメラからインポート
   Future getImageFromCamera(childContext) async {
     final pickedFile = await picker.pickImage(
         source: ImageSource.camera,
@@ -21,6 +21,7 @@ Widget avatarInput(
     }
   }
 
+//ギャラリーからインポート
   Future getImageFromGallery(childContext) async {
     final pickedFile = await picker.pickImage(
         source: ImageSource.gallery,
@@ -35,6 +36,7 @@ Widget avatarInput(
   }
 
   ImageProvider<Object> avatarImageWidget() {
+    //選択順の画像→設定済みの画像→初期アバターの優先順位で表示
     if (inputAvatarImage.value != null) {
       return FileImage(File(inputAvatarImage.value!.path));
     } else if (initialAvatar.isNotNullAndNotEmpty) {

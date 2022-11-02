@@ -4,7 +4,6 @@ import 'package:app_links/app_links.dart';
 import 'package:duel_matching/freezed/users_view.dart/users_view.dart';
 import 'package:duel_matching/input_options/adress.dart';
 import 'package:duel_matching/input_options/play_title.dart';
-import 'package:duel_matching/main.dart';
 import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/parts/primary_sliverappbar.dart';
 import 'package:duel_matching/parts/scroll_detector.dart';
@@ -19,9 +18,6 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/link.dart';
-
 import '../freezed/user_profile/user_profile.dart';
 
 class UsersScreen extends HookConsumerWidget {
@@ -53,7 +49,6 @@ class UsersScreen extends HookConsumerWidget {
           );
         }, []);
 
-        // WidgetsBinding.instance.addPostFrameCallback((_) => null);qqqqqqqqqqqqqqq
         //ディープリンク遷移
         FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
           if (dynamicLinkData.link.queryParameters['user'] != null) {
@@ -93,7 +88,6 @@ class UsersScreen extends HookConsumerWidget {
                 controller: controller,
                 slivers: [
                   PrimarySliverAppBar(
-                    // appBarText: 'ユーザ一覧',
                     appBarText: 'ユーザ一覧',
                     user: user,
                     appBarAction: [

@@ -6,6 +6,7 @@ import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/avatarInput.dart';
 import 'package:duel_matching/parts/headerInput.dart';
 import 'package:duel_matching/screens/my_profile.dart';
+import 'package:duel_matching/viewmodel/profileEdit.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -39,6 +40,7 @@ class ProfileEditScreen extends HookConsumerWidget {
       child: (user) {
         final inputPlayTitle = useState<List<String>>([]);
         useEffect(() {
+          //既存のプレイしているタイトル設定を代入
           inputPlayTitle.value = user.playTitle ?? [];
         }, const []);
         return Scaffold(
@@ -46,14 +48,20 @@ class ProfileEditScreen extends HookConsumerWidget {
             title: const Text('プロフィール編集'),
             actions: [
               TextButton(
-                  onPressed: () {
-                    profileUpdate(
-                        FirebaseAuth.instance.currentUser!.uid,
-                        user,
-                        inputHeaderImage.value,
-                        inputAvatarImage.value,
-                        inputPlayTitle.value,
-                        context);
+                  onPressed: () async {
+                    //プロフィールを保存した後SNSシェア案内のツールチップ表示
+                    await profileUpdate(
+                            formKey: _formKey,
+                            uid: FirebaseAuth.instance.currentUser!.uid,
+                            user: user,
+                            headerImage: inputHeaderImage.value,
+                            avatarImage: inputAvatarImage.value,
+                            playTitle: inputPlayTitle.value,
+                            context: context)
+                        .then((_) {
+                      GoRouter.of(context).pop();
+                      GoRouter.of(context).push('/profile');
+                    });
                     Future.delayed(
                         const Duration(seconds: 1),
                         () => tooltipControllerNotifier.state
@@ -311,82 +319,5 @@ class ProfileEditScreen extends HookConsumerWidget {
     List<String> removedTitle = [...playTitle];
     removedTitle.remove(removeTitle);
     playTitle = [...removedTitle];
-  }
-
-  profileUpdate(String uid, Profile user, XFile? headerImage,
-      XFile? avatarImage, List<String> playTitle, BuildContext context) async {
-    _formKey.currentState!.save();
-    String? headerUrl;
-    String? avatarUrl;
-    if (headerImage != null) {
-      try {
-        await FirebaseStorage.instance
-            .ref("headers/$uid.png")
-            .putFile(File(headerImage.path));
-        headerUrl = await FirebaseStorage.instance
-            .ref("headers/$uid.png")
-            .getDownloadURL();
-      } catch (e) {
-        Fluttertoast.showToast(
-            msg: 'ヘッダーのアップロードに失敗しました',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 13.0);
-      }
-    }
-
-    if (avatarImage != null) {
-      try {
-        await FirebaseStorage.instance
-            .ref("avatars/$uid.png")
-            .putFile(File(avatarImage.path));
-        avatarUrl = await FirebaseStorage.instance
-            .ref("avatars/$uid.png")
-            .getDownloadURL();
-      } catch (e) {
-        Fluttertoast.showToast(
-            msg: 'アバターのアップロードに失敗しました',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 13.0);
-      }
-    }
-
-    if (_formKey.currentState!.validate()) {
-      try {
-        await userDocument(uid).update({
-          'header': headerUrl ?? user.header,
-          'avatar': avatarUrl ?? user.avatar,
-          'name': _formKey.currentState!.value['name'],
-          'comment': _formKey.currentState!.value['comment'],
-          'introduction': _formKey.currentState!.value['introduction'],
-          'favorite': _formKey.currentState!.value['favorite'],
-          'playTitle': playTitle,
-          'remoteDuel': _formKey.currentState!.value['remoteDuel'],
-          'adress': _formKey.currentState!.value['adress'],
-          'activityDay': _formKey.currentState!.value['activityDay'],
-          'activityTime': _formKey.currentState!.value['activityTime'],
-          'age': _formKey.currentState!.value['age'],
-          'sex': _formKey.currentState!.value['sex']
-        });
-        GoRouter.of(context).pop();
-        GoRouter.of(context).push('/profile', extra: true);
-      } catch (e) {
-        Fluttertoast.showToast(
-            msg: 'プロフィールの更新に失敗しました',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 13.0);
-      }
-    }
   }
 }

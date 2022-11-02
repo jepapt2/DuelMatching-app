@@ -1,17 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:duel_matching/freezed/member/member.dart';
 import 'package:duel_matching/freezed/recruit/recruit.dart';
-import 'package:duel_matching/freezed/user_profile/user_profile.dart';
-import 'package:duel_matching/parts/image.dart';
-import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:duel_matching/extension/string.dart';
 
 class JoinedRecruitScreen extends HookConsumerWidget {
   const JoinedRecruitScreen({Key? key}) : super(key: key);
@@ -27,6 +20,7 @@ class JoinedRecruitScreen extends HookConsumerWidget {
           body: Padding(
               padding: const EdgeInsets.only(top: 20.0),
               child: FirestoreQueryBuilder(
+                  //参加しているグループをスタートが近い順で表示
                   query: recruitsCollection()
                       .where('membersId',
                           arrayContains: FirebaseAuth.instance.currentUser!.uid)

@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+
+final String firebaseUserId = FirebaseAuth.instance.currentUser!.uid;
 
 final profileProvider = StreamProvider.family<Profile, String>((ref, id) {
   final document = userDocument(id);

@@ -2,7 +2,6 @@ import 'package:duel_matching/input_options/dynamicLinks.dart';
 import 'package:duel_matching/parts/image.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,13 +9,14 @@ import 'package:duel_matching/extension/string.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:share_plus/share_plus.dart';
 
+//シェアボタンのツールチップ表示用provider
 final myprofileTooltipProvider = StateProvider.autoDispose((ref) {
   final tooltipController = JustTheController();
   return tooltipController;
 });
 
 class MyProfileScreen extends HookConsumerWidget {
-  MyProfileScreen({
+  const MyProfileScreen({
     Key? key,
     required this.id,
     required this.initialEdit,
@@ -200,6 +200,7 @@ class MyProfileScreen extends HookConsumerWidget {
                           child: Text(user.comment!),
                         ),
                       Visibility(
+                        //表示プロフィール項目がすべて無い場合は非表示
                         visible: user.activityDay.isNotNullAndNotEmpty ||
                             user.activityTime.isNotNullAndNotEmpty ||
                             user.adress.isNotNullAndNotEmpty ||

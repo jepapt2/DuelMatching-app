@@ -4,6 +4,7 @@ import 'package:duel_matching/extension/string.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/headerInput.dart';
 import 'package:duel_matching/screens/my_profile.dart';
+import 'package:duel_matching/viewmodel/profileEdit.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -113,13 +114,13 @@ class InitialEditScreen extends HookConsumerWidget {
                                             autoClose: true,
                                             immediately: false));
                                 await profileUpdate(
-                                    FirebaseAuth.instance.currentUser!.uid,
-                                    user,
-                                    inputHeaderImage.value,
-                                    inputAvatarImage.value,
-                                    inputPlayTitle.value,
-                                    pageState,
-                                    controller);
+                                    formKey: _formKey,
+                                    uid: FirebaseAuth.instance.currentUser!.uid,
+                                    user: user,
+                                    headerImage: inputHeaderImage.value,
+                                    avatarImage: inputAvatarImage.value,
+                                    playTitle: inputPlayTitle.value,
+                                    context: context);
                               } catch (e) {}
                             } else if (pageState.value == 4) {
                               if (userQuery != null) {
@@ -497,101 +498,16 @@ class InitialEditScreen extends HookConsumerWidget {
                       ),
                     ),
                     //5ページ目
-                    if (pageState.value == 4)
-                      MyProfileScreen(
-                        id: FirebaseAuth.instance.currentUser!.uid,
-                        initialEdit: true,
-                      )
-                    else
-                      Container()
+
+                    MyProfileScreen(
+                      id: FirebaseAuth.instance.currentUser!.uid,
+                      initialEdit: true,
+                    ),
                   ],
                 ),
               ),
             ),
           );
         });
-  }
-
-  Future<void> profileUpdate(
-    String uid,
-    Profile user,
-    XFile? headerImage,
-    XFile? avatarImage,
-    List<String> playTitle,
-    ValueNotifier<int> pageState,
-    PageController controller,
-  ) async {
-    _formKey.currentState!.save();
-    String? headerUrl;
-    String? avatarUrl;
-    if (headerImage != null) {
-      try {
-        await FirebaseStorage.instance
-            .ref("headers/$uid.png")
-            .putFile(File(headerImage.path));
-        headerUrl = await FirebaseStorage.instance
-            .ref("headers/$uid.png")
-            .getDownloadURL();
-      } catch (e) {
-        Fluttertoast.showToast(
-            msg: 'ヘッダーのアップロードに失敗しました',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 13.0);
-      }
-    }
-
-    if (avatarImage != null) {
-      try {
-        await FirebaseStorage.instance
-            .ref("avatars/$uid.png")
-            .putFile(File(avatarImage.path));
-        avatarUrl = await FirebaseStorage.instance
-            .ref("avatars/$uid.png")
-            .getDownloadURL();
-      } catch (e) {
-        Fluttertoast.showToast(
-            msg: 'アバターのアップロードに失敗しました',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 13.0);
-      }
-    }
-
-    if (_formKey.currentState!.validate()) {
-      try {
-        await userDocument(uid).update({
-          'header': headerUrl ?? user.header,
-          'avatar': avatarUrl ?? user.avatar,
-          'name': _formKey.currentState!.value['name'],
-          'comment': _formKey.currentState!.value['comment'],
-          'introduction': _formKey.currentState!.value['introduction'],
-          'favorite': _formKey.currentState!.value['favorite'],
-          'playTitle': playTitle,
-          'remoteDuel': _formKey.currentState!.value['remoteDuel'],
-          'adress': _formKey.currentState!.value['adress'],
-          'activityDay': _formKey.currentState!.value['activityDay'],
-          'activityTime': _formKey.currentState!.value['activityTime'],
-          'age': _formKey.currentState!.value['age'],
-          'sex': _formKey.currentState!.value['sex'],
-          'initialSetting': true,
-        });
-      } catch (e) {
-        Fluttertoast.showToast(
-            msg: 'プロフィールの更新に失敗しました',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 13.0);
-      }
-    }
   }
 }

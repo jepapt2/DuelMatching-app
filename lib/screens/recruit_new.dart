@@ -4,6 +4,7 @@ import 'package:duel_matching/parts/text.dart';
 import 'package:duel_matching/input_options/adress.dart';
 import 'package:duel_matching/input_options/play_title.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
+import 'package:duel_matching/viewmodel/recruitAdd.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -227,67 +228,6 @@ class RecruitNewScreen extends HookConsumerWidget {
   }
 
   recruitAddDialog(Profile user, BuildContext context) async {
-    recruitAdd(dialogContext) {
-      _formKey.currentState!.save();
-
-      String? recruitId;
-
-      if (_formKey.currentState!.validate()) {
-        try {
-          recruitsCollection()
-              .add(Recruit(
-                  title: _formKey.currentState!.value['title'],
-                  playTitle: _formKey.currentState!.value['playTitle'],
-                  format: _formKey.currentState?.value['format'] ?? '',
-                  place: _formKey.currentState!.value['place'],
-                  point: _formKey.currentState!.value['point'],
-                  friendOnly: _formKey.currentState!.value['friendOnly'],
-                  recruitNumber: _formKey.currentState!.value['recruitNumber'],
-                  start: _formKey.currentState!.value['start'],
-                  end: _formKey.currentState!.value['end'],
-                  limit: _formKey.currentState!.value['limit'],
-                  overview: _formKey.currentState?.value['overview'] ?? '',
-                  memberCount: 0,
-                  full: false,
-                  cancel: false,
-                  close: false,
-                  organizerId: FirebaseAuth.instance.currentUser!.uid,
-                  membersId: [FirebaseAuth.instance.currentUser!.uid],
-                  createdAt: DateTime.now()))
-              .then((docRef) async {
-            recruitId = docRef.id;
-            if (recruitId != null) {
-              Navigator.pop(dialogContext);
-              Navigator.pop(context);
-              GoRouter.of(context).push('/recruit/$recruitId');
-            }
-            return await membersCollection(docRef.id)
-                .doc(FirebaseAuth.instance.currentUser!.uid)
-                .set(
-                  Member(
-                      uid: FirebaseAuth.instance.currentUser!.uid,
-                      name: user.name,
-                      avatar: user.avatar,
-                      organizer: true,
-                      noticeTitle:
-                          '${_formKey.currentState!.value['title']} (1)',
-                      createdAt: DateTime.now(),
-                      noticeToken: user.noticeToken),
-                );
-          });
-        } catch (e) {
-          Fluttertoast.showToast(
-              msg: '対戦募集の作成に失敗しました',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.TOP,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 13.0);
-        }
-      }
-    }
-
     return Future.delayed(
         const Duration(seconds: 0),
         () => showDialog(
@@ -304,7 +244,16 @@ class RecruitNewScreen extends HookConsumerWidget {
                   ),
                   TextButton(
                     child: const Text("はい"),
-                    onPressed: () => recruitAdd(dialogContext),
+                    onPressed: () => recruitAdd(
+                        dialogContext: dialogContext,
+                        formKey: _formKey,
+                        user: user,
+                        createAfter: (recruitId) {
+                          //作成した後募集ページに遷移
+                          Navigator.pop(dialogContext);
+                          Navigator.pop(context);
+                          GoRouter.of(context).push('/recruit/$recruitId');
+                        }),
                   ),
                 ],
               );
