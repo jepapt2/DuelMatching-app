@@ -29,9 +29,10 @@ class NoticeRedirect extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    //課金ユーザの確認
     var purchases = ref.watch(purchasesNotifierProvider.notifier);
     Purchases.addPurchaserInfoUpdateListener(purchases.purchaserInfoUpdated);
-
+//通知を開いた時の遷移
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       GoRouter.of(context).go('/notice');
       if (message.data['chatRoomId'] != null) {

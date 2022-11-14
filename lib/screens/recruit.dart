@@ -2,6 +2,7 @@ import 'package:duel_matching/freezed/member/member.dart';
 import 'package:duel_matching/freezed/recruit/recruit.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/image.dart';
+import 'package:duel_matching/viewmodel/joinMember.dart';
 import 'package:duel_matching/viewmodel/recruit_provider.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,9 +29,12 @@ class RecruitScreen extends HookConsumerWidget {
               child: (recruit) => MembersWhenConsumer(
                 id: id,
                 child: (members) => UserDisposeWhenConsumer(
+                  //主催者の情報を取得
                   id: recruit.organizerId,
                   child: (organizer) => FriendsWhenConsumer(
+                    //主催者のフレンドを取得
                     id: recruit.organizerId,
+                    //主催者のブロックリストに存在するか判定
                     child: (organizerFriends) => organizer.blockList == null ||
                             organizer.blockList!.isEmpty ||
                             !organizer.blockList!
@@ -54,23 +58,21 @@ class RecruitScreen extends HookConsumerWidget {
                                             child: const Text('このグループを抜ける'),
                                             onTap: () =>
                                                 memberExitDialog(context),
-                                            enabled: FirebaseAuth.instance
-                                                        .currentUser!.uid !=
+                                            //自分が主催者ではない、かつ自分がメンバーに存在する
+                                            enabled: firebaseCurrentUserId !=
                                                     recruit.organizerId &&
                                                 members
                                                     .map((m) => m.uid)
                                                     .toList()
-                                                    .contains(FirebaseAuth
-                                                        .instance
-                                                        .currentUser!
-                                                        .uid),
+                                                    .contains(
+                                                        firebaseCurrentUserId),
                                           ),
                                           PopupMenuItem(
                                               child: const Text('対戦募集をキャンセルする'),
                                               onTap: () =>
                                                   recruitCancelDialog(context),
-                                              enabled: FirebaseAuth.instance
-                                                      .currentUser!.uid ==
+                                              //主催者のみtrue
+                                              enabled: firebaseCurrentUserId ==
                                                   recruit.organizerId),
                                         ]),
                               ],
@@ -366,7 +368,7 @@ class RecruitScreen extends HookConsumerWidget {
                                 child: Column(
                                   children: const [
                                     Text(
-                                      '主催者ブロックされています',
+                                      '主催者にブロックされています',
                                       style: TextStyle(
                                           fontSize: 20.0,
                                           fontWeight: FontWeight.bold),
@@ -483,52 +485,6 @@ class RecruitScreen extends HookConsumerWidget {
   Widget joinButton(Profile myProfile, Recruit recruit, List<Member> members,
       List<FriendWithId> organizerFriends, BuildContext context) {
     joinDialog() {
-      joinMember(dialogContext) async {
-        Navigator.pop(dialogContext);
-        try {
-          if (recruit.cancel ||
-              (recruit.recruitNumber <= members.length - 1) ||
-              recruit.limit!.isBefore(DateTime.now()) ||
-              (recruit.friendOnly &&
-                  !organizerFriends
-                      .map((f) => f.uid)
-                      .toList()
-                      .contains(firebaseCurrentUserId)) ||
-              (members
-                  .map((m) => m.uid)
-                  .toList()
-                  .contains(firebaseCurrentUserId))) {
-            throw Exception();
-          }
-          await membersCollection(id).doc(firebaseCurrentUserId).set(Member(
-              uid: firebaseCurrentUserId,
-              name: myProfile.name,
-              avatar: myProfile.avatar ?? '',
-              organizer: false,
-              noticeToken: myProfile.noticeToken ?? [],
-              noticeTitle: '${recruit.title} (${members.length + 1})',
-              createdAt: DateTime.now()));
-          GoRouter.of(context).push('/group/$id');
-          Fluttertoast.showToast(
-              msg: '募集に参加しました',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.TOP,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.greenAccent,
-              textColor: Colors.white,
-              fontSize: 13.0);
-        } catch (_) {
-          Fluttertoast.showToast(
-              msg: '参加に失敗しました',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.TOP,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 13.0);
-        }
-      }
-
       return Future.delayed(
           const Duration(seconds: 0),
           () => showDialog(
@@ -545,7 +501,14 @@ class RecruitScreen extends HookConsumerWidget {
                     ),
                     TextButton(
                       child: const Text("はい"),
-                      onPressed: () => joinMember(dialogContext),
+                      onPressed: () => joinMember(
+                          context: context,
+                          dialogContext: dialogContext,
+                          recruitId: id,
+                          recruit: recruit,
+                          members: members,
+                          organizerFriends: organizerFriends,
+                          myProfile: myProfile),
                     ),
                   ],
                 );

@@ -208,6 +208,7 @@ class RecruitsScreen extends HookConsumerWidget {
       DateTime nowTime,
       List<String> blockList) {
     BuildContext innerContext;
+    //ソートがスタート時間の場合のみ絞り込み日時のボックスをtrue
     bool startInputEnabled =
         recruitsController.searchItem.sort == 'startDesc' ||
             recruitsController.searchItem.sort == 'startAsc';
@@ -251,7 +252,6 @@ class RecruitsScreen extends HookConsumerWidget {
                             ]),
                         FormBuilderDropdown(
                             name: 'place',
-                            // initialValue: recruitsController.searchItem.place,
                             decoration: const InputDecoration(
                                 label: Text('開催する場所'),
                                 floatingLabelBehavior:
@@ -370,6 +370,7 @@ class RecruitsScreen extends HookConsumerWidget {
                           Navigator.of(innerContext).pop();
                           _formKey.currentState!.save();
 
+                          //startをdateTimeからtimestampに変換
                           Timestamp? startTimestamp =
                               _formKey.currentState?.value['start'] != null
                                   ? Timestamp.fromDate(

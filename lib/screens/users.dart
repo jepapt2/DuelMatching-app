@@ -9,6 +9,8 @@ import 'package:duel_matching/parts/primary_sliverappbar.dart';
 import 'package:duel_matching/parts/scroll_detector.dart';
 import 'package:duel_matching/parts/search_button.dart';
 import 'package:duel_matching/parts/user_card.dart';
+import 'package:duel_matching/viewmodel/dynamiclink.dart';
+import 'package:duel_matching/viewmodel/showTutorial.dart';
 import 'package:duel_matching/viewmodel/users_future_scroll.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,6 +35,7 @@ class UsersScreen extends HookConsumerWidget {
 
     return UserWhenConsumer(
       child: (user) => FriendsWhenConsumer(child: (friends) {
+        //自身のID、フレンドID、ブロックIDを非表示IDリストにまとめる
         final hideIds = [
           firebaseCurrentUserId,
           ...friends.map((f) => f.uid).toList(),
@@ -43,38 +46,17 @@ class UsersScreen extends HookConsumerWidget {
           Future.delayed(
             Duration.zero,
             () {
+              //ユーザ一覧をロード
               usersControllerNotifier.loadUsers(hideIds);
-              _showTutorial(context: context, profile: user);
+              //ユーザ情報未設定の時は初期設定ページへ遷移
+              showTutorial(context: context, profile: user);
             },
           );
+          return null;
         }, []);
 
         //ディープリンク遷移
-        FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
-          if (dynamicLinkData.link.queryParameters['user'] != null) {
-            await Future.delayed(
-                const Duration(
-                  seconds: 1,
-                ), () async {
-              GoRouter.of(context).go('/users');
-              if (dynamicLinkData.link.queryParameters['user'] ==
-                  FirebaseAuth.instance.currentUser?.uid) {
-                GoRouter.of(context).push('/profile');
-              } else {
-                GoRouter.of(context).push(
-                    '/user/${dynamicLinkData.link.queryParameters['user']}');
-              }
-            });
-          }
-          if (dynamicLinkData.link.queryParameters['recruit'] != null) {
-            GoRouter.of(context).go('/recruits');
-
-            GoRouter.of(context).push(
-                '/recruit/${dynamicLinkData.link.queryParameters['recruit']}');
-          }
-        }).onError((error) {
-          // Handle errors
-        });
+        dynamicLinkListen(context);
 
         return PrimaryScaffold(
           pageIndex: 0,
@@ -94,11 +76,11 @@ class UsersScreen extends HookConsumerWidget {
                       IconButton(
                           iconSize: 33,
                           onPressed: () => searchDialog(
-                              context,
-                              ref,
-                              usersController,
-                              usersControllerNotifier,
-                              hideIds),
+                              context: context,
+                              ref: ref,
+                              usersController: usersController,
+                              usersControllerNotifier: usersControllerNotifier,
+                              hideIds: hideIds),
                           icon: const Icon(Icons.manage_search_outlined))
                     ],
                   ),
@@ -162,10 +144,13 @@ class UsersScreen extends HookConsumerWidget {
                                           MaterialStateProperty.all(
                                               Colors.redAccent)),
                                   child: const Text('再検索する'),
-                                  onPressed: () {
-                                    searchDialog(context, ref, usersController,
-                                        usersControllerNotifier, hideIds);
-                                  },
+                                  onPressed: () => searchDialog(
+                                      context: context,
+                                      ref: ref,
+                                      usersController: usersController,
+                                      usersControllerNotifier:
+                                          usersControllerNotifier,
+                                      hideIds: hideIds),
                                 ),
                               ],
                             ),
@@ -226,8 +211,12 @@ class UsersScreen extends HookConsumerWidget {
     );
   }
 
-  searchDialog(context, WidgetRef ref, UsersFutureScroll usersController,
-      UsersFutureScrollNotifier usersControllerNotifier, List<String> hideIds) {
+  searchDialog(
+      {required BuildContext context,
+      required WidgetRef ref,
+      required UsersFutureScroll usersController,
+      required UsersFutureScrollNotifier usersControllerNotifier,
+      required List<String> hideIds}) {
     BuildContext innerContext;
     showDialog(
       context: context,
@@ -332,44 +321,5 @@ class UsersScreen extends HookConsumerWidget {
         );
       },
     );
-  }
-
-  _showTutorial(
-      {required BuildContext context, required Profile profile}) async {
-    PendingDynamicLinkData? dynamicLinkData;
-    final applinks = AppLinks();
-    final Uri? getAppLinks = await applinks.getInitialAppLink();
-
-    if (Platform.isIOS) {
-      dynamicLinkData = getAppLinks != null
-          ? await FirebaseDynamicLinks.instance.getDynamicLink(getAppLinks)
-          : null;
-    } else {
-      dynamicLinkData = await FirebaseDynamicLinks.instance.getInitialLink();
-    }
-    // プロフィールの初期設定を完了していないアカウントは初期設定ページへ
-    if (!profile.initialSetting) {
-      if (dynamicLinkData != null) {
-        GoRouter.of(context).go('/initial_edit?${dynamicLinkData.link.query}');
-      } else {
-        GoRouter.of(context).go('/initial_edit?');
-      }
-    } else {
-      if (dynamicLinkData?.link.queryParameters['user'] != null) {
-        if (dynamicLinkData?.link.queryParameters['user'] ==
-            FirebaseAuth.instance.currentUser?.uid) {
-          GoRouter.of(context).push('/profile');
-        } else {
-          GoRouter.of(context)
-              .push('/user/${dynamicLinkData!.link.queryParameters['user']}');
-        }
-      }
-      if (dynamicLinkData?.link.queryParameters['recruit'] != null) {
-        GoRouter.of(context).go('/recruits');
-
-        GoRouter.of(context).push(
-            '/recruit/${dynamicLinkData!.link.queryParameters['recruit']}');
-      }
-    }
   }
 }

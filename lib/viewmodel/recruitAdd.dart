@@ -1,7 +1,7 @@
 import 'package:duel_matching/freezed/member/member.dart';
 import 'package:duel_matching/freezed/recruit/recruit.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';

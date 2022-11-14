@@ -315,6 +315,7 @@ class ProfileEditScreen extends HookConsumerWidget {
     );
   }
 
+// playTitle削除ボタン
   playTitleOnDeleted(List<String> playTitle, String removeTitle) {
     List<String> removedTitle = [...playTitle];
     removedTitle.remove(removeTitle);

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/viewmodel/purchases_notifier.dart';
 import 'package:duel_matching/viewmodel/subscriber_provider.dart';
+import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -20,8 +21,10 @@ class StoreScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final purchases = ref.watch(purchasesStoreProvider);
     final purchasesNotifier = ref.watch(purchasesNotifierProvider.notifier);
+    //サブスクリプション情報を取得
     return purchases.when(data: (snapshot) {
       final product = snapshot.current?.monthly?.product;
+      //会員情報を取得
       return SubscriberWhenConsumer(
         id: firebaseCurrentUserId,
         child: (isSubscriber) => Scaffold(

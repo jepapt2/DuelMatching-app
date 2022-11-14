@@ -3,7 +3,10 @@ import 'package:duel_matching/freezed/report/report.dart';
 import 'package:duel_matching/freezed/request/request.dart';
 import 'package:duel_matching/freezed/user_profile/user_profile.dart';
 import 'package:duel_matching/parts/image.dart';
+import 'package:duel_matching/viewmodel/friendDelete.dart';
 import 'package:duel_matching/viewmodel/subscriber_provider.dart';
+import 'package:duel_matching/viewmodel/userBlock.dart';
+import 'package:duel_matching/viewmodel/userReport.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -541,20 +544,11 @@ class UserProfileScreen extends HookConsumerWidget {
             }));
   }
 
-  friendDocumentDelete(bool isFriend) async {
-    if (isFriend) {
-      await userDocument(firebaseCurrentUserId)
-          .collection('friends')
-          .doc(id)
-          .delete();
-    }
-  }
-
   friendDeleteDialog(BuildContext context, String name, bool isFriend) {
     friendDelete(dialogContext) async {
       Navigator.pop(dialogContext);
       try {
-        await friendDocumentDelete(isFriend);
+        await friendDocumentDelete(userId: id, isFriend: isFriend);
         Fluttertoast.showToast(
             msg: '$nameをフレンドから削除しました',
             toastLength: Toast.LENGTH_SHORT,
@@ -599,33 +593,6 @@ class UserProfileScreen extends HookConsumerWidget {
   }
 
   userBlockDialog(BuildContext context, String name, bool isFriend) {
-    userBlock(dialogContext) async {
-      Navigator.pop(dialogContext);
-      try {
-        await friendDocumentDelete(isFriend);
-        await userDocument(firebaseCurrentUserId).update({
-          'blockList': FieldValue.arrayUnion([id])
-        });
-        Fluttertoast.showToast(
-            msg: '$nameをブロックしました',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.greenAccent,
-            textColor: Colors.white,
-            fontSize: 13.0);
-      } catch (_) {
-        Fluttertoast.showToast(
-            msg: 'ブロックに失敗しました',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 13.0);
-      }
-    }
-
     return Future.delayed(
         const Duration(seconds: 0),
         () => showDialog(
@@ -643,7 +610,14 @@ class UserProfileScreen extends HookConsumerWidget {
                   ),
                   TextButton(
                     child: const Text("はい"),
-                    onPressed: () => userBlock(dialogContext),
+                    onPressed: () {
+                      Navigator.pop(dialogContext);
+                      userBlock(
+                          dialogContext: dialogContext,
+                          userId: id,
+                          userName: name,
+                          isFriend: isFriend);
+                    },
                   ),
                 ],
               );
@@ -653,40 +627,6 @@ class UserProfileScreen extends HookConsumerWidget {
   userReportDialog(
       BuildContext context, String reportName, String sendName, bool isFriend) {
     final _formKey = GlobalKey<FormBuilderState>();
-    userReport(dialogContext) async {
-      if (_formKey.currentState!.validate()) {
-        try {
-          _formKey.currentState!.save();
-          await friendDocumentDelete(isFriend);
-          await reportsCollection().add(Report(
-              sendId: firebaseCurrentUserId,
-              sendName: sendName,
-              reportId: id,
-              reason: _formKey.currentState?.value['reason'] ?? '',
-              details: _formKey.currentState?.value['details'] ?? '',
-              createdAt: DateTime.now()));
-          Fluttertoast.showToast(
-              msg: '$reportNameを報告しました',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.TOP,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.greenAccent,
-              textColor: Colors.white,
-              fontSize: 13.0);
-        } catch (_) {
-          Fluttertoast.showToast(
-              msg: '報告に失敗しました',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.TOP,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 13.0);
-        } finally {
-          Navigator.pop(dialogContext);
-        }
-      }
-    }
 
     return Future.delayed(
         const Duration(seconds: 0),
@@ -769,7 +709,12 @@ class UserProfileScreen extends HookConsumerWidget {
                                   height: 10.0,
                                 ),
                                 TextButton(
-                                  onPressed: () => userReport(dialogContext),
+                                  onPressed: () => userReport(
+                                      dialogContext: dialogContext,
+                                      formKey: _formKey,
+                                      sendName: sendName,
+                                      reportId: id,
+                                      reportName: reportName),
                                   child: const Text('報告する'),
                                 )
                               ],

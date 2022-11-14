@@ -5,6 +5,7 @@ import 'package:duel_matching/parts/image.dart';
 import 'package:duel_matching/parts/scroll_detector.dart';
 import 'package:duel_matching/viewmodel/applifecycle_provider.dart';
 import 'package:duel_matching/viewmodel/partner_provider.dart';
+import 'package:duel_matching/viewmodel/user_profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

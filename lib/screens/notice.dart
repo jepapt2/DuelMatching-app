@@ -5,7 +5,6 @@ import 'package:duel_matching/parts/primary_scaffold.dart';
 import 'package:duel_matching/parts/primary_sliverappbar.dart';
 import 'package:duel_matching/viewmodel/notices_provider.dart';
 import 'package:duel_matching/viewmodel/user_profile_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +15,8 @@ class NoticeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //通知を開いた時の時間を保存
+    //noticeScreenを開いた後に来た通知か判定するため
     var nowTime = useMemoized(DateTime.now);
 
     final noticesRef = ref.watch(noticesProvider(firebaseCurrentUserId));
