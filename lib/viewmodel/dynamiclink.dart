@@ -4,12 +4,14 @@ import 'package:go_router/go_router.dart';
 
 dynamicLinkListen(context) {
   FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
+    //ユーザページへ遷移
     if (dynamicLinkData.link.queryParameters['user'] != null) {
       await Future.delayed(
           const Duration(
             seconds: 1,
           ), () async {
         GoRouter.of(context).go('/users');
+        //自分のIDの場合プロフィールへ
         if (dynamicLinkData.link.queryParameters['user'] ==
             firebaseCurrentUserId) {
           GoRouter.of(context).push('/profile');
@@ -19,6 +21,7 @@ dynamicLinkListen(context) {
         }
       });
     }
+    //対戦募集共有の遷移
     if (dynamicLinkData.link.queryParameters['recruit'] != null) {
       GoRouter.of(context).go('/recruits');
 

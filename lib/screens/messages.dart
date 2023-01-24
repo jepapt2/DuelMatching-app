@@ -19,54 +19,54 @@ class MessagesScreen extends HookConsumerWidget {
 
     return UserWhenConsumer(child: (user) {
       return messagesRef.when(
-          data: (messages) => PrimaryScaffold(
-              pageIndex: 2,
-              child: CustomScrollView(
-                slivers: [
-                  PrimarySliverAppBar(
-                    user: user,
-                    appBarText: 'メッセージ',
-                    appBarAction: const [],
-                  ),
-                  SliverList(
-                      delegate: SliverChildListDelegate([
-                    if (messages.isEmpty)
-                      Center(
-                          child: Column(
-                        children: const [
-                          SizedBox(
-                            height: 100.0,
-                          ),
-                          Text('まだ通知はありません'),
-                        ],
-                      ))
-                    else
-                      Padding(
-                        padding: const EdgeInsets.only(top: 2.0),
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: messages.length,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 5.0, vertical: 2.0),
-                                      child: MessageCard(
-                                        id: messages[index].id,
-                                        notice: messages[index].notice,
-                                        nowTime: nowTime,
-                                      )),
-                                  const Divider()
-                                ],
-                              );
-                            }),
-                      ),
-                  ]))
-                ],
+          data: (messages) => SafeArea(
+                child: PrimaryScaffold(
+                    pageIndex: 2,
+                    child: CustomScrollView(
+                      slivers: [
+                        PrimarySliverAppBar(
+                          user: user,
+                          appBarText: 'メッセージ',
+                          appBarAction: const [],
+                        ),
+                        SliverList(
+                            delegate: SliverChildListDelegate([
+                          if (messages.isEmpty)
+                            Center(
+                                child: Column(
+                              children: const [
+                                SizedBox(
+                                  height: 100.0,
+                                ),
+                                Text('まだ通知はありません'),
+                              ],
+                            ))
+                          else
+                            const SizedBox(height: 16.0),
+                          ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: messages.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5.0, vertical: 2.0),
+                                        child: MessageCard(
+                                          id: messages[index].id,
+                                          notice: messages[index].notice,
+                                          nowTime: nowTime,
+                                        )),
+                                    const Divider()
+                                  ],
+                                );
+                              }),
+                        ]))
+                      ],
+                    ),
+                    user: user),
               ),
-              user: user),
           error: (error, _) => Scaffold(
                 body: Center(
                   child: Column(

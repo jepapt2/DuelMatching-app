@@ -40,112 +40,114 @@ class RecruitsScreen extends HookConsumerWidget {
           );
         }, []);
 
-        return PrimaryScaffold(
-          pageIndex: 1,
-          user: user,
-          child: ScrollDetector(
-            threshold: 0.8,
-            loadNext: () =>
-                recruitsControllerNotifier.loadRecruits(nowTime, blockList),
-            builder: (context, controller) => RefreshIndicator(
-              onRefresh: () => recruitsControllerNotifier.recruitsRefresh(
-                  nowTime, blockList),
-              child: CustomScrollView(
-                controller: controller,
-                slivers: [
-                  PrimarySliverAppBar(
-                    user: user,
-                    appBarText: '対戦募集',
-                    appBarAction: [
-                      IconButton(
-                          iconSize: 33,
-                          onPressed: () => searchDialog(
-                              context,
-                              ref,
-                              recruitsController,
-                              recruitsControllerNotifier,
-                              nowTime,
-                              blockList),
-                          icon: const Icon(Icons.manage_search_outlined))
-                    ],
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        const SizedBox(
-                          height: 8.0,
-                        ),
-                        if (recruitsController.list == null &&
-                            recruitsController.loading)
-                          Center(
+        return SafeArea(
+          child: PrimaryScaffold(
+            pageIndex: 1,
+            user: user,
+            child: ScrollDetector(
+              threshold: 0.8,
+              loadNext: () =>
+                  recruitsControllerNotifier.loadRecruits(nowTime, blockList),
+              builder: (context, controller) => RefreshIndicator(
+                onRefresh: () => recruitsControllerNotifier.recruitsRefresh(
+                    nowTime, blockList),
+                child: CustomScrollView(
+                  controller: controller,
+                  slivers: [
+                    PrimarySliverAppBar(
+                      user: user,
+                      appBarText: '対戦募集',
+                      appBarAction: [
+                        IconButton(
+                            iconSize: 33,
+                            onPressed: () => searchDialog(
+                                context,
+                                ref,
+                                recruitsController,
+                                recruitsControllerNotifier,
+                                nowTime,
+                                blockList),
+                            icon: const Icon(Icons.manage_search_outlined))
+                      ],
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          const SizedBox(
+                            height: 8.0,
+                          ),
+                          if (recruitsController.list == null &&
+                              recruitsController.loading)
+                            Center(
+                                child: Column(
+                              children: const [
+                                SizedBox(
+                                  height: 100.0,
+                                ),
+                                CircularProgressIndicator(),
+                              ],
+                            ))
+                          else if (recruitsController.error)
+                            Center(
                               child: Column(
-                            children: const [
-                              SizedBox(
-                                height: 100.0,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(
+                                    height: 100.0,
+                                  ),
+                                  const Text('募集の取得に失敗しました'),
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                        textStyle: MaterialStateProperty.all(
+                                            const TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.redAccent)),
+                                    child: const Text('更新する'),
+                                    onPressed: () {
+                                      recruitsControllerNotifier
+                                          .recruitsRefresh(nowTime, blockList);
+                                    },
+                                  ),
+                                ],
                               ),
-                              CircularProgressIndicator(),
-                            ],
-                          ))
-                        else if (recruitsController.error)
-                          Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(
-                                  height: 100.0,
-                                ),
-                                const Text('募集の取得に失敗しました'),
-                                ElevatedButton(
-                                  style: ButtonStyle(
-                                      textStyle: MaterialStateProperty.all(
-                                          const TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.redAccent)),
-                                  child: const Text('更新する'),
-                                  onPressed: () {
-                                    recruitsControllerNotifier.recruitsRefresh(
-                                        nowTime, blockList);
-                                  },
-                                ),
-                              ],
-                            ),
-                          )
-                        else if (recruitsController.list == null)
-                          const SizedBox()
-                        else if (recruitsController.list!.isEmpty)
-                          Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(
-                                  height: 100.0,
-                                ),
-                                const Text('募集が見つかりませんでした'),
-                                ElevatedButton(
-                                  style: ButtonStyle(
-                                      textStyle: MaterialStateProperty.all(
-                                          const TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.redAccent)),
-                                  child: const Text('再検索する'),
-                                  onPressed: () {
-                                    searchDialog(
-                                        context,
-                                        ref,
-                                        recruitsController,
-                                        recruitsControllerNotifier,
-                                        nowTime,
-                                        blockList);
-                                  },
-                                ),
-                              ],
-                            ),
-                          )
-                        else
+                            )
+                          else if (recruitsController.list == null)
+                            const SizedBox()
+                          else if (recruitsController.list!.isEmpty)
+                            Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(
+                                    height: 100.0,
+                                  ),
+                                  const Text('募集が見つかりませんでした'),
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                        textStyle: MaterialStateProperty.all(
+                                            const TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.redAccent)),
+                                    child: const Text('再検索する'),
+                                    onPressed: () {
+                                      searchDialog(
+                                          context,
+                                          ref,
+                                          recruitsController,
+                                          recruitsControllerNotifier,
+                                          nowTime,
+                                          blockList);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )
+                          else
+                            const SizedBox(height: 16),
                           ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
@@ -181,19 +183,20 @@ class RecruitsScreen extends HookConsumerWidget {
                                   child: CircularProgressIndicator(),
                                 );
                               }),
-                      ],
-                    ),
-                  )
-                ],
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            child: const FaIcon(
-              FontAwesomeIcons.plus,
-              color: Color(0xffeff0f3),
+            floatingActionButton: FloatingActionButton(
+              child: const FaIcon(
+                FontAwesomeIcons.plus,
+                color: Color(0xffeff0f3),
+              ),
+              onPressed: () => GoRouter.of(context).push('/recruit_new'),
             ),
-            onPressed: () => GoRouter.of(context).push('/recruit_new'),
           ),
         );
       }),

@@ -144,12 +144,14 @@ class FriendRequestNotice extends HookWidget {
                                 RichText(
                                     text: TextSpan(
                                         style: const TextStyle(
-                                            color: Color(0xff2a2a2a)),
+                                            color: Color(0xff2a2a2a),
+                                            fontSize: 16),
                                         children: [
                                       TextSpan(
                                         text: recName,
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                       const TextSpan(text: 'からフレンド申請が届きました')
                                     ])),
@@ -401,7 +403,8 @@ class NewFriendNotice extends HookWidget {
                   children: [
                     RichText(
                         text: TextSpan(
-                            style: const TextStyle(color: Color(0xff2a2a2a)),
+                            style: const TextStyle(
+                                color: Color(0xff2a2a2a), fontSize: 16),
                             children: [
                           TextSpan(
                             text: recName,
@@ -516,7 +519,8 @@ class CreateRecruitNotice extends HookWidget {
                 children: [
                   RichText(
                       text: TextSpan(
-                          style: const TextStyle(color: Color(0xff2a2a2a)),
+                          style: const TextStyle(
+                              color: Color(0xff2a2a2a), fontSize: 16),
                           children: [
                         TextSpan(
                           text: recName,
@@ -613,7 +617,8 @@ class RecruitCancelNotice extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: RichText(
                       text: TextSpan(
-                          style: const TextStyle(color: Color(0xff2a2a2a)),
+                          style: const TextStyle(
+                              color: Color(0xff2a2a2a), fontSize: 16),
                           children: [
                         TextSpan(
                           text: recName,

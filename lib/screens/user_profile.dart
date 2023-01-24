@@ -180,7 +180,9 @@ class UserProfileScreen extends HookConsumerWidget {
                                         if (user.comment.isNotNullAndNotEmpty)
                                           Padding(
                                             padding: const EdgeInsets.only(
-                                                bottom: 12.0),
+                                                bottom: 12.0,
+                                                left: 16,
+                                                right: 16),
                                             child: Text(user.comment!),
                                           ),
                                         Visibility(

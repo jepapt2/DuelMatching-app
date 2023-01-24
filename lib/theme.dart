@@ -36,9 +36,9 @@ ThemeData appTheme() {
           elevation: 10.0),
       brightness: Brightness.light,
       inputDecorationTheme: const InputDecorationTheme(
-          labelStyle: TextStyle(color: Color(0xff2a2a2a), fontSize: 15.0),
+          labelStyle: TextStyle(color: Color(0xff2a2a2a), fontSize: 16.0),
           floatingLabelStyle:
-              TextStyle(color: Color(0xff2a2a2a), fontSize: 15.0),
+              TextStyle(color: Color(0xff2a2a2a), fontSize: 16.0),
           border: UnderlineInputBorder(
               borderSide: BorderSide(color: Color(0xff2a2a2a)))),
       textButtonTheme: TextButtonThemeData(

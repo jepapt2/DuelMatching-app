@@ -100,6 +100,9 @@ class NewMessageNotice extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
+                  const SizedBox(
+                    height: 2.0,
+                  ),
                   Text(
                     text,
                     overflow: TextOverflow.ellipsis,
@@ -134,7 +137,7 @@ class NewMessageNotice extends StatelessWidget {
                   child: Chip(
                     label: Text(
                       unReadCount > 99 ? '99+' : unReadCount.toString(),
-                      style: const TextStyle(fontSize: 15),
+                      style: const TextStyle(fontSize: 14),
                     ),
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     labelPadding: const EdgeInsets.symmetric(horizontal: 5),
@@ -201,7 +204,11 @@ class NewGroupMessageNotice extends StatelessWidget {
                       Text(
                         recName,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      const SizedBox(
+                        height: 2.0,
                       ),
                       Text(
                         text,
@@ -237,7 +244,7 @@ class NewGroupMessageNotice extends StatelessWidget {
                       child: Chip(
                         label: Text(
                           unReadCount > 99 ? '99+' : unReadCount.toString(),
-                          style: const TextStyle(fontSize: 15),
+                          style: const TextStyle(fontSize: 14),
                         ),
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         labelPadding: const EdgeInsets.symmetric(horizontal: 5),
@@ -283,7 +290,7 @@ class ErrorNotice extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               'バージョンが古い、またはエラーのためこの通知は表示できません',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
           ),
         ),

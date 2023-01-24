@@ -40,54 +40,54 @@ class NoticeScreen extends HookConsumerWidget {
               });
               return null;
             }, []);
-            return PrimaryScaffold(
-                pageIndex: 3,
-                child: CustomScrollView(
-                  slivers: [
-                    PrimarySliverAppBar(
-                      user: user,
-                      appBarText: '通知',
-                      appBarAction: const [],
-                    ),
-                    SliverList(
-                        delegate: SliverChildListDelegate([
-                      if (notices.isEmpty)
-                        Center(
-                            child: Column(
-                          children: const [
-                            SizedBox(
-                              height: 100.0,
-                            ),
-                            Text('まだ通知はありません'),
-                          ],
-                        ))
-                      else
-                        Padding(
-                          padding: const EdgeInsets.only(top: 2.0),
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: notices.length,
-                              itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 5.0, vertical: 2.0),
-                                        child: NoticeCard(
-                                          id: notices[index].id,
-                                          notice: notices[index].notice,
-                                          nowTime: nowTime,
-                                        )),
-                                    const Divider()
-                                  ],
-                                );
-                              }),
-                        ),
-                    ]))
-                  ],
-                ),
-                user: user);
+            return SafeArea(
+              child: PrimaryScaffold(
+                  pageIndex: 3,
+                  child: CustomScrollView(
+                    slivers: [
+                      PrimarySliverAppBar(
+                        user: user,
+                        appBarText: '通知',
+                        appBarAction: const [],
+                      ),
+                      SliverList(
+                          delegate: SliverChildListDelegate([
+                        if (notices.isEmpty)
+                          Center(
+                              child: Column(
+                            children: const [
+                              SizedBox(
+                                height: 100.0,
+                              ),
+                              Text('まだ通知はありません'),
+                            ],
+                          ))
+                        else
+                          const SizedBox(height: 16.0),
+                        ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: notices.length,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5.0, vertical: 2.0),
+                                      child: NoticeCard(
+                                        id: notices[index].id,
+                                        notice: notices[index].notice,
+                                        nowTime: nowTime,
+                                      )),
+                                  const Divider()
+                                ],
+                              );
+                            }),
+                      ]))
+                    ],
+                  ),
+                  user: user),
+            );
           },
           error: (error, _) {
             return Scaffold(
