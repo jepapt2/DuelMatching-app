@@ -23,7 +23,7 @@ class StoreScreen extends HookConsumerWidget {
     final purchasesNotifier = ref.watch(purchasesNotifierProvider.notifier);
     //サブスクリプション情報を取得
     return purchases.when(data: (snapshot) {
-      final product = snapshot.current?.monthly?.product;
+      final product = snapshot.current?.monthly!.storeProduct;
       //会員情報を取得
       return SubscriberWhenConsumer(
         id: firebaseCurrentUserId,
@@ -44,7 +44,7 @@ class StoreScreen extends HookConsumerWidget {
                       child: Column(
                         children: [
                           Text(
-                            '月額${snapshot.current?.monthly?.product.priceString}',
+                            '月額${snapshot.current!.monthly!.storeProduct.priceString}',
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16.0),
                           ),
@@ -155,6 +155,7 @@ class StoreScreen extends HookConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text('サブスクリプション情報の取得に失敗しました'),
+              Text(error.toString()),
               ElevatedButton(
                 style: ButtonStyle(
                     textStyle: MaterialStateProperty.all(

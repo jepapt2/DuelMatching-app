@@ -12,14 +12,14 @@ final purchasesNotifierProvider =
 class PurchasesNotifier extends StateNotifier<bool> {
   PurchasesNotifier() : super(false);
 
-  Future<void> purchaserInfoUpdated(PurchaserInfo info) async {
+  Future<void> purchaserInfoUpdated(CustomerInfo info) async {
     if (state) return;
     await syncSubscription(info);
   }
 
   void restore() async {
     state = true;
-    final info = await Purchases.restoreTransactions();
+    final info = await Purchases.restorePurchases();
     await syncSubscription(info);
     state = false;
   }
@@ -40,7 +40,7 @@ class PurchasesNotifier extends StateNotifier<bool> {
   }
 
 // 課金ユーザーになったらtrueを返す
-  Future<bool> syncSubscription(PurchaserInfo info, {String? productID}) async {
+  Future<bool> syncSubscription(CustomerInfo info, {String? productID}) async {
     state = true;
     if (const String.fromEnvironment('FLAVOR') == 'production') {
       final func = FirebaseFunctions.instanceFor(region: 'asia-northeast1')

@@ -38,10 +38,12 @@ Future<void> main() async {
     provisional: false,
     sound: true,
   );
-  await Purchases.setup(getRevenueCatApi());
+  await Purchases.configure(
+    PurchasesConfiguration(getRevenueCatApi()),
+  );
   Purchases.setDebugLogsEnabled(
       const String.fromEnvironment('FLAVOR') == 'development');
-  Purchases.addPurchaserInfoUpdateListener(_purchaserInfoUpdated);
+  Purchases.addCustomerInfoUpdateListener(_purchaserInfoUpdated);
   MobileAds.instance.initialize();
 
   runApp(ProviderScope(
@@ -49,7 +51,7 @@ Future<void> main() async {
   ));
 }
 
-void _purchaserInfoUpdated(PurchaserInfo info) {
+void _purchaserInfoUpdated(CustomerInfo info) {
   print('purchaserInfoUpdated: $info');
 }
 
